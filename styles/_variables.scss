@@ -1,0 +1,122 @@
+// ==============================================================================
+// Qori Design System - Tokens (Geist Monochromatic Blueprint)
+// Reference: DESIGN.md ("clinical blueprint on frosted paper")
+// ==============================================================================
+
+// Official Tokens — Colors
+$color-canvas: #f5f5f5;      // Page background, muted surface fills, secondary buttons
+$color-paper: #ffffff;       // Card surfaces, popover backgrounds, primary button fills
+$color-surface-alt: #fafafa; // Sidebar background, subtle card variant, input resting state
+$color-ink: #0a0a0a;         // Primary text, headings, button labels, icon strokes
+$color-ink-soft: #171717;    // Filled button backgrounds, secondary text on light surfaces
+$color-mid-gray: #737373;    // Muted body text, placeholder text, helper labels, icon fills at rest
+$color-hairline: #e5e5e5;    // Borders, input outlines, card edges, badge outlines
+$color-ember: #e7000b;       // Red decorative accent & destructive states
+
+// Semantic Alias Mappings
+$color-bg: $color-paper;
+$color-bg-subtle: $color-canvas;
+$color-bg-surface: $color-surface-alt;
+$color-border: $color-hairline;
+$color-border-hover: #d4d4d4;
+
+$color-text-primary: $color-ink;
+$color-text-secondary: $color-mid-gray;
+$color-text-muted: $color-mid-gray;
+$color-text-inverse: #fafafa;
+
+// Accents (Monochromatic migration + WhatsApp flow utility)
+$color-qori-gold: #0a0a0a;
+$color-qori-gold-hover: #171717;
+$color-qori-gold-subtle: #f5f5f5;
+
+$color-whatsapp: #25D366;
+$color-whatsapp-dark: #128C7E;
+$color-whatsapp-hover: #1EBE5D;
+$color-whatsapp-subtle: #DCF8C6;
+
+// Status & Destructive
+$color-danger: $color-ember;
+$color-danger-bg: #fef2f2;
+$color-success: #171717;
+$color-success-bg: #f5f5f5;
+$color-warning: #737373;
+$color-warning-bg: #f5f5f5;
+$color-info: #171717;
+$color-info-bg: #f5f5f5;
+
+// Typography — Geist / Inter
+$font-family: var(--font-geist, 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+$font-size-caption: 12px;
+$font-size-body: 14px;
+$font-size-body-lg: 16px;
+$font-size-subheading: 18px;
+$font-size-heading-sm: 24px;
+$font-size-heading: 30px;
+$font-size-heading-lg: 36px;
+$font-size-display: 48px;
+
+// Legacy size aliases
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-size-2xl: 24px;
+$font-size-3xl: 30px;
+$font-size-4xl: 36px;
+
+// Letter Spacing Tokens
+$tracking-caption: 0.05em;      // 0.6px at 12px uppercase
+$tracking-heading-sm: -0.025em; // -0.6px
+$tracking-heading: -0.025em;    // -0.75px
+$tracking-heading-lg: -0.025em; // -0.9px
+$tracking-display: -0.05em;     // -2.4px at 48px
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 600;
+
+// Spacing Scale (Base unit 4px)
+$spacing-1: 4px;
+$spacing-2: 8px;
+$spacing-3: 12px;
+$spacing-4: 16px;
+$spacing-5: 20px;
+$spacing-6: 24px;
+$spacing-8: 32px;
+$spacing-10: 40px;
+$spacing-12: 48px;
+$spacing-16: 64px;
+
+// Border Radius (Strict 18px interactive / 24px containers)
+$radius-cards: 24px;
+$radius-buttons: 18px;
+$radius-inputs: 18px;
+$radius-badges: 18px;
+$radius-nested: 10px;
+$radius-small: 6px;
+$radius-full: 9999px;
+
+// Aliases
+$radius-sm: 6px;
+$radius-md: 18px;
+$radius-lg: 24px;
+$radius-xl: 24px;
+
+// Shadows (Subtle, multi-layer card elevation from DESIGN.md)
+$shadow-subtle: 0 0 0 1px rgba(23, 23, 23, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+$shadow-sm: $shadow-subtle;
+$shadow-md: $shadow-subtle;
+$shadow-lg: 0 0 0 1px rgba(23, 23, 23, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-base: 0.2s ease;
+
+// Layout Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;

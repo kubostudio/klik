@@ -1,0 +1,243 @@
+@import '../variables';
+@import '../mixins';
+
+.legalPage {
+  min-height: 100vh;
+  background-color: $color-canvas;
+  color: $color-ink;
+  display: flex;
+  flex-direction: column;
+}
+
+.legalHeader {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid $color-hairline;
+
+  &__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: $spacing-3 $spacing-4;
+    display: flex;
+    align-items: center;
+    justifyContent: space-between;
+
+    @include tablet {
+      padding: $spacing-4 $spacing-6;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    font-size: $font-size-xl;
+    font-weight: 600;
+    color: $color-ink;
+    text-decoration: none;
+    letter-spacing: -0.03em;
+
+    span {
+      color: $color-mid-gray;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+  }
+}
+
+.legalContainer {
+  flex: 1;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  padding: $spacing-8 $spacing-4 $spacing-16;
+
+  @include tablet {
+    padding: $spacing-12 $spacing-6 $spacing-16;
+  }
+}
+
+.legalTabs {
+  display: inline-flex;
+  background-color: $color-paper;
+  border: 1px solid $color-hairline;
+  border-radius: 18px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: $spacing-6;
+}
+
+.legalTab {
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-mid-gray;
+  text-decoration: none;
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: $color-ink;
+  }
+
+  &--active {
+    background-color: $color-ink;
+    color: $color-paper;
+
+    &:hover {
+      color: $color-paper;
+    }
+  }
+}
+
+.legalCard {
+  background-color: $color-paper;
+  border: 1px solid $color-hairline;
+  border-radius: 24px;
+  padding: $spacing-6;
+  box-shadow: $shadow-subtle;
+
+  @include tablet {
+    padding: $spacing-10;
+  }
+
+  header {
+    border-bottom: 1px solid $color-hairline;
+    padding-bottom: $spacing-6;
+    margin-bottom: $spacing-8;
+
+    .badge {
+      display: inline-block;
+      margin-bottom: $spacing-3;
+    }
+
+    h1 {
+      font-size: $font-size-2xl;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: $color-ink;
+      margin-bottom: $spacing-2;
+
+      @include tablet {
+        font-size: $font-size-3xl;
+      }
+    }
+
+    p {
+      color: $color-mid-gray;
+      font-size: $font-size-sm;
+      margin: 0;
+    }
+  }
+}
+
+.legalContent {
+  color: #262626;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: $color-ink;
+    margin-top: $spacing-8;
+    margin-bottom: $spacing-3;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-ink;
+    margin-top: $spacing-5;
+    margin-bottom: $spacing-2;
+  }
+
+  p {
+    margin-bottom: $spacing-4;
+  }
+
+  ul, ol {
+    margin-bottom: $spacing-5;
+    padding-left: $spacing-5;
+
+    li {
+      margin-bottom: $spacing-2;
+    }
+  }
+
+  strong {
+    color: $color-ink;
+    font-weight: 600;
+  }
+
+  .callout {
+    background-color: $color-canvas;
+    border-left: 3px solid $color-ink;
+    border-radius: 0 14px 14px 0;
+    padding: $spacing-4 $spacing-5;
+    margin: $spacing-6 0;
+    font-size: $font-size-sm;
+    color: $color-ink-soft;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.legalFooter {
+  background-color: $color-paper;
+  border-top: 1px solid $color-hairline;
+  padding: $spacing-8 0;
+
+  &__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 $spacing-4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justifyContent: space-between;
+    gap: $spacing-4;
+
+    @include tablet {
+      flex-direction: row;
+      padding: 0 $spacing-6;
+    }
+  }
+
+  &__copy {
+    font-size: $font-size-xs;
+    color: $color-mid-gray;
+  }
+
+  &__links {
+    display: flex;
+    gap: $spacing-4;
+    font-size: $font-size-xs;
+
+    a {
+      color: $color-mid-gray;
+      text-decoration: none;
+
+      &:hover {
+        color: $color-ink;
+      }
+    }
+  }
+}

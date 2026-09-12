@@ -1,0 +1,129 @@
+@import '../variables';
+@import '../mixins';
+
+.authContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-6 $spacing-4;
+  background-color: $color-canvas;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 440px;
+  background-color: $color-paper;
+  border: 1px solid $color-hairline;
+  border-radius: $radius-cards;
+  padding: 32px 24px;
+  box-shadow: $shadow-subtle;
+
+  @include desktop {
+    padding: 40px 32px;
+  }
+}
+
+.authHeader {
+  text-align: center;
+  margin-bottom: $spacing-6;
+
+  .logo {
+    display: inline-block;
+    font-size: $font-size-2xl;
+    font-weight: 600;
+    color: $color-ink;
+    letter-spacing: -0.025em;
+    margin-bottom: $spacing-3;
+
+    span {
+      color: $color-ink;
+    }
+  }
+
+  h1 {
+    font-size: $font-size-xl;
+    font-weight: 600;
+    color: $color-ink;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-1;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: $color-mid-gray;
+  }
+}
+
+.socialBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  height: 40px;
+  padding: 0 16px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-ink;
+  background-color: $color-paper;
+  border: 1px solid $color-hairline;
+  border-radius: $radius-buttons;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: $color-canvas;
+    border-color: #d4d4d4;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: $spacing-6 0;
+  color: $color-mid-gray;
+  font-size: $font-size-caption;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid $color-hairline;
+  }
+
+  span {
+    padding: 0 $spacing-3;
+  }
+}
+
+.authFooter {
+  text-align: center;
+  margin-top: $spacing-6;
+  font-size: $font-size-sm;
+  color: $color-mid-gray;
+
+  a {
+    color: $color-ink;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.badgeTrial {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  background-color: $color-canvas;
+  color: $color-ink;
+  font-size: $font-size-caption;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: $radius-badges;
+  border: 1px solid $color-hairline;
+  margin-bottom: $spacing-4;
+}

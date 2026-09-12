@@ -1,0 +1,283 @@
+@import '../variables';
+@import '../mixins';
+
+.wrapper {
+  margin-bottom: $spacing-4;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-2;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-ink, #{$color-ink});
+}
+
+.counter {
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  font-weight: 400;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+  gap: $spacing-3;
+  margin-bottom: $spacing-2;
+}
+
+.imageCard {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: $radius-nested;
+  overflow: hidden;
+  border: 1px solid var(--color-hairline, #{$color-hairline});
+  background-color: var(--color-surface-alt, #{$color-surface-alt});
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: var(--color-ink, #{$color-ink});
+    box-shadow: $shadow-subtle;
+
+    .cardActions {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &--primary {
+    border-color: var(--color-ink, #{$color-ink});
+    box-shadow: 0 0 0 1px var(--color-ink, #{$color-ink});
+  }
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.primaryBadge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background-color: var(--color-ink, #{$color-ink});
+  color: var(--color-paper, #ffffff);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: $radius-small;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.cardActions {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.45) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity $transition-fast;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px;
+  z-index: 3;
+}
+
+.deleteBtn {
+  align-self: flex-end;
+  background-color: rgba(231, 0, 11, 0.9);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform $transition-fast;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: $color-ember;
+  }
+}
+
+.makePrimaryBtn {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: #FFFFFF;
+    color: #0a0a0a;
+  }
+}
+
+.addCard {
+  aspect-ratio: 1;
+  border: 1px dashed var(--color-hairline, #{$color-hairline});
+  border-radius: $radius-nested;
+  background-color: var(--color-canvas, #{$color-canvas});
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all $transition-fast;
+  padding: $spacing-2;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  text-align: center;
+
+  &:hover {
+    border-color: var(--color-ink, #{$color-ink});
+    background-color: var(--color-surface-alt, #{$color-surface-alt});
+    color: var(--color-ink, #{$color-ink});
+  }
+
+  &--uploading {
+    pointer-events: none;
+    opacity: 0.7;
+    background-color: var(--color-canvas, #{$color-canvas});
+    border-color: var(--color-ink, #{$color-ink});
+  }
+
+  .addCardText {
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+}
+
+.emptyDropzone {
+  border: 1px dashed var(--color-hairline, #{$color-hairline});
+  border-radius: $radius-inputs;
+  padding: $spacing-5 $spacing-4;
+  text-align: center;
+  background-color: var(--color-canvas, #{$color-canvas});
+  cursor: pointer;
+  transition: all $transition-fast;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: var(--color-ink, #{$color-ink});
+    background-color: var(--color-surface-alt, #{$color-surface-alt});
+  }
+
+  &--active {
+    border-color: var(--color-ink, #{$color-ink});
+    background-color: var(--color-surface-alt, #{$color-surface-alt});
+  }
+
+  &--uploading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  .iconCircle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-paper, #{$color-paper});
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-mid-gray, #{$color-mid-gray});
+    border: 1px solid var(--color-hairline, #{$color-hairline});
+    box-shadow: $shadow-subtle;
+    margin-bottom: $spacing-2;
+  }
+
+  .promptText {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: var(--color-ink, #{$color-ink});
+
+    span {
+      text-decoration: underline;
+    }
+  }
+
+  .subText {
+    font-size: $font-size-caption;
+    color: var(--color-mid-gray, #{$color-mid-gray});
+    margin-top: 4px;
+  }
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.urlToggle {
+  display: inline-block;
+  margin-top: $spacing-2;
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    color: var(--color-ink, #{$color-ink});
+  }
+}
+
+.urlInputRow {
+  display: flex;
+  gap: $spacing-2;
+  margin-top: $spacing-2;
+}
+
+.errorText {
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: $radius-badges;
+  padding: 4px 10px;
+  font-size: $font-size-caption;
+  margin-top: $spacing-2;
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+}
+
+.helperText {
+  display: block;
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  margin-top: 4px;
+}

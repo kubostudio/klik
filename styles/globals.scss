@@ -1,0 +1,470 @@
+@import './variables';
+@import './mixins';
+
+:root {
+  /* Colors */
+  --color-canvas: #f5f5f5;
+  --color-paper: #ffffff;
+  --color-surface-alt: #fafafa;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #171717;
+  --color-mid-gray: #737373;
+  --color-hairline: #e5e5e5;
+  --color-ember: #e7000b;
+
+  /* Typography — Font Families */
+  --font-geist: var(--font-geist, 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.33;
+  --tracking-caption: 0.6px;
+  --text-body: 14px;
+  --leading-body: 1.43;
+  --text-body-lg: 16px;
+  --leading-body-lg: 1.5;
+  --text-subheading: 18px;
+  --leading-subheading: 1.56;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --tracking-heading-sm: -0.6px;
+  --text-heading: 30px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.75px;
+  --text-heading-lg: 36px;
+  --leading-heading-lg: 1.11;
+  --tracking-heading-lg: -0.9px;
+  --text-display: 48px;
+  --leading-display: 1.1;
+  --tracking-display: -2.4px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-48: 48px;
+
+  /* Layout */
+  --page-max-width: 1280px;
+  --section-gap: 48px;
+  --card-padding: 20px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 24px;
+
+  /* Named Radii */
+  --radius-cards: 24px;
+  --radius-small: 6px;
+  --radius-badges: 18px;
+  --radius-inputs: 18px;
+  --radius-nested: 10px;
+  --radius-buttons: 18px;
+
+  /* Shadows */
+  --shadow-subtle: 0 0 0 1px rgba(23, 23, 23, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+
+  /* Surfaces */
+  --surface-canvas: #f5f5f5;
+  --surface-sidebar: #fafafa;
+  --surface-card: #ffffff;
+  --surface-input-fill: #f5f5f5;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family;
+  background-color: $color-canvas;
+  color: $color-ink;
+  line-height: 1.43;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  @include focus-ring;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  @include focus-ring;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// ==============================================================================
+// Cards (DESIGN.md: 24px radius, 1px hairline border, subtle multi-layer elevation)
+// ==============================================================================
+.card {
+  background-color: $color-paper;
+  border-radius: $radius-cards;
+  border: 1px solid $color-hairline;
+  box-shadow: $shadow-subtle;
+  padding: $spacing-5;
+}
+
+// ==============================================================================
+// Buttons (DESIGN.md: 18px pill radius, height 36-40px, tonal contrast)
+// ==============================================================================
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 $spacing-4;
+  border-radius: $radius-buttons;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-align: center;
+  user-select: none;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Primary Filled: #0a0a0a on #ffffff / #fafafa
+  &--primary, &--gold {
+    background-color: $color-ink;
+    color: $color-paper;
+
+    &:hover:not(:disabled) {
+      background-color: $color-ink-soft;
+    }
+  }
+
+  // Secondary Ghost: #f5f5f5 tonal sibling
+  &--secondary, &--ghost {
+    background-color: $color-canvas;
+    color: $color-ink;
+
+    &:hover:not(:disabled) {
+      background-color: #ebebeb;
+      color: $color-ink;
+    }
+  }
+
+  // Outline: hairline boundary
+  &--outline {
+    background-color: transparent;
+    color: $color-ink;
+    border: 1px solid $color-hairline;
+
+    &:hover:not(:disabled) {
+      background-color: $color-canvas;
+      border-color: #d4d4d4;
+    }
+  }
+
+  // Destructive: reserved #e7000b
+  &--danger {
+    background-color: transparent;
+    color: $color-ember;
+    border: 1px solid rgba($color-ember, 0.3);
+
+    &:hover:not(:disabled) {
+      background-color: $color-ember;
+      color: $color-paper;
+      border-color: $color-ember;
+    }
+  }
+
+  // WhatsApp utility flow
+  &--whatsapp {
+    background-color: $color-ink;
+    color: #FFFFFF;
+    font-weight: $font-weight-semibold;
+
+    &:hover:not(:disabled) {
+      background-color: $color-whatsapp-hover;
+    }
+  }
+
+  &--full {
+    width: 100%;
+  }
+
+  &--lg {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 $spacing-5;
+    font-size: $font-size-base;
+    border-radius: $radius-buttons;
+  }
+
+  &--sm {
+    height: 32px;
+    min-height: 32px;
+    padding: 0 $spacing-3;
+    font-size: $font-size-xs;
+    border-radius: $radius-buttons;
+  }
+}
+
+// ==============================================================================
+// Form Controls (DESIGN.md: 18px pill inputs, #f5f5f5 resting, 1px ring focus)
+// ==============================================================================
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  margin-bottom: $spacing-4;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-ink;
+  }
+
+  .helper-text {
+    font-size: $font-size-caption;
+    color: $color-mid-gray;
+  }
+
+  .error-text {
+    font-size: $font-size-caption;
+    color: $color-ember;
+  }
+}
+
+.input, .select {
+  width: 100%;
+  height: 38px;
+  padding: 0 $spacing-3;
+  font-size: $font-size-sm;
+  color: $color-ink;
+  background-color: $color-canvas;
+  border: 1px solid transparent;
+  border-radius: $radius-inputs;
+  transition: border-color $transition-fast, background-color $transition-fast, box-shadow $transition-fast;
+
+  &::placeholder {
+    color: $color-mid-gray;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $color-paper;
+    border-color: $color-hairline;
+    box-shadow: 0 0 0 1px $color-hairline;
+  }
+
+  &--error {
+    border-color: $color-ember;
+    &:focus {
+      border-color: $color-ember;
+      box-shadow: 0 0 0 1px $color-ember;
+    }
+  }
+}
+
+.textarea {
+  width: 100%;
+  padding: $spacing-3;
+  font-size: $font-size-sm;
+  color: $color-ink;
+  background-color: $color-canvas;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  min-height: 96px;
+  resize: vertical;
+  transition: border-color $transition-fast, background-color $transition-fast, box-shadow $transition-fast;
+
+  &::placeholder {
+    color: $color-mid-gray;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $color-paper;
+    border-color: $color-hairline;
+    box-shadow: 0 0 0 1px $color-hairline;
+  }
+
+  &--error {
+    border-color: $color-ember;
+    &:focus {
+      border-color: $color-ember;
+      box-shadow: 0 0 0 1px $color-ember;
+    }
+  }
+}
+
+// ==============================================================================
+// Badges (DESIGN.md: 18px pill radius, compact capsule tags)
+// ==============================================================================
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: 2px 10px;
+  border-radius: $radius-badges;
+  font-size: $font-size-caption;
+  font-weight: $font-weight-medium;
+  line-height: 1.33;
+
+  // Solid: dark capsule
+  &--solid {
+    background-color: $color-ink-soft;
+    color: #fafafa;
+  }
+
+  // Soft: subtle neutral
+  &--soft {
+    background-color: $color-canvas;
+    color: $color-ink-soft;
+  }
+
+  // Outline: hairline border
+  &--outline {
+    background-color: transparent;
+    color: $color-ink;
+    border: 1px solid $color-hairline;
+  }
+
+  // Semantic mappings
+  &--new {
+    background-color: $color-canvas;
+    color: $color-ink;
+    border: 1px solid $color-hairline;
+  }
+
+  &--contacted {
+    background-color: #ebebeb;
+    color: $color-ink;
+  }
+
+  &--confirmed {
+    background-color: $color-ink;
+    color: $color-paper;
+  }
+
+  &--delivered {
+    background-color: $color-canvas;
+    color: $color-ink;
+    font-weight: $font-weight-semibold;
+    border: 1px solid $color-hairline;
+  }
+
+  &--cancelled {
+    background-color: $color-danger-bg;
+    color: $color-ember;
+    border: 1px solid rgba($color-ember, 0.2);
+  }
+
+  &--starter {
+    background-color: $color-canvas;
+    color: $color-mid-gray;
+  }
+
+  &--pro {
+    background-color: $color-ink;
+    color: $color-paper;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// ==============================================================================
+// Stat Block (DESIGN.md: 12-14px uppercase label, 30-48px Geist 600 value)
+// ==============================================================================
+.stat-block {
+  display: flex;
+  flex-direction: column;
+
+  &__label {
+    font-size: $font-size-caption;
+    text-transform: uppercase;
+    letter-spacing: $tracking-caption;
+    color: $color-mid-gray;
+    margin-bottom: $spacing-1;
+  }
+
+  &__value {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-semibold;
+    color: $color-ink;
+    letter-spacing: $tracking-heading;
+    line-height: 1.15;
+  }
+
+  &__helper {
+    font-size: $font-size-body;
+    color: $color-mid-gray;
+    margin-top: $spacing-1;
+  }
+}
+
+// ==============================================================================
+// Empty States (DESIGN.md: 24px radius, hairline dashed border)
+// ==============================================================================
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: $spacing-12 $spacing-4;
+  background-color: $color-paper;
+  border: 1px dashed $color-hairline;
+  border-radius: $radius-cards;
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    color: $color-mid-gray;
+    margin-bottom: $spacing-3;
+    stroke-width: 1.5;
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-ink;
+    letter-spacing: $tracking-heading-sm;
+    margin-bottom: $spacing-1;
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-mid-gray;
+    max-width: 320px;
+    margin-bottom: $spacing-4;
+  }
+}

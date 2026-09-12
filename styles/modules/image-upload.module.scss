@@ -1,0 +1,270 @@
+@import '../variables';
+@import '../mixins';
+
+.wrapper {
+  margin-bottom: $spacing-4;
+}
+
+.label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-ink, #{$color-ink});
+  margin-bottom: 0.5rem;
+}
+
+// ---------------------------------------------------------------------------
+// DROPZONE (Sin imagen seleccionada)
+// ---------------------------------------------------------------------------
+.dropzone {
+  border: 1px dashed var(--color-hairline, #{$color-hairline});
+  border-radius: $radius-cards;
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  background-color: var(--color-canvas, #{$color-canvas});
+  cursor: pointer;
+  transition: all $transition-fast;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+
+  &:hover {
+    border-color: var(--color-ink, #{$color-ink});
+    background-color: var(--color-surface-alt, #{$color-surface-alt});
+
+    .iconCircle {
+      color: var(--color-ink, #{$color-ink});
+      transform: translateY(-1px);
+    }
+  }
+
+  &--active {
+    border-color: var(--color-ink, #{$color-ink});
+    background-color: var(--color-surface-alt, #{$color-surface-alt});
+    border-style: solid;
+  }
+
+  &--uploading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+}
+
+.iconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-paper, #{$color-paper});
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  border: 1px solid var(--color-hairline, #{$color-hairline});
+  box-shadow: $shadow-subtle;
+  margin-bottom: 0.75rem;
+  transition: all $transition-fast;
+}
+
+.promptText {
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-ink, #{$color-ink});
+  line-height: 1.4;
+
+  span {
+    color: var(--color-ink, #{$color-ink});
+  }
+}
+
+.subText {
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  margin-top: 0.35rem;
+}
+
+// ---------------------------------------------------------------------------
+// PREVIEW CONTAINER (Con imagen seleccionada)
+// ---------------------------------------------------------------------------
+.previewContainer {
+  position: relative;
+  border-radius: $radius-cards;
+  overflow: hidden;
+  border: 1px solid var(--color-hairline, #{$color-hairline});
+  background-color: var(--color-paper, #{$color-paper});
+  box-shadow: $shadow-subtle;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+
+  @include tablet {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+  }
+}
+
+.imageFrame {
+  width: 84px;
+  height: 84px;
+  border-radius: $radius-inputs;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--color-surface-alt, #{$color-surface-alt});
+  border: 1px solid var(--color-hairline, #{$color-hairline});
+  box-shadow: $shadow-subtle;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--store {
+    border-radius: 50%;
+  }
+
+  &--wide {
+    width: 140px;
+    height: 84px;
+    border-radius: $radius-inputs;
+  }
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlayUploading {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.previewContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  gap: 0.75rem;
+}
+
+.previewMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: $font-size-caption;
+  font-weight: 500;
+  color: var(--color-ink, #{$color-ink});
+  background-color: var(--color-surface-alt, #{$color-surface-alt});
+  border: 1px solid var(--color-hairline, #{$color-hairline});
+  border-radius: $radius-badges;
+  padding: 2px 8px;
+  align-self: flex-start;
+}
+
+.previewHint {
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  margin: 0;
+}
+
+.previewActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.deleteButton {
+  color: $color-ember !important;
+  border-color: rgba($color-ember, 0.3) !important;
+  background-color: rgba(231, 0, 11, 0.1) !important;
+
+  &:hover:not(:disabled) {
+    background-color: rgba(231, 0, 11, 0.2) !important;
+    border-color: $color-ember !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// INPUT OCULTO
+// ---------------------------------------------------------------------------
+.hiddenInput {
+  display: none !important;
+}
+
+// ---------------------------------------------------------------------------
+// ALTERNATIVA DE URL DIRECTA
+// ---------------------------------------------------------------------------
+.urlSection {
+  margin-top: 0.5rem;
+}
+
+.urlToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: var(--color-ink, #{$color-ink});
+    text-decoration: underline;
+  }
+}
+
+.urlInputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  input {
+    flex: 1;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// HELPER & ERROR TEXTS
+// ---------------------------------------------------------------------------
+.helperText {
+  display: block;
+  font-size: $font-size-caption;
+  color: var(--color-mid-gray, #{$color-mid-gray});
+  margin-top: 0.35rem;
+}
+
+.errorText {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: $font-size-caption;
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: $radius-badges;
+  padding: 4px 10px;
+  margin-top: 0.5rem;
+}
