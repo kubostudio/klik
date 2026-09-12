@@ -468,3 +468,69 @@ img {
     margin-bottom: $spacing-4;
   }
 }
+
+// ==============================================================================
+// Scroll Reveal & Micro-Animations
+// ==============================================================================
+.scroll-reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+
+  &--fade-up {
+    transform: translate3d(0, 32px, 0);
+  }
+
+  &--fade-in {
+    transform: translate3d(0, 0, 0);
+  }
+
+  &--scale-up {
+    transform: scale3d(0.95, 0.95, 1) translate3d(0, 20px, 0);
+  }
+
+  &--slide-left {
+    transform: translate3d(-32px, 0, 0);
+  }
+
+  &--slide-right {
+    transform: translate3d(32px, 0, 0);
+  }
+
+  &--visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+}
+
+@keyframes counterPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+  }
+  100% {
+    transform: scale(1);
+    filter: none;
+  }
+}
+
+.counter--completed {
+  animation: counterPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .counter--completed {
+    animation: none !important;
+  }
+}
+

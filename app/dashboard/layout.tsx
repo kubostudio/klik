@@ -69,17 +69,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Link
             href="/dashboard"
             className={styles.logo}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              backgroundColor: '#0a0a0a',
-              borderRadius: '12px',
-              padding: '6px 14px',
-              textDecoration: 'none',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-            }}
           >
-            <Logo size={44} color="#ffffff" />
+            <Logo size={50} color="#ffffff" />
           </Link>
         </div>
 

@@ -8,8 +8,9 @@
 .page {
   background-color: #0a0a0a;
   color: #f5f5f5;
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   position: relative;
 
   // Scoped Button Styles for Dark Mode Landing
@@ -76,134 +77,475 @@
 }
 
 // ---------------------------------------------------------------------------
-// 1. HEADER (Glassmorphic Dark Sticky Bar)
+// 1. VERTICAL LEFT SIDEBAR (Desktop Fixed Left Navbar)
 // ---------------------------------------------------------------------------
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background-color: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid #1f1f1f;
-  padding: $spacing-3 0;
-  transition: border-color $transition-fast;
+.sidebar {
+  display: none;
 
-  &__inner {
-    @include max-width-container;
+  @include desktop {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 28px 18px;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
   }
 
-  &__logo {
+  &__top {
     display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__brand {
+    display: inline-flex;
     align-items: center;
-    font-size: $font-size-xl;
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: -0.03em;
+    gap: 10px;
     text-decoration: none;
+    padding: 2px 4px;
     transition: opacity $transition-fast;
 
     &:hover {
       opacity: 0.9;
     }
+  }
 
-    span {
-      color: #ffffff;
-    }
+  &__brandText {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+    background: linear-gradient(180deg, #ffffff 40%, rgba(255, 255, 255, 0.72) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   &__nav {
-    display: none;
-    align-items: center;
-    gap: $spacing-6;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
 
-    @include desktop {
-      display: flex;
+  &__navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #a1a1aa;
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    text-align: left;
+    width: 100%;
+
+    &:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
     }
 
-    a {
-      font-size: $font-size-sm;
-      font-weight: 500;
-      color: #a3a3a3;
-      text-decoration: none;
-      transition: color $transition-fast;
+    &--active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
-      &:hover {
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 25%;
+        bottom: 25%;
+        width: 3px;
+        background: #ffffff;
+        border-radius: 0 4px 4px 0;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      }
+
+      .sidebar__navIndex {
         color: #ffffff;
+        opacity: 1;
       }
     }
   }
 
-  &__actions {
+  &__navIndex {
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 600;
+    color: #71717a;
+    opacity: 0.8;
+  }
+
+  &__navLabel {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  &__loginBtn {
     display: flex;
     align-items: center;
-    gap: $spacing-3;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #a3a3a3;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &__ctaBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0a0a0a;
+    background: linear-gradient(180deg, #ffffff 0%, #ebebeb 100%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 18px -2px rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      transform: translateY(-1px);
+      background: #ffffff;
+      box-shadow: 0 0 24px 0 rgba(255, 255, 255, 0.55);
+      color: #000000;
+    }
+  }
+
+  &__tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #71717a;
+    margin-top: 4px;
+
+    span {
+      color: #22c55e;
+    }
   }
 }
 
 // ---------------------------------------------------------------------------
-// 2. HERO SECTION
+// 2. MOBILE TOP BAR & DRAWER (< 1024px)
 // ---------------------------------------------------------------------------
-.hero {
-  padding: 100px 0 $spacing-16;
-  background-color: #0a0a0a;
-  border-bottom: 1px solid #1f1f1f;
-  position: relative;
-  overflow: hidden;
+.mobileHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 110;
+  background: rgba(12, 12, 12, 0.9);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
 
-  // Ambient radial glow for depth
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 900px;
-    height: 500px;
-    background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.05) 0%, rgba(10, 10, 10, 0) 70%);
-    pointer-events: none;
-    z-index: 0;
+  @include desktop {
+    display: none;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__menuBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  &__slideIndicator {
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 600;
+    color: #a1a1aa;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__ctaBtn {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0a0a0a;
+    background: #ffffff;
+    text-decoration: none;
+  }
+
+  // Mobile Slide-out Drawer
+  &__drawer {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 270px;
+    background: rgba(12, 12, 12, 0.96);
+    backdrop-filter: blur(28px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 120;
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8);
+    animation: drawerSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &__drawerNav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__drawerNavItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #a1a1aa;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    &--active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      font-weight: 600;
+    }
+  }
+
+  &__drawerBottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__drawerBackdrop {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 115;
+  }
+}
+
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 3. RIGHT FLOATING SLIDE DOTS (Desktop Pagination)
+// ---------------------------------------------------------------------------
+.slideDots {
+  display: none;
+
+  @include desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 90;
+    background: rgba(18, 18, 18, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 8px;
+    border-radius: 9999px;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(1.2);
+    }
+
+    &--active {
+      height: 24px;
+      border-radius: 9999px;
+      background: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 4. FULL-PAGE SLIDES CONTAINER (Scroll-Snap Engine)
+// ---------------------------------------------------------------------------
+.slidesContainer {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include desktop {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+  }
+
+  @media (max-width: #{$breakpoint-desktop - 1px}) {
+    padding-top: 60px;
+    height: calc(100vh - 60px);
+  }
+}
+
+// Base Slide Layout
+.slide {
+  min-height: 100vh;
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  padding: 24px 16px;
+  box-sizing: border-box;
+
+  @include desktop {
+    padding: 32px 48px;
   }
 
   &__inner {
-    @include max-width-container;
+    width: 100%;
+    max-width: 1040px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 1: HERO
+// ---------------------------------------------------------------------------
+.slideHero {
+  background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 10, 0) 70%);
+
+  .heroContent {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    z-index: 1;
+    max-width: 820px;
   }
 
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-2;
-    background-color: #141414;
-    color: #e5e5e5;
-    font-size: $font-size-caption;
-    font-weight: 500;
-    padding: 5px 16px;
-    border-radius: $radius-badges;
-    margin-bottom: $spacing-5;
-    border: 1px solid #262626;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  &__title {
-    font-size: 38px;
+  .heroTitle {
+    font-size: 34px;
     font-weight: 600;
     line-height: 1.12;
     letter-spacing: $tracking-heading;
     color: #ffffff;
-    max-width: 860px;
     margin-bottom: $spacing-4;
 
     @include desktop {
-      font-size: 54px;
+      font-size: 50px;
       letter-spacing: $tracking-display;
       line-height: 1.08;
     }
@@ -216,30 +558,548 @@
     }
   }
 
-  &__subtitle {
+  .heroSubtitle {
     font-size: $font-size-body-lg;
     color: #a3a3a3;
-    max-width: 660px;
+    max-width: 620px;
     margin-bottom: $spacing-8;
     line-height: 1.55;
 
     @include desktop {
-      font-size: 19px;
+      font-size: 18px;
     }
   }
 
-  &__ctas {
+  .heroCtas {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 380px;
     gap: $spacing-3;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
 
     @include tablet {
       flex-direction: row;
       justify-content: center;
       max-width: none;
+    }
+  }
+
+  .scrollHint {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #71717a;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 7px 16px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    animation: bounceSlow 2.5s infinite ease-in-out;
+
+    &:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+  }
+}
+
+@keyframes bounceSlow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 2: DASHBOARD & METRICS
+// ---------------------------------------------------------------------------
+.slideDashboard {
+  .trustRow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 980px;
+    margin-bottom: 20px;
+
+    @include desktop {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .trustCard {
+    background: #131313;
+    border: 1px solid #222222;
+    border-radius: 16px;
+    padding: 10px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .trustNumber {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .trustLabel {
+      font-size: 11px;
+      color: #888888;
+      margin-top: 2px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 3: BENTO GRID ("TODO LO QUE NECESITAS")
+// ---------------------------------------------------------------------------
+.slideBento {
+  .slideHeader {
+    text-align: center;
+    max-width: 640px;
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: $tracking-heading;
+      margin-bottom: 6px;
+      color: #ffffff;
+
+      @include desktop {
+        font-size: 34px;
+      }
+    }
+
+    p {
+      color: #a3a3a3;
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+  }
+
+  .bentoGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    width: 100%;
+    max-width: 980px;
+
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bentoCard {
+    background: #141414;
+    border: 1px solid #222222;
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    &--span2 {
+      @include desktop {
+        grid-column: span 3;
+      }
+    }
+
+    .cardIcon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #1e1e1e;
+      border: 1px solid #2d2d2d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 5px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      font-size: 12.5px;
+      color: #999999;
+      line-height: 1.45;
+    }
+
+    .visualSnippet {
+      background: #1a1a1a;
+      border: 1px solid #262626;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 12px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 4: CÓMO FUNCIONA QORI
+// ---------------------------------------------------------------------------
+.slideHow {
+  .slideHeader {
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 28px;
+
+    h2 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: $tracking-heading;
+      margin-bottom: 6px;
+      color: #ffffff;
+
+      @include desktop {
+        font-size: 34px;
+      }
+    }
+
+    p {
+      color: #a3a3a3;
+      font-size: 14px;
+    }
+  }
+
+  .stepsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 980px;
+
+    @include desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .stepCard {
+    background: #141414;
+    border: 1px solid #222222;
+    border-radius: 18px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+    }
+
+    .stepBadge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #a1a1aa;
+      font-family: monospace;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #22c55e;
+      }
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      font-size: 13px;
+      color: #999999;
+      line-height: 1.5;
+
+      code {
+        background: #202020;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #ffffff;
+        font-size: 12px;
+        border: 1px solid #333333;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 5: PLAN QORI
+// ---------------------------------------------------------------------------
+.slidePricing {
+  .slideHeader {
+    text-align: center;
+    max-width: 520px;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: $tracking-heading;
+      margin-bottom: 6px;
+      color: #ffffff;
+
+      @include desktop {
+        font-size: 34px;
+      }
+    }
+
+    p {
+      color: #a3a3a3;
+      font-size: 13.5px;
+    }
+  }
+
+  .planCard {
+    background: #141414;
+    border: 1px solid #2c2c2c;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85), 0 0 24px -4px rgba(255, 255, 255, 0.12);
+    }
+
+    .featuredBadge {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: #ffffff;
+      color: #0a0a0a;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
+
+    .planName {
+      font-size: 19px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .planTagline {
+      font-size: 12px;
+      color: #888888;
+      margin-bottom: 10px;
+    }
+
+    .planPrice {
+      font-size: 30px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+
+      span {
+        font-size: 13px;
+        font-weight: 400;
+        color: #71717a;
+      }
+    }
+
+    .planFeatures {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+      margin-bottom: 20px;
+      padding: 0;
+
+      @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px 16px;
+      }
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12.5px;
+        color: #d4d4d4;
+
+        svg {
+          color: #22c55e;
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 6: FOOTER & CIERRE
+// ---------------------------------------------------------------------------
+.slideFooter {
+  .footerBox {
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .ctaBanner {
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08) 0%, rgba(20, 20, 20, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+
+      @include desktop {
+        font-size: 32px;
+      }
+    }
+
+    p {
+      font-size: 13.5px;
+      color: #a3a3a3;
+      max-width: 500px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .bannerCtas {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+
+      @include tablet {
+        flex-direction: row;
+        justify-content: center;
+        max-width: none;
+      }
+    }
+  }
+
+  .footerContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 20px;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brandMeta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+
+      p {
+        font-size: 12px;
+        color: #71717a;
+        max-width: 320px;
+        margin: 0;
+      }
+    }
+
+    .linksMeta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      a {
+        font-size: 13px;
+        color: #888888;
+        text-decoration: none;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #555555;
+    padding-top: 4px;
+
+    a {
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
@@ -664,10 +1524,16 @@
       font-weight: 700;
       color: #ffffff;
       letter-spacing: -0.025em;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.25s ease;
 
       @include desktop {
-        font-size: 32px;
+        font-size: 34px;
       }
+    }
+
+    &:hover .metricNumber {
+      transform: scale(1.05);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
     }
 
     .metricLabel {
@@ -736,11 +1602,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform $transition-fast, border-color $transition-fast;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      border-color: #383838;
-      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     &--span2 {
@@ -840,6 +1707,13 @@
     padding: $spacing-8 $spacing-6;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.6);
+    }
 
     .stepNumber {
       font-size: $font-size-caption;
@@ -907,6 +1781,13 @@
     position: relative;
     max-width: 480px;
     margin: 0 auto;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 24px 54px -12px rgba(0, 0, 0, 0.85), 0 0 24px -4px rgba(255, 255, 255, 0.12);
+    }
 
     .featuredBadge {
       position: absolute;

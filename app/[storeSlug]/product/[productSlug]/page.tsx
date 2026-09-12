@@ -277,7 +277,7 @@ export default function ProductDetailPage() {
         <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
           Desarrollado por{' '}
           <a
-            href="https://kubo.pe"
+            href="https://kubostudio.co"
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
