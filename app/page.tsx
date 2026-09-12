@@ -633,7 +633,10 @@ export default function HomePage() {
         </div>
 
         <div className={styles.footer__copy}>
-          © {new Date().getFullYear()} Qori (qori.business) — Todos los derechos reservados.
+          © {new Date().getFullYear()} Qori (qori.business) — Todos los derechos reservados. Desarrollado por{' '}
+          <a href="https://kubo.pe" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', fontWeight: 600 }}>
+            KUBOstudio
+          </a>
         </div>
       </footer>
     </div>

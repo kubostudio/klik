@@ -3,14 +3,14 @@
 .carouselContainer {
   position: relative;
   width: 100%;
-  background-color: $color-bg-surface;
+  background-color: #141414;
 }
 
 .mainWrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background-color: $color-bg-surface;
+  background-color: #141414;
   overflow: hidden;
 
   // Single static image
@@ -43,8 +43,9 @@
   top: 12px;
   right: 12px;
   z-index: 5;
-  background-color: rgba(15, 23, 42, 0.7);
+  background-color: rgba(10, 10, 10, 0.8);
   backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #FFFFFF;
   font-size: 11px;
   font-weight: $font-weight-semibold;
@@ -64,11 +65,11 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(20, 20, 20, 0.85);
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: $color-text-primary;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,9 +77,9 @@
   transition: all $transition-fast;
 
   &:hover {
-    background-color: #FFFFFF;
+    background-color: #2a2a2a;
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
   }
 
   &--prev {
@@ -96,14 +97,14 @@
   padding: $spacing-3 $spacing-4;
   overflow-x: auto;
   scrollbar-width: thin;
-  background-color: $color-bg;
-  border-top: 1px solid $color-border;
+  background-color: #141414;
+  border-top: 1px solid #242424;
 
   &::-webkit-scrollbar {
     height: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: $color-border;
+    background-color: #333333;
     border-radius: 4px;
   }
 }
@@ -114,7 +115,7 @@
   flex-shrink: 0;
   border-radius: $radius-sm;
   overflow: hidden;
-  border: 2px solid $color-border;
+  border: 2px solid #282828;
   background: none;
   padding: 0;
   cursor: pointer;
@@ -128,12 +129,12 @@
   }
 
   &:hover {
-    border-color: $color-text-primary;
+    border-color: #666666;
   }
 
   &--active {
-    border-color: $color-ink;
-    box-shadow: 0 0 0 1px $color-ink;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 1px #ffffff;
   }
 }
 
@@ -193,20 +194,21 @@
           height: 8px;
           padding: 0;
           border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.6);
-          border: 1px solid rgba(0, 0, 0, 0.2);
+          background-color: rgba(255, 255, 255, 0.4);
+          border: 1px solid rgba(0, 0, 0, 0.5);
           cursor: pointer;
           text-indent: -9999px;
           transition: all 0.2s ease;
         }
 
         &.slick-active button {
-          background-color: $color-ink;
+          background-color: #ffffff;
           width: 20px;
           border-radius: 4px;
-          border-color: $color-ink;
+          border-color: #ffffff;
         }
       }
     }
   }
 }
+

@@ -82,14 +82,14 @@ export default function OrderConfirmationPage() {
 
           {/* Desglose del pedido */}
           <div className={styles.whatsappCtaBox}>
-            <div style={{ fontWeight: 700, fontSize: '0.8125rem', color: '#0F172A', marginBottom: '0.5rem' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.8125rem', color: '#ffffff', marginBottom: '0.5rem' }}>
               Resumen de tu compra:
             </div>
             {order.items?.map((item) => (
               <div key={item.id} style={{ marginBottom: '0.35rem' }}>
                 • <strong>{item.product_name}</strong> (x{item.quantity}) — {formatCurrency(item.subtotal)}
                 {item.variant_data && (
-                  <div style={{ fontSize: '0.75rem', color: '#64748B', paddingLeft: '0.75rem' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#a3a3a3', paddingLeft: '0.75rem' }}>
                     {Object.entries(item.variant_data)
                       .map(([k, v]) => `${k}: ${v}`)
                       .join(', ')}
@@ -97,11 +97,11 @@ export default function OrderConfirmationPage() {
                 )}
               </div>
             ))}
-            <div style={{ borderTop: '1px solid #E2E8F0', marginTop: '0.5rem', paddingTop: '0.5rem', fontWeight: 700 }}>
+            <div style={{ borderTop: '1px solid #282828', marginTop: '0.5rem', paddingTop: '0.5rem', fontWeight: 700 }}>
               Total: {formatCurrency(order.total)}
             </div>
             {order.customer_dni && (
-              <div style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '0.4rem' }}>
+              <div style={{ fontSize: '0.75rem', color: '#a3a3a3', marginTop: '0.4rem' }}>
                 Comprador: {order.customer_name} (DNI: {order.customer_dni})
               </div>
             )}
@@ -124,6 +124,28 @@ export default function OrderConfirmationPage() {
           </div>
         </div>
       </div>
+
+      {/* Powered by Qori & KUBOstudio */}
+      <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
+        <div>
+          Creado con{' '}
+          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
+            Qori<span>.</span>
+          </Link>{' '}
+          — Catálogo online para WhatsApp
+        </div>
+        <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
+          Desarrollado por{' '}
+          <a
+            href="https://kubo.pe"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+          >
+            KUBOstudio
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }

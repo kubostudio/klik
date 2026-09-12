@@ -163,8 +163,9 @@ export default function CheckoutPage() {
           {error && (
             <div
               style={{
-                backgroundColor: '#FEF2F2',
-                color: '#EF4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                color: '#f87171',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
                 padding: '0.65rem 0.85rem',
                 borderRadius: '8px',
                 fontSize: '0.8125rem',
@@ -178,14 +179,14 @@ export default function CheckoutPage() {
           {/* Resumen compacto del pedido */}
           <div
             style={{
-              backgroundColor: '#F8FAFC',
-              border: '1px solid #E2E8F0',
+              backgroundColor: '#191919',
+              border: '1px solid #282828',
               borderRadius: '8px',
               padding: '0.85rem',
               marginBottom: '1.25rem',
             }}
           >
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#a3a3a3', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               Resumen ({items.length} producto{items.length > 1 ? 's' : ''})
             </div>
             {items.map((item) => (
@@ -199,14 +200,14 @@ export default function CheckoutPage() {
                 }}
               >
                 <span>
-                  {item.name} <span style={{ color: '#64748B' }}>x{item.quantity}</span>
+                  {item.name} <span style={{ color: '#a3a3a3' }}>x{item.quantity}</span>
                 </span>
                 <strong>{formatCurrency(item.price * item.quantity)}</strong>
               </div>
             ))}
             <div
               style={{
-                borderTop: '1px solid #E2E8F0',
+                borderTop: '1px solid #282828',
                 marginTop: '0.5rem',
                 paddingTop: '0.5rem',
                 display: 'flex',
@@ -216,7 +217,7 @@ export default function CheckoutPage() {
               }}
             >
               <span>Total a pagar</span>
-              <span style={{ color: '#0F172A' }}>{formatCurrency(subtotal)}</span>
+              <span style={{ color: '#ffffff' }}>{formatCurrency(subtotal)}</span>
             </div>
           </div>
 
@@ -299,7 +300,7 @@ export default function CheckoutPage() {
                 alignItems: 'center',
                 gap: '0.4rem',
                 fontSize: '0.75rem',
-                color: '#64748B',
+                color: '#a3a3a3',
                 margin: '1rem 0',
               }}
             >
@@ -317,6 +318,28 @@ export default function CheckoutPage() {
           </form>
         </div>
       </div>
+
+      {/* Powered by Qori & KUBOstudio */}
+      <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
+        <div>
+          Creado con{' '}
+          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
+            Qori<span>.</span>
+          </Link>{' '}
+          — Catálogo online para WhatsApp
+        </div>
+        <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
+          Desarrollado por{' '}
+          <a
+            href="https://kubo.pe"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+          >
+            KUBOstudio
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }

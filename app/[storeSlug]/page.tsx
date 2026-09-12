@@ -64,7 +64,7 @@ export default function PublicStoreCatalogPage() {
     return (
       <div className={styles.storeContainer}>
         <div style={{ padding: '5rem 1rem', textAlign: 'center' }}>
-          <p style={{ color: '#64748B', fontSize: '0.9375rem' }}>Cargando tienda...</p>
+          <p style={{ color: '#a3a3a3', fontSize: '0.9375rem' }}>Cargando tienda...</p>
         </div>
       </div>
     );
@@ -162,7 +162,7 @@ export default function PublicStoreCatalogPage() {
 
         {/* PRODUCTS GRID */}
         {filteredProducts.length === 0 ? (
-          <div className="empty-state" style={{ backgroundColor: '#FFFFFF' }}>
+          <div className="empty-state">
             <div className="empty-state__icon">
               <Package size={44} />
             </div>
@@ -237,13 +237,26 @@ export default function PublicStoreCatalogPage() {
         )}
       </div>
 
-      {/* Powered by Qori badge */}
-      <footer style={{ textAlign: 'center', padding: '1rem', fontSize: '0.75rem', color: '#94A3B8' }}>
-        Creado con{' '}
-        <Link href="/" style={{ color: '#0F172A', fontWeight: 600 }}>
-          Qori<span>.</span>
-        </Link>{' '}
-        — Catálogo online para WhatsApp
+      {/* Powered by Qori & KUBOstudio */}
+      <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
+        <div>
+          Creado con{' '}
+          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
+            Qori<span>.</span>
+          </Link>{' '}
+          — Catálogo online para WhatsApp
+        </div>
+        <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
+          Desarrollado por{' '}
+          <a
+            href="https://kubo.pe"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+          >
+            KUBOstudio
+          </a>
+        </div>
       </footer>
     </div>
   );

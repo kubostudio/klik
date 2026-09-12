@@ -66,7 +66,7 @@ export default function ProductDetailPage() {
     return (
       <div className={styles.storeContainer}>
         <div style={{ padding: '5rem 1rem', textAlign: 'center' }}>
-          <p style={{ color: '#64748B', fontSize: '0.9375rem' }}>Cargando producto...</p>
+          <p style={{ color: '#a3a3a3', fontSize: '0.9375rem' }}>Cargando producto...</p>
         </div>
       </div>
     );
@@ -161,8 +161,8 @@ export default function ProductDetailPage() {
               <span className={styles.productDetail__category}>{product.category}</span>
               {product.brand && (
                 <>
-                  <span style={{ color: '#94A3B8' }}>•</span>
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <span style={{ color: '#666666' }}>•</span>
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#a3a3a3', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     {product.brand}
                   </span>
                 </>
@@ -182,7 +182,7 @@ export default function ProductDetailPage() {
                   <div key={groupName} className={styles.productDetail__variantGroup}>
                     <label>
                       {groupName}:{' '}
-                      <span style={{ fontWeight: 400, color: '#64748B' }}>
+                      <span style={{ fontWeight: 400, color: '#a3a3a3' }}>
                         {selectedVariants[groupName] || 'Selecciona'}
                       </span>
                     </label>
@@ -264,6 +264,28 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Powered by Qori & KUBOstudio */}
+      <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
+        <div>
+          Creado con{' '}
+          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
+            Qori<span>.</span>
+          </Link>{' '}
+          — Catálogo online para WhatsApp
+        </div>
+        <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
+          Desarrollado por{' '}
+          <a
+            href="https://kubo.pe"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+          >
+            KUBOstudio
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }

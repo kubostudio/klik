@@ -90,7 +90,7 @@ export default function CartPage() {
                       <div className={styles.price}>
                         {formatCurrency(item.price * item.quantity)}
                         {item.quantity > 1 && (
-                          <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 400 }}>
+                          <span style={{ fontSize: '0.75rem', color: '#a3a3a3', fontWeight: 400 }}>
                             {' '}
                             ({formatCurrency(item.price)} c/u)
                           </span>
@@ -102,7 +102,7 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => handleRemove(item.id)}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8' }}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888888' }}
                         title="Eliminar producto"
                       >
                         <Trash2 size={16} />
@@ -132,7 +132,7 @@ export default function CartPage() {
               <div className={styles.cartView__summary}>
                 <div className={styles.row}>
                   <span>Subtotal</span>
-                  <span style={{ fontSize: '1.25rem', color: '#0F172A' }}>
+                  <span style={{ fontSize: '1.25rem', color: '#ffffff' }}>
                     {formatCurrency(subtotal)}
                   </span>
                 </div>
@@ -154,6 +154,28 @@ export default function CartPage() {
           )}
         </div>
       </div>
+
+      {/* Powered by Qori & KUBOstudio */}
+      <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
+        <div>
+          Creado con{' '}
+          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
+            Qori<span>.</span>
+          </Link>{' '}
+          — Catálogo online para WhatsApp
+        </div>
+        <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
+          Desarrollado por{' '}
+          <a
+            href="https://kubo.pe"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+          >
+            KUBOstudio
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
