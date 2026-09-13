@@ -424,6 +424,66 @@
     align-items: center;
     gap: $spacing-3;
   }
+
+  .topbarSkeleton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .skeletonText {
+    height: 16px;
+    width: 130px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
+    background-size: 200% 100%;
+    animation: dashboardShimmer 1.8s infinite ease-in-out;
+  }
+
+  .skeletonSlug {
+    height: 14px;
+    width: 170px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #191919 25%, #222222 50%, #191919 75%);
+    background-size: 200% 100%;
+    animation: dashboardShimmer 1.8s infinite ease-in-out;
+  }
+
+  .skeletonBadge {
+    height: 18px;
+    width: 60px;
+    border-radius: 9999px;
+    background: #1f1f1f;
+  }
+
+  .skeletonButton {
+    height: 32px;
+    width: 110px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #1f1f1f 25%, #282828 50%, #1f1f1f 75%);
+    background-size: 200% 100%;
+    animation: dashboardShimmer 1.8s infinite ease-in-out;
+  }
+}
+
+.skeletonGreeting {
+  display: inline-block;
+  height: 28px;
+  width: 160px;
+  border-radius: 6px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
+  background-size: 200% 100%;
+  animation: dashboardShimmer 1.8s infinite ease-in-out;
+}
+
+@keyframes dashboardShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 // DASHBOARD VIEW CONTAINER

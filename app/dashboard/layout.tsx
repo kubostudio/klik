@@ -1,57 +1,49 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from '@/styles/modules/dashboard.module.scss';
-import { getCurrentStore } from '@/lib/supabase/db';
-import { Store } from '@/lib/supabase/types';
 import {
   LayoutDashboard,
   Package,
   ShoppingBag,
   Users,
-  BarChart3,
   Clock,
   Settings,
   ExternalLink,
   Share2,
   Menu,
   X,
-  Sparkles,
 } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
+import { DashboardProvider, useDashboard } from '@/contexts/DashboardContext';
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [store, setStore] = useState<Store | null>(null);
+  const { store, isLoadingStore } = useDashboard();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    getCurrentStore().then(setStore);
-  }, [pathname]);
 
   const navItems = [
     { href: '/dashboard', label: 'Inicio', icon: LayoutDashboard },
     { href: '/dashboard/products', label: 'Productos', icon: Package },
     { href: '/dashboard/orders', label: 'Pedidos', icon: ShoppingBag },
     { href: '/dashboard/customers', label: 'Clientes', icon: Users },
-    // { href: '/dashboard/analytics', label: 'Estadísticas', icon: BarChart3 }, // Retomaremos en v2
     { href: '/dashboard/follow-ups', label: 'Seguimiento', icon: Clock },
     { href: '/dashboard/settings', label: 'Configuración', icon: Settings },
   ];
 
-  const currentPlan = store?.plan || 'starter';
   const currentSlug = store?.slug || '';
-  const currentName = store?.name || 'Mi Tienda';
+  const currentName = store?.name || '';
 
   const handleShareStore = () => {
+    if (!currentSlug) return;
     const url = `https://qori.business/${currentSlug}`;
     if (navigator.share) {
       navigator.share({
-        title: currentName,
-        text: `Compra en ${currentName} a través de nuestro catálogo online:`,
+        title: currentName || 'Mi Tienda',
+        text: `Compra en ${currentName || 'Mi Tienda'} a través de nuestro catálogo online:`,
         url,
       }).catch(() => {});
     } else {
@@ -66,10 +58,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* DESKTOP SIDEBAR */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebar__brand}>
-          <Link
-            href="/dashboard"
-            className={styles.logo}
-          >
+          <Link href="/dashboard" className={styles.logo}>
             <Logo size={50} color="#ffffff" />
           </Link>
         </div>
@@ -90,29 +79,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             );
           })}
         </nav>
-
-        {/* LINK TIENDA */}
-        {/* <div className={styles.sidebar__storeLink}>
-          {currentSlug ? (
-            <Link href={`/${currentSlug}`} target="_blank" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span>Ver mi tienda</span>
-              <ExternalLink size={12} />
-            </Link>
-          ) : (
-            <Link href="/onboarding" style={{ color: '#D97706' }}>
-              + Crear tienda
-            </Link>
-          )}
-          {currentSlug && (
-            <button
-              onClick={handleShareStore}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B' }}
-              title="Compartir enlace"
-            >
-              <Share2 size={14} />
-            </button>
-          )}
-        </div> */}
       </aside>
 
       {/* MAIN CONTAINER */}
@@ -183,23 +149,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* DESKTOP TOPBAR */}
         <div className={styles.topbar}>
-          <div className={styles.welcome} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <span style={{ fontWeight: 600 }}>{currentName}</span>
-            {currentSlug ? (
-              <span style={{ color: 'var(--color-mid-gray)', fontWeight: 400, fontSize: '0.875rem' }}>
-                — qori.business/{currentSlug}
+          {isLoadingStore && !store ? (
+            <div className={styles.topbarSkeleton}>
+              <div className={styles.skeletonText} />
+              <div className={styles.skeletonSlug} />
+              <div className={styles.skeletonBadge} />
+            </div>
+          ) : (
+            <div className={styles.welcome} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <span style={{ fontWeight: 600 }}>{currentName || 'Mi Tienda'}</span>
+              {currentSlug ? (
+                <span style={{ color: 'var(--color-mid-gray)', fontWeight: 400, fontSize: '0.875rem' }}>
+                  — qori.business/{currentSlug}
+                </span>
+              ) : (
+                <span style={{ color: 'var(--color-mid-gray)', fontWeight: 400, fontSize: '0.875rem' }}>
+                  — Tienda pendiente de publicación
+                </span>
+              )}
+              <span className="badge badge--soft" title="Sistema en línea y sincronizado">
+                ● En línea
               </span>
-            ) : (
-              <span style={{ color: 'var(--color-mid-gray)', fontWeight: 400, fontSize: '0.875rem' }}>
-                — Tienda pendiente de publicación
-              </span>
-            )}
-            <span className="badge badge--soft" title="Sistema en línea y sincronizado">
-              ● En línea
-            </span>
-          </div>
+            </div>
+          )}
+
           <div className={styles.actions}>
-            {currentSlug ? (
+            {isLoadingStore && !store ? (
+              <div className={styles.skeletonButton} />
+            ) : currentSlug ? (
               <>
                 <Link href={`/${currentSlug}`} target="_blank" className="btn btn--outline btn--sm">
                   <ExternalLink size={14} /> Ver tienda
@@ -220,5 +197,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className={styles.viewContainer}>{children}</div>
       </div>
     </div>
+  );
+}
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <DashboardProvider>
+      <DashboardLayoutInner>{children}</DashboardLayoutInner>
+    </DashboardProvider>
   );
 }

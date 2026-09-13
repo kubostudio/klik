@@ -11,6 +11,7 @@ import {
   createStore,
   getAllProductImages,
 } from '@/lib/supabase/db';
+import { useDashboard } from '@/contexts/DashboardContext';
 import { Product, Store } from '@/lib/supabase/types';
 import { formatCurrency, slugify } from '@/lib/utils';
 import MultiImageUpload from '@/components/ui/MultiImageUpload';
@@ -29,7 +30,8 @@ import {
 } from 'lucide-react';
 
 export default function ProductsDashboardPage() {
-  const [store, setStore] = useState<Store | null>(null);
+  const { store: contextStore } = useDashboard();
+  const [store, setStore] = useState<Store | null>(contextStore);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,11 +52,11 @@ export default function ProductsDashboardPage() {
 
   useEffect(() => {
     loadProducts();
-  }, []);
+  }, [contextStore?.id]);
 
   const loadProducts = async () => {
     setLoading(true);
-    const s = await getCurrentStore();
+    const s = contextStore || (await getCurrentStore());
     setStore(s);
     if (s) {
       const prods = await getProducts(s.id);

@@ -16,8 +16,11 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
+import { useDashboard } from '@/contexts/DashboardContext';
+
 export default function CustomersDashboardPage() {
-  const [store, setStore] = useState<Store | null>(null);
+  const { store: contextStore } = useDashboard();
+  const [store, setStore] = useState<Store | null>(contextStore);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +29,7 @@ export default function CustomersDashboardPage() {
   useEffect(() => {
     async function loadData() {
       setLoading(true);
-      const s = await getCurrentStore();
+      const s = contextStore || (await getCurrentStore());
       setStore(s);
       if (s) {
         const [custs, ords] = await Promise.all([
@@ -40,7 +43,7 @@ export default function CustomersDashboardPage() {
     }
 
     loadData();
-  }, []);
+  }, [contextStore?.id]);
 
   const storeName = store?.name || 'Mi Tienda';
 

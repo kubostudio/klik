@@ -9,8 +9,11 @@ import { formatDate } from '@/lib/utils';
 import { buildFollowUpWhatsAppUrl } from '@/lib/whatsapp';
 import { MessageCircle, Clock, CheckCircle, CheckCircle2, Search, AlertCircle, Settings, Check } from 'lucide-react';
 
+import { useDashboard } from '@/contexts/DashboardContext';
+
 export default function FollowUpsDashboardPage() {
-  const [store, setStore] = useState<Store | null>(null);
+  const { store: contextStore } = useDashboard();
+  const [store, setStore] = useState<Store | null>(contextStore);
   const [followUps, setFollowUps] = useState<FollowUp[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -24,7 +27,7 @@ export default function FollowUpsDashboardPage() {
   useEffect(() => {
     async function loadData() {
       setLoading(true);
-      const s = await getCurrentStore();
+      const s = contextStore || (await getCurrentStore());
       setStore(s);
       if (s) {
         const [fu, custs, ords] = await Promise.all([
@@ -40,7 +43,7 @@ export default function FollowUpsDashboardPage() {
     }
 
     loadData();
-  }, []);
+  }, [contextStore?.id]);
 
   const isPro = store?.plan === 'pro';
 

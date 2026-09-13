@@ -88,8 +88,11 @@ const STATUS_CONFIG: Record<
   },
 };
 
+import { useDashboard } from '@/contexts/DashboardContext';
+
 export default function OrdersDashboardPage() {
-  const [store, setStore] = useState<Store | null>(null);
+  const { store: contextStore } = useDashboard();
+  const [store, setStore] = useState<Store | null>(contextStore);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'all' | OrderStatus>('all');
@@ -99,11 +102,11 @@ export default function OrdersDashboardPage() {
 
   useEffect(() => {
     loadOrders();
-  }, [activeTab]);
+  }, [activeTab, contextStore?.id]);
 
   const loadOrders = async () => {
     setLoading(true);
-    const s = await getCurrentStore();
+    const s = contextStore || (await getCurrentStore());
     setStore(s);
     if (s) {
       const ords = await getOrders(s.id, activeTab === 'all' ? undefined : activeTab);

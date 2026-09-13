@@ -7,14 +7,16 @@ import { getCurrentStore, getStoreIntegration, updateStore, createStore, saveSto
 import { Store, StoreIntegration, PlanType } from '@/lib/supabase/types';
 import { slugify } from '@/lib/utils';
 import ImageUpload from '@/components/ui/ImageUpload';
+import { useDashboard } from '@/contexts/DashboardContext';
 import { Check, Sparkles, AlertCircle, Save, ExternalLink, Loader2, Instagram, ArrowDown } from 'lucide-react';
 
 function SettingsContent() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') === 'billing' ? 'billing' : 'store';
 
+  const { store: contextStore, refreshStore, updateStoreLocally } = useDashboard();
   const [activeTab, setActiveTab] = useState<'store' | 'pixels' | 'billing'>(initialTab);
-  const [store, setStore] = useState<Store | null>(null);
+  const [store, setStore] = useState<Store | null>(contextStore);
   const [integration, setIntegration] = useState<StoreIntegration | null>(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -27,14 +29,14 @@ function SettingsContent() {
   const [instaFeedback, setInstaFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   // Store fields
-  const [name, setName] = useState('');
-  const [slug, setSlug] = useState('');
-  const [description, setDescription] = useState('');
-  const [logoUrl, setLogoUrl] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
-  const [instagram, setInstagram] = useState('');
-  const [facebook, setFacebook] = useState('');
-  const [city, setCity] = useState('');
+  const [name, setName] = useState(contextStore?.name || '');
+  const [slug, setSlug] = useState(contextStore?.slug || '');
+  const [description, setDescription] = useState(contextStore?.description || '');
+  const [logoUrl, setLogoUrl] = useState(contextStore?.logo_url || '');
+  const [whatsapp, setWhatsapp] = useState(contextStore?.whatsapp || '');
+  const [instagram, setInstagram] = useState(contextStore?.instagram || '');
+  const [facebook, setFacebook] = useState(contextStore?.facebook || '');
+  const [city, setCity] = useState(contextStore?.city || '');
 
   // Pixel fields (Section 29 - Pro)
   const [gaId, setGaId] = useState('');
@@ -46,7 +48,7 @@ function SettingsContent() {
   useEffect(() => {
     async function loadSettings() {
       setLoading(true);
-      const currentStore = await getCurrentStore();
+      const currentStore = contextStore || (await getCurrentStore());
       setStore(currentStore);
       if (currentStore) {
         setName(currentStore.name || '');
@@ -67,7 +69,7 @@ function SettingsContent() {
     }
 
     loadSettings();
-  }, []);
+  }, [contextStore?.id]);
 
   const handleImportInstagram = async (overrideUser?: string) => {
     const rawTarget = (overrideUser || instaHandleInput || instagram).trim();
@@ -158,6 +160,8 @@ function SettingsContent() {
 
         if (created) {
           setStore(created);
+          updateStoreLocally(created);
+          refreshStore();
           setSavedSuccess(true);
           setTimeout(() => setSavedSuccess(false), 2500);
         } else {
@@ -179,6 +183,8 @@ function SettingsContent() {
 
       if (updated) {
         setStore(updated);
+        updateStoreLocally(updated);
+        refreshStore();
         setSavedSuccess(true);
         setTimeout(() => setSavedSuccess(false), 2500);
       } else {
