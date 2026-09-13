@@ -44,7 +44,7 @@ export default function HomePage() {
 
   const scrollToSlide = (index: number) => {
     const target = slideRefs.current[index];
-    if (target && containerRef.current) {
+    if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setActiveSlide(index);
     }
@@ -52,13 +52,13 @@ export default function HomePage() {
 
   // Synchronize active slide via IntersectionObserver
   useEffect(() => {
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
     const container = containerRef.current;
-    if (!container) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          if (entry.isIntersecting) {
             const index = slideRefs.current.findIndex((el) => el === entry.target);
             if (index !== -1) {
               setActiveSlide(index);
@@ -67,8 +67,8 @@ export default function HomePage() {
         });
       },
       {
-        root: container,
-        threshold: 0.5,
+        root: isDesktop ? container : null,
+        threshold: isDesktop ? 0.5 : 0.25,
       }
     );
 
@@ -81,9 +81,11 @@ export default function HomePage() {
     };
   }, []);
 
-  // Keyboard navigation (Arrow keys & Page keys)
+  // Keyboard navigation (Desktop only)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
+
       // Don't intercept if focus is inside an input or textarea
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
         return;
