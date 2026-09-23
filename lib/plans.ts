@@ -3,7 +3,7 @@ import { PlanType } from './supabase/types';
 export const PLAN_CONFIG = {
   active: {
     id: 'starter' as PlanType,
-    name: 'Plan Qori',
+    name: 'Plan Klik',
     priceMonthly: 19.90,
     trialDays: 14,
     tagline: 'Todo lo que necesitas para vender y organizar tus pedidos por WhatsApp.',

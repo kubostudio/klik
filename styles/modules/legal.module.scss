@@ -13,7 +13,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(249, 244, 239, 0.92); // Warm canvas frosted
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid $color-hairline;
@@ -24,7 +24,7 @@
     padding: $spacing-3 $spacing-4;
     display: flex;
     align-items: center;
-    justifyContent: space-between;
+    justify-content: space-between;
 
     @include tablet {
       padding: $spacing-4 $spacing-6;
@@ -34,14 +34,15 @@
   &__logo {
     display: flex;
     align-items: center;
+    font-family: $font-family-display;
     font-size: $font-size-xl;
     font-weight: 600;
     color: $color-ink;
     text-decoration: none;
-    letter-spacing: -0.03em;
+    letter-spacing: $tracking-heading-sm;
 
     span {
-      color: $color-mid-gray;
+      color: $color-primary; // Orange accent
     }
   }
 
@@ -68,7 +69,7 @@
   display: inline-flex;
   background-color: $color-paper;
   border: 1px solid $color-hairline;
-  border-radius: 18px;
+  border-radius: $radius-xl; // 14px
   padding: 4px;
   gap: 4px;
   margin-bottom: $spacing-6;
@@ -76,23 +77,25 @@
 
 .legalTab {
   padding: 6px 14px;
-  border-radius: 14px;
+  border-radius: $radius-lg; // 8px
   font-size: $font-size-sm;
   font-weight: 500;
   color: $color-mid-gray;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all $transition-fast;
 
   &:hover {
     color: $color-ink;
+    background-color: $color-canvas;
   }
 
   &--active {
-    background-color: $color-ink;
-    color: $color-paper;
+    background-color: $color-primary; // Orange active tab
+    color: $color-on-primary;
 
     &:hover {
-      color: $color-paper;
+      color: $color-on-primary;
+      background-color: $color-primary-hover;
     }
   }
 }
@@ -100,7 +103,7 @@
 .legalCard {
   background-color: $color-paper;
   border: 1px solid $color-hairline;
-  border-radius: 24px;
+  border-radius: $radius-cards; // 8px
   padding: $spacing-6;
   box-shadow: $shadow-subtle;
 
@@ -119,14 +122,15 @@
     }
 
     h1 {
+      font-family: $font-family-display;
       font-size: $font-size-2xl;
       font-weight: 600;
-      letter-spacing: -0.03em;
+      letter-spacing: $tracking-heading-sm;
       color: $color-ink;
       margin-bottom: $spacing-2;
 
       @include tablet {
-        font-size: $font-size-3xl;
+        font-size: $font-size-heading-lg;
       }
     }
 
@@ -139,17 +143,18 @@
 }
 
 .legalContent {
-  color: #262626;
+  color: $color-ink;
   font-size: 0.9375rem;
   line-height: 1.7;
 
   h2 {
+    font-family: $font-family-display;
     font-size: 1.15rem;
     font-weight: 600;
     color: $color-ink;
     margin-top: $spacing-8;
     margin-bottom: $spacing-3;
-    letter-spacing: -0.02em;
+    letter-spacing: $tracking-heading-sm;
     display: flex;
     align-items: center;
     gap: $spacing-2;
@@ -160,6 +165,7 @@
   }
 
   h3 {
+    font-family: $font-family-display;
     font-size: 1rem;
     font-weight: 600;
     color: $color-ink;
@@ -186,9 +192,9 @@
   }
 
   .callout {
-    background-color: $color-canvas;
-    border-left: 3px solid $color-ink;
-    border-radius: 0 14px 14px 0;
+    background-color: $color-primary-subtle;
+    border-left: 3px solid $color-primary; // Orange accent border
+    border-radius: 0 $radius-lg $radius-lg 0;
     padding: $spacing-4 $spacing-5;
     margin: $spacing-6 0;
     font-size: $font-size-sm;
@@ -212,7 +218,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justifyContent: space-between;
+    justify-content: space-between;
     gap: $spacing-4;
 
     @include tablet {
@@ -236,7 +242,7 @@
       text-decoration: none;
 
       &:hover {
-        color: $color-ink;
+        color: $color-primary; // Orange on hover
       }
     }
   }

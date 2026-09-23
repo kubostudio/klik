@@ -112,6 +112,7 @@ export default function CartPage() {
                         <button
                           type="button"
                           onClick={() => handleUpdateQty(item.id, item.quantity - 1)}
+                          aria-label="Disminuir cantidad"
                         >
                           -
                         </button>
@@ -119,10 +120,52 @@ export default function CartPage() {
                         <button
                           type="button"
                           onClick={() => handleUpdateQty(item.id, item.quantity + 1)}
+                          aria-label="Aumentar cantidad"
+                          disabled={
+                            item.stock !== null &&
+                            item.stock !== undefined &&
+                            item.quantity >= item.stock
+                          }
+                          style={{
+                            opacity:
+                              item.stock !== null &&
+                              item.stock !== undefined &&
+                              item.quantity >= item.stock
+                                ? 0.35
+                                : 1,
+                            cursor:
+                              item.stock !== null &&
+                              item.stock !== undefined &&
+                              item.quantity >= item.stock
+                                ? "not-allowed"
+                                : "pointer",
+                          }}
+                          title={
+                            item.stock !== null &&
+                            item.stock !== undefined &&
+                            item.quantity >= item.stock
+                              ? `Stock máximo disponible (${item.stock} uds.)`
+                              : "Aumentar cantidad"
+                          }
                         >
                           +
                         </button>
                       </div>
+                      {item.stock !== null &&
+                        item.stock !== undefined &&
+                        item.quantity >= item.stock && (
+                          <span
+                            style={{
+                              fontSize: "0.68rem",
+                              color: "#ca8a04",
+                              fontWeight: 600,
+                              marginTop: "0.2rem",
+                              textAlign: "right",
+                            }}
+                          >
+                            Máx. disponible ({item.stock} uds.)
+                          </span>
+                        )}
                     </div>
                   </div>
                 ))}
@@ -155,12 +198,12 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Powered by Qori & KUBOstudio */}
+      {/* Powered by Klik & KUBOstudio */}
       <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
         <div>
           Creado con{' '}
           <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
-            Qori<span>.</span>
+            Klik<span>.</span>
           </Link>{' '}
           — Catálogo online para WhatsApp
         </div>

@@ -125,12 +125,12 @@ export default function OrderConfirmationPage() {
         </div>
       </div>
 
-      {/* Powered by Qori & KUBOstudio */}
+      {/* Powered by Klik & KUBOstudio */}
       <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
         <div>
           Creado con{' '}
           <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
-            Qori<span>.</span>
+            Klik<span>.</span>
           </Link>{' '}
           — Catálogo online para WhatsApp
         </div>

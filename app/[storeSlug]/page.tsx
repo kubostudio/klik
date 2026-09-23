@@ -1,24 +1,32 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import styles from '@/styles/modules/store.module.scss';
-import { getStoreBySlug, getProducts } from '@/lib/supabase/db';
-import { cartManager, CartItem } from '@/lib/cart';
-import { trackEvent } from '@/lib/analytics';
-import { Store, Product } from '@/lib/supabase/types';
-import { formatCurrency } from '@/lib/utils';
-import { ShoppingCart, ArrowRight, Instagram, MessageCircle, MapPin, Package, Camera } from 'lucide-react';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import styles from "@/styles/modules/store.module.scss";
+import { getStoreBySlug, getProducts } from "@/lib/supabase/db";
+import { cartManager, CartItem } from "@/lib/cart";
+import { trackEvent } from "@/lib/analytics";
+import { Store, Product } from "@/lib/supabase/types";
+import { formatCurrency } from "@/lib/utils";
+import {
+  ShoppingCart,
+  ArrowRight,
+  Instagram,
+  MessageCircle,
+  MapPin,
+  Package,
+  Camera,
+} from "lucide-react";
 
 export default function PublicStoreCatalogPage() {
   const params = useParams();
-  const storeSlug = (params?.storeSlug as string) || '';
+  const storeSlug = (params?.storeSlug as string) || "";
 
   const [loading, setLoading] = useState(true);
   const [store, setStore] = useState<Store | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
@@ -28,13 +36,16 @@ export default function PublicStoreCatalogPage() {
       setStore(s);
 
       if (s) {
-        const prods = await getProducts(s.id, true);
+        const prods = await getProducts(s.id, true, s.product_sort_mode || undefined);
         setProducts(prods);
 
         trackEvent({
           storeId: s.id,
-          eventType: 'store_view',
-          metadata: { slug: storeSlug, referrer: typeof document !== 'undefined' ? document.referrer : '' },
+          eventType: "store_view",
+          metadata: {
+            slug: storeSlug,
+            referrer: typeof document !== "undefined" ? document.referrer : "",
+          },
         });
       }
       setLoading(false);
@@ -53,18 +64,20 @@ export default function PublicStoreCatalogPage() {
         setCartItems(e.detail.items);
       }
     };
-    window.addEventListener('qori-cart-updated', handleCartUpdate);
+    window.addEventListener("klik-cart-updated", handleCartUpdate);
 
     return () => {
-      window.removeEventListener('qori-cart-updated', handleCartUpdate);
+      window.removeEventListener("klik-cart-updated", handleCartUpdate);
     };
   }, [storeSlug]);
 
   if (loading) {
     return (
       <div className={styles.storeContainer}>
-        <div style={{ padding: '5rem 1rem', textAlign: 'center' }}>
-          <p style={{ color: '#a3a3a3', fontSize: '0.9375rem' }}>Cargando tienda...</p>
+        <div style={{ padding: "5rem 1rem", textAlign: "center" }}>
+          <p style={{ color: "#a3a3a3", fontSize: "0.9375rem" }}>
+            Cargando tienda...
+          </p>
         </div>
       </div>
     );
@@ -73,17 +86,25 @@ export default function PublicStoreCatalogPage() {
   if (!store) {
     return (
       <div className={styles.storeContainer}>
-        <div style={{ padding: '5rem 1rem', textAlign: 'center' }}>
-          <div className="empty-state" style={{ maxWidth: '420px', margin: '0 auto' }}>
+        <div style={{ padding: "5rem 1rem", textAlign: "center" }}>
+          <div
+            className="empty-state"
+            style={{ maxWidth: "420px", margin: "0 auto" }}
+          >
             <div className="empty-state__icon">
               <Package size={44} />
             </div>
             <div className="empty-state__title">Tienda no encontrada</div>
             <div className="empty-state__description">
-              La tienda &quot;{storeSlug}&quot; no existe o ha cambiado de dirección.
+              La tienda &quot;{storeSlug}&quot; no existe o ha cambiado de
+              dirección.
             </div>
-            <Link href="/" className="btn btn--primary btn--sm" style={{ marginTop: '1rem' }}>
-              Ir a Qori
+            <Link
+              href="/"
+              className="btn btn--primary btn--sm"
+              style={{ marginTop: "1rem" }}
+            >
+              Ir a Klik
             </Link>
           </div>
         </div>
@@ -92,12 +113,18 @@ export default function PublicStoreCatalogPage() {
   }
 
   // Categorías únicas
-  const categories = ['all', ...Array.from(new Set(products.map((p) => p.category || 'General')))];
+  const categories = [
+    "all",
+    ...Array.from(new Set(products.map((p) => p.category || "General"))),
+  ];
+
+  // Filtrar productos agotados (stock === 0) de la vista pública
+  const availableProducts = products.filter((p) => p.stock === null || p.stock === undefined || p.stock > 0);
 
   const filteredProducts =
-    selectedCategory === 'all'
-      ? products
-      : products.filter((p) => (p.category || 'General') === selectedCategory);
+    selectedCategory === "all"
+      ? availableProducts
+      : availableProducts.filter((p) => (p.category || "General") === selectedCategory);
 
   const cartTotalCount = cartManager.getTotalCount(cartItems);
   const cartSubtotal = cartManager.getSubtotal(cartItems);
@@ -108,7 +135,11 @@ export default function PublicStoreCatalogPage() {
         {/* STORE HEADER (Section 17) */}
         <header className={styles.header}>
           {store.logo_url ? (
-            <img src={store.logo_url} alt={store.name} className={styles.header__logo} />
+            <img
+              src={store.logo_url}
+              alt={store.name}
+              className={styles.header__logo}
+            />
           ) : (
             <div className={styles.header__logoPlaceholder}>
               {store.name.substring(0, 2).toUpperCase()}
@@ -116,17 +147,23 @@ export default function PublicStoreCatalogPage() {
           )}
 
           <h1 className={styles.header__name}>{store.name}</h1>
-          {store.description && <p className={styles.header__desc}>{store.description}</p>}
+          {store.description && (
+            <p className={styles.header__desc}>{store.description}</p>
+          )}
 
           <div className={styles.header__meta}>
             {store.city && (
               <span>
-                <MapPin size={13} style={{ display: 'inline', verticalAlign: '-1px' }} /> {store.city}
+                <MapPin
+                  size={13}
+                  style={{ display: "inline", verticalAlign: "-1px" }}
+                />{" "}
+                {store.city}
               </span>
             )}
             {store.instagram && (
               <a
-                href={`https://instagram.com/${store.instagram.replace('@', '')}`}
+                href={`https://instagram.com/${store.instagram.replace("@", "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -134,7 +171,7 @@ export default function PublicStoreCatalogPage() {
               </a>
             )}
             <a
-              href={`https://wa.me/${store.whatsapp.replace(/\D/g, '')}`}
+              href={`https://wa.me/${store.whatsapp.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -151,10 +188,10 @@ export default function PublicStoreCatalogPage() {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`${styles.catPill} ${
-                  selectedCategory === cat ? styles['catPill--active'] : ''
+                  selectedCategory === cat ? styles["catPill--active"] : ""
                 }`}
               >
-                {cat === 'all' ? 'Todos los productos' : cat}
+                {cat === "all" ? "Todos los productos" : cat}
               </button>
             ))}
           </div>
@@ -166,9 +203,12 @@ export default function PublicStoreCatalogPage() {
             <div className="empty-state__icon">
               <Package size={44} />
             </div>
-            <div className="empty-state__title">Esta tienda todavía no tiene productos disponibles</div>
+            <div className="empty-state__title">
+              Esta tienda todavía no tiene productos disponibles
+            </div>
             <div className="empty-state__description">
-              Vuelve a consultar pronto o escribe por WhatsApp para consultar el catálogo.
+              Vuelve a consultar pronto o escribe por WhatsApp para consultar el
+              catálogo.
             </div>
           </div>
         ) : (
@@ -182,7 +222,7 @@ export default function PublicStoreCatalogPage() {
                   <img
                     src={
                       prod.image_url ||
-                      'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&fit=crop'
+                      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&fit=crop"
                     }
                     alt={prod.name}
                     loading="lazy"
@@ -199,7 +239,9 @@ export default function PublicStoreCatalogPage() {
                     <span>{prod.category}</span>
                     {prod.brand && (
                       <>
-                        <span style={{ margin: '0 0.25rem', opacity: 0.6 }}>•</span>
+                        <span style={{ margin: "0 0.25rem", opacity: 0.6 }}>
+                          •
+                        </span>
                         <span style={{ fontWeight: 600 }}>{prod.brand}</span>
                       </>
                     )}
@@ -207,7 +249,61 @@ export default function PublicStoreCatalogPage() {
                   <Link href={`/${storeSlug}/product/${prod.slug}`}>
                     <h3 className={styles.productCard__name}>{prod.name}</h3>
                   </Link>
-                  <div className={styles.productCard__price}>{formatCurrency(prod.price)}</div>
+
+                  {/* Visualización de stock según configuración de la tienda */}
+                  {prod.show_stock !== false && prod.stock !== null && prod.stock !== undefined && (
+                    <div style={{ marginBottom: "0.4rem" }}>
+                      {prod.stock <= 3 ? (
+                        <span
+                          style={{
+                            fontSize: "0.725rem",
+                            fontWeight: 600,
+                            color: "#ca8a04",
+                            backgroundColor: "rgba(234, 179, 8, 0.12)",
+                            padding: "2px 7px",
+                            borderRadius: "6px",
+                            display: "inline-block",
+                          }}
+                        >
+                          ¡Últimas {prod.stock} disponibles!
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            fontSize: "0.725rem",
+                            fontWeight: 500,
+                            color: "var(--color-mid-gray)",
+                            backgroundColor: "var(--color-canvas)",
+                            padding: "2px 7px",
+                            borderRadius: "6px",
+                            display: "inline-block",
+                            border: "1px solid var(--color-hairline)",
+                          }}
+                        >
+                          {prod.stock} disponibles
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Precio o indicador de consulta según show_price */}
+                  {prod.show_price === false ? (
+                    <div
+                      className={styles.productCard__price}
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "var(--color-mid-gray)",
+                        fontWeight: 500,
+                        fontStyle: "italic",
+                      }}
+                    >
+                      Precio a consultar
+                    </div>
+                  ) : (
+                    <div className={styles.productCard__price}>
+                      {formatCurrency(prod.price)}
+                    </div>
+                  )}
 
                   <div className={styles.productCard__cta}>
                     <Link
@@ -228,7 +324,9 @@ export default function PublicStoreCatalogPage() {
           <Link href={`/${storeSlug}/cart`} className={styles.floatingCartBar}>
             <div className={styles.left}>
               <div className={styles.countBadge}>{cartTotalCount}</div>
-              <div className={styles.subtotal}>{formatCurrency(cartSubtotal)}</div>
+              <div className={styles.subtotal}>
+                {formatCurrency(cartSubtotal)}
+              </div>
             </div>
             <div className={styles.cta}>
               Ver mi carrito <ArrowRight size={14} />
@@ -237,22 +335,44 @@ export default function PublicStoreCatalogPage() {
         )}
       </div>
 
-      {/* Powered by Qori & KUBOstudio */}
-      <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
+      {/* Powered by Klik & KUBOstudio */}
+      <footer
+        style={{
+          textAlign: "center",
+          padding: "1.5rem 1rem",
+          fontSize: "0.75rem",
+          color: "#737373",
+          borderTop: "1px solid #1f1f1f",
+          marginTop: "2rem",
+        }}
+      >
         <div>
-          Creado con{' '}
-          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
-            Qori<span>.</span>
-          </Link>{' '}
+          Creado con{" "}
+          <Link
+            href="/"
+            style={{
+              color: "#ffffff",
+              fontWeight: 600,
+              textDecoration: "none",
+            }}
+          >
+            Klik<span>.</span>
+          </Link>{" "}
           — Catálogo online para WhatsApp
         </div>
-        <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666666' }}>
-          Desarrollado por{' '}
+        <div
+          style={{ marginTop: "0.35rem", fontSize: "0.7rem", color: "#666666" }}
+        >
+          Desarrollado por{" "}
           <a
             href="https://kubostudio.co"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+            style={{
+              color: "#a3a3a3",
+              fontWeight: 600,
+              textDecoration: "none",
+            }}
           >
             KUBOstudio
           </a>

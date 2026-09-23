@@ -131,7 +131,7 @@ export default function CustomersDashboardPage() {
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn--whatsapp btn--sm"
+                            className="btn btn--primary btn--sm"
                             style={{ padding: '0.35rem 0.55rem' }}
                             title="Escribir por WhatsApp"
                           >
@@ -289,7 +289,7 @@ export default function CustomersDashboardPage() {
               )}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn--whatsapp btn--full btn--lg"
+              className="btn btn--primary btn--full btn--lg"
             >
               <MessageCircle size={18} /> Escribir por WhatsApp
             </a>

@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { Store } from '@/lib/supabase/types';
-import { getCurrentStore } from '@/lib/supabase/db';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { Store } from "@/lib/supabase/types";
+import { getCurrentStore } from "@/lib/supabase/db";
 
 interface DashboardContextType {
   store: Store | null;
@@ -12,14 +18,16 @@ interface DashboardContextType {
   updateStoreLocally: (updated: Partial<Store>) => void;
 }
 
-const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
+const DashboardContext = createContext<DashboardContextType | undefined>(
+  undefined,
+);
 
-const STORE_CACHE_KEY = 'qori_cached_store';
-const SELLER_SESSION_KEY = 'qori_seller_session';
+const STORE_CACHE_KEY = "klik_cached_store";
+const SELLER_SESSION_KEY = "klik_seller_session";
 
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [store, setStore] = useState<Store | null>(null);
-  const [sellerName, setSellerName] = useState<string>('');
+  const [sellerName, setSellerName] = useState<string>("");
   const [isLoadingStore, setIsLoadingStore] = useState<boolean>(true);
 
   // Background revalidation with Supabase
@@ -30,7 +38,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
         setStore(current);
         try {
           localStorage.setItem(STORE_CACHE_KEY, JSON.stringify(current));
-          localStorage.setItem('qori_current_store_id', current.id);
+          localStorage.setItem("klik_current_store_id", current.id);
         } catch {}
       }
 
@@ -38,7 +46,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
         const session = localStorage.getItem(SELLER_SESSION_KEY);
         if (session) {
           const parsed = JSON.parse(session);
-          if (parsed.name) setSellerName(parsed.name.split(' ')[0]);
+          if (parsed.name) setSellerName(parsed.name.split(" ")[0]);
         } else if (current?.name) {
           setSellerName(current.name);
         }
@@ -46,7 +54,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
 
       return current;
     } catch (err) {
-      console.error('Error refreshing store in DashboardContext:', err);
+      console.error("Error refreshing store in DashboardContext:", err);
       return null;
     } finally {
       setIsLoadingStore(false);
@@ -78,7 +86,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
       if (session) {
         const parsedSession = JSON.parse(session);
         if (parsedSession.name) {
-          setSellerName(parsedSession.name.split(' ')[0]);
+          setSellerName(parsedSession.name.split(" ")[0]);
         }
       }
     } catch {}
@@ -90,7 +98,9 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     <DashboardContext.Provider
       value={{
         store,
-        sellerName: sellerName || (store?.name ? store.name.split(' ')[0] : 'Emprendedor'),
+        sellerName:
+          sellerName ||
+          (store?.name ? store.name.split(" ")[0] : "Emprendedor"),
         isLoadingStore,
         refreshStore,
         updateStoreLocally,
@@ -104,7 +114,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
 export function useDashboard() {
   const context = useContext(DashboardContext);
   if (!context) {
-    throw new Error('useDashboard must be used within a DashboardProvider');
+    throw new Error("useDashboard must be used within a DashboardProvider");
   }
   return context;
 }

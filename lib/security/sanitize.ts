@@ -1,5 +1,5 @@
 /**
- * Módulo de Sanitización y Seguridad para Entradas de Usuario (Qori)
+ * Módulo de Sanitización y Seguridad para Entradas de Usuario (Klik)
  * Previene XSS almacenado/reflejado, caracteres de control nulos e inyecciones.
  */
 

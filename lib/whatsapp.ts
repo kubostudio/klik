@@ -26,7 +26,7 @@ export function buildCustomerOrderWhatsAppUrl(
   const cleanPhone = normalizePhoneNumber(storePhone);
 
   const lines: string[] = [
-    `Hola, hice el pedido *#${order.order_number}* en Qori para *${storeName}*.`,
+    `Hola, hice el pedido *#${order.order_number}* en Klik para *${storeName}*.`,
     '',
     '*Mi pedido:*',
   ];
@@ -71,7 +71,7 @@ export function buildCustomerOrderWhatsAppUrl(
  * - Nuevo: Mensaje inicial de coordinación de pago y entrega.
  * - Contactado: Comunica que el pedido ha sido confirmado y se prepara (referencia al siguiente estado).
  * - Confirmado: Comunica que ya está en proceso de entrega hacia la dirección (referencia al siguiente estado).
- * - Entregado: Comunica que fue entregado y agradece la preferencia usando Qori y la tienda.
+ * - Entregado: Comunica que fue entregado y agradece la preferencia usando Klik y la tienda.
  * - Cancelado: Informa el estado cancelado e incita amablemente a realizar una compra después.
  */
 export function getOrderStatusMessageText(
@@ -82,7 +82,7 @@ export function getOrderStatusMessageText(
 ): string {
   switch (status) {
     case 'new':
-      return `Hola ${customerName}, te escribo de *${storeName}* respecto a tu pedido *#${orderNumber}* en Qori. ¿Deseas coordinar el pago y la entrega?`;
+      return `Hola ${customerName}, te escribo de *${storeName}* respecto a tu pedido *#${orderNumber}* en Klik. ¿Deseas coordinar el pago y la entrega?`;
 
     case 'contacted':
       return `Hola ${customerName}, te escribo de *${storeName}*. ¡Buenas noticias! Tu pedido *#${orderNumber}* ha sido confirmado y ya lo estamos preparando para su despacho. Te avisaremos en cuanto esté en camino a tu dirección.`;
@@ -91,13 +91,13 @@ export function getOrderStatusMessageText(
       return `Hola ${customerName}, te escribo de *${storeName}*. Tu pedido *#${orderNumber}* ya se encuentra en proceso de entrega hacia tu dirección. Nuestro repartidor está coordinando la llegada para que lo recibas sin inconvenientes. ¡Muchas gracias por tu espera!`;
 
     case 'delivered':
-      return `Hola ${customerName}, te saludamos de *${storeName}*. Confirmamos que tu pedido *#${orderNumber}* ha sido entregado exitosamente. Queremos agradecerte por tu preferencia y por confiar en *${storeName}* a través de nuestra tienda online en Qori. ¡Esperamos que disfrutes mucho tu compra y verte pronto de vuelta!`;
+      return `Hola ${customerName}, te saludamos de *${storeName}*. Confirmamos que tu pedido *#${orderNumber}* ha sido entregado exitosamente. Queremos agradecerte por tu preferencia y por confiar en *${storeName}* a través de nuestra tienda online en Klik. ¡Esperamos que disfrutes mucho tu compra y verte pronto de vuelta!`;
 
     case 'cancelled':
       return `Hola ${customerName}, te escribo de *${storeName}*. Te informamos que tu pedido *#${orderNumber}* ha sido cancelado. Si tuviste algún inconveniente o deseas realizar una compra más adelante, nuestro catálogo sigue disponible para ti cuando gustes. ¡Estaremos encantados de atenderte en tu próxima visita!`;
 
     default:
-      return `Hola ${customerName}, te escribo de *${storeName}* sobre tu pedido *#${orderNumber}* en Qori.`;
+      return `Hola ${customerName}, te escribo de *${storeName}* sobre tu pedido *#${orderNumber}* en Klik.`;
   }
 }
 

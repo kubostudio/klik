@@ -207,7 +207,7 @@ export default function FollowUpsDashboardPage() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn btn--whatsapp btn--sm"
+                        className="btn btn--primary btn--sm"
                       >
                         <MessageCircle size={14} /> Contactar por WhatsApp
                       </a>
@@ -269,7 +269,7 @@ export default function FollowUpsDashboardPage() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn btn--whatsapp btn--sm"
+                        className="btn btn--primary btn--sm"
                       >
                         <MessageCircle size={14} /> Contactar por WhatsApp
                       </a>
@@ -328,7 +328,7 @@ export default function FollowUpsDashboardPage() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn btn--whatsapp btn--sm"
+                        className="btn btn--primary btn--sm"
                       >
                         <MessageCircle size={14} /> Contactar por WhatsApp
                       </a>

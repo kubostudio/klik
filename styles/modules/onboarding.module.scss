@@ -2,121 +2,121 @@
 @import '../mixins';
 
 // ==============================================================================
-// ONBOARDING - DARK THEME (#0a0a0a OBSIDIAN BLUEPRINT)
+// ONBOARDING - LIGHT THEME (Cookbooker warm palette)
 // ==============================================================================
 
 .container {
-  // Theme Overrides for Onboarding Dark Mode
-  --color-canvas: #0a0a0a;
-  --color-paper: #141414;
-  --color-surface-alt: #171717;
-  --color-ink: #ffffff;
-  --color-ink-soft: #242424;
-  --color-mid-gray: #a3a3a3;
-  --color-hairline: #242424;
-  --surface-canvas: #0a0a0a;
-  --surface-sidebar: #121212;
-  --surface-card: #141414;
-  --surface-input-fill: #191919;
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.35);
+  // Theme — inherits Cookbooker light palette from globals
+  --color-canvas: #f9f4ef;
+  --color-paper: #ffffff;
+  --color-surface-alt: #fdf7f2;
+  --color-ink: #232323;
+  --color-ink-soft: #3d2e22;
+  --color-mid-gray: rgba(35,35,35,0.55);
+  --color-hairline: #e8ddd4;
+  --surface-canvas: #f9f4ef;
+  --surface-sidebar: #fdf7f2;
+  --surface-card: #ffffff;
+  --surface-input-fill: #fdf7f2;
+  --shadow-subtle: 0 0 0 1px rgba(217,119,66,0.08), 0 1px 3px rgba(35,15,5,0.08);
 
   min-height: 100vh;
-  background-color: #0a0a0a;
-  color: #ffffff;
+  background-color: $color-canvas;
+  color: $color-ink;
   display: flex;
   flex-direction: column;
 
-  // Scoped Global Components within Onboarding
+  // Scoped Global Components within Onboarding (light)
   :global {
     .btn--primary {
-      background-color: #ffffff;
-      color: #0a0a0a;
+      background-color: #d97742;
+      color: #ffffff;
       font-weight: 600;
 
       &:hover:not(:disabled) {
-        background-color: #eaeaea;
-        color: #0a0a0a;
+        background-color: #c4662f;
+        color: #ffffff;
       }
     }
 
     .btn--secondary {
-      background-color: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background-color: $color-canvas;
+      color: $color-ink;
+      border: 1px solid rgba(217, 119, 66, 0.20);
 
       &:hover:not(:disabled) {
-        background-color: rgba(255, 255, 255, 0.14);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.28);
+        background-color: rgba(217, 119, 66, 0.16);
+        color: $color-ink;
+        border-color: rgba(217, 119, 66, 0.35);
       }
     }
 
     .btn--outline {
       background-color: transparent;
-      color: #ffffff;
-      border: 1px solid #333333;
+      color: $color-ink;
+      border: 1px solid rgba(217, 119, 66, 0.25);
 
       &:hover:not(:disabled) {
-        background-color: #1a1a1a;
-        border-color: #555555;
+        background-color: $color-surface-alt;
+        border-color: rgba(217, 119, 66, 0.5);
       }
     }
 
     .btn--ghost {
       background-color: transparent;
-      color: #d4d4d4;
+      color: $color-text-secondary;
 
       &:hover:not(:disabled) {
-        background-color: rgba(255, 255, 255, 0.08);
-        color: #ffffff;
+        background-color: $color-primary-subtle;
+        color: $color-primary;
       }
     }
 
     .input, .select {
-      background-color: #191919;
-      border: 1px solid #282828;
-      color: #ffffff;
+      background-color: $color-surface-alt;
+      border: 1px solid rgba(217, 119, 66, 0.2);
+      color: $color-ink;
 
       &::placeholder {
         color: #737373;
       }
 
       &:focus {
-        background-color: #141414;
-        border-color: #ffffff;
-        box-shadow: 0 0 0 1px #ffffff;
+        background-color: $color-paper;
+        border-color: #d97742;
+        box-shadow: 0 0 0 2px rgba(217, 119, 66, 0.4);
       }
     }
 
     .textarea {
-      background-color: #191919;
-      border: 1px solid #282828;
-      color: #ffffff;
+      background-color: $color-surface-alt;
+      border: 1px solid rgba(217, 119, 66, 0.2);
+      color: $color-ink;
 
       &::placeholder {
         color: #737373;
       }
 
       &:focus {
-        background-color: #141414;
-        border-color: #ffffff;
-        box-shadow: 0 0 0 1px #ffffff;
+        background-color: $color-paper;
+        border-color: #d97742;
+        box-shadow: 0 0 0 2px rgba(217, 119, 66, 0.4);
       }
     }
 
     .form-group label {
-      color: #e5e5e5;
+      color: $color-ink;
     }
 
     .form-group .helper-text {
-      color: #888888;
+      color: $color-mid-gray;
     }
   }
 }
 
 .header {
-  background-color: #121212;
-  border-bottom: 1px solid #1f1f1f;
+  background-color: $color-surface-alt;
+  border-bottom: 1px solid $color-hairline;
   padding: $spacing-4 0;
 
   &__inner {
@@ -134,10 +134,10 @@
 
   .stepIndicator {
     font-size: $font-size-caption;
-    font-weight: 500;
-    color: #e5e5e5;
-    background-color: #1c1c1c;
-    border: 1px solid #282828;
+    font-weight: 600;
+    color: $color-primary;
+    background-color: $color-primary-subtle;
+    border: 1px solid rgba(217, 119, 66, 0.25);
     padding: 4px 12px;
     border-radius: $radius-badges;
   }
@@ -149,20 +149,20 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #0a0a0a;
+  background-color: $color-canvas;
 }
 
 .card {
   width: 100%;
   max-width: 580px;
-  background-color: #141414;
-  border: 1px solid #222222;
+  background-color: $color-paper;
+  border: 1px solid $color-hairline;
   border-radius: $radius-cards;
-  padding: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: 32px 28px;
+  box-shadow: $shadow-subtle;
 
   @include desktop {
-    padding: 32px;
+    padding: 40px 36px;
   }
 
   &__header {
@@ -171,14 +171,15 @@
     h1 {
       font-size: $font-size-xl;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       letter-spacing: -0.02em;
       margin-bottom: $spacing-1;
     }
 
     p {
       font-size: $font-size-sm;
-      color: #a3a3a3;
+      color: $color-mid-gray;
+      line-height: 1.5;
     }
   }
 }
@@ -191,16 +192,16 @@
   .segment {
     height: 4px;
     flex: 1;
-    background-color: #242424;
+    background-color: rgba(35, 20, 10, 0.08);
     border-radius: $radius-full;
     transition: background-color $transition-fast;
 
     &--active {
-      background-color: #ffffff;
+      background-color: $color-primary;
     }
 
     &--completed {
-      background-color: #ffffff;
+      background-color: $color-primary;
     }
   }
 }
@@ -217,21 +218,25 @@
 }
 
 .planOption {
-  border: 1px solid #262626;
+  border: 1px solid $color-hairline;
   border-radius: $radius-cards;
-  padding: $spacing-4;
+  padding: $spacing-5;
   cursor: pointer;
   transition: all $transition-fast;
   position: relative;
-  background-color: #171717;
+  background-color: $color-paper;
+  box-shadow: $shadow-subtle;
 
   &:hover {
-    border-color: #383838;
+    border-color: rgba(217, 119, 66, 0.35);
+    box-shadow: $shadow-hover;
+    transform: translateY(-2px);
   }
 
   &--selected {
-    border-color: #ffffff;
-    background-color: #1f1f1f;
+    border-color: $color-primary;
+    background-color: $color-primary-subtle;
+    box-shadow: 0 0 0 1px $color-primary, $shadow-sm;
   }
 
   .planHeader {
@@ -244,36 +249,36 @@
   .planTitle {
     font-size: $font-size-base;
     font-weight: 600;
-    color: #ffffff;
+    color: $color-ink;
   }
 
   .planBadge {
     font-size: $font-size-caption;
-    font-weight: 500;
+    font-weight: 600;
     padding: 2px 8px;
     border-radius: $radius-badges;
-    background-color: #242424;
-    color: #ffffff;
-    border: 1px solid #333333;
+    background-color: $color-primary-subtle;
+    color: $color-primary;
+    border: 1px solid rgba(217, 119, 66, 0.25);
   }
 
   .planPrice {
     font-size: $font-size-xl;
     font-weight: 600;
-    color: #ffffff;
+    color: $color-ink;
     margin-bottom: $spacing-2;
 
     span {
       font-size: $font-size-xs;
       font-weight: 400;
-      color: #888888;
+      color: $color-mid-gray;
     }
   }
 
   .planDesc {
     font-size: $font-size-xs;
-    color: #a3a3a3;
-    line-height: 1.4;
+    color: $color-mid-gray;
+    line-height: 1.45;
   }
 }
 
@@ -286,10 +291,11 @@
 }
 
 .previewBox {
-  border: 1px solid #262626;
+  border: 1px solid $color-hairline;
   border-radius: $radius-cards;
-  padding: $spacing-4;
-  background-color: #171717;
+  padding: $spacing-5;
+  background-color: $color-surface-alt;
+  box-shadow: $shadow-subtle;
   margin-bottom: $spacing-6;
 }
 
@@ -304,53 +310,59 @@
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid #333333;
-    background-color: #1e1e1e;
+    border: 1px solid rgba(217, 119, 66, 0.25);
+    background-color: $color-primary-subtle;
+    color: $color-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
   }
 
   .info {
     h3 {
       font-size: 15px;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       margin-bottom: 2px;
     }
 
     p {
       font-size: 12px;
-      color: #888888;
+      color: $color-mid-gray;
     }
   }
 }
 
 .previewProductCard {
-  border: 1px solid #262626;
+  border: 1px solid $color-hairline;
   border-radius: $radius-inputs;
   overflow: hidden;
-  background-color: #1a1a1a;
+  background-color: $color-paper;
+  box-shadow: $shadow-subtle;
 
   .prodInfo {
-    padding: $spacing-3;
+    padding: $spacing-4;
 
     .cat {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: #888888;
+      color: $color-mid-gray;
       margin-bottom: 2px;
     }
 
     h4 {
       font-size: 14px;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       margin-bottom: 4px;
     }
 
     .price {
       font-size: 16px;
       font-weight: 700;
-      color: #ffffff;
+      color: $color-ink;
     }
   }
 }
@@ -366,26 +378,26 @@
     width: 68px;
     height: 68px;
     border-radius: 50%;
-    background-color: #ffffff;
-    color: #0a0a0a;
+    background-color: $color-primary;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: $spacing-4;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(217, 119, 66, 0.35);
   }
 
   h2 {
     font-size: 24px;
     font-weight: 600;
     letter-spacing: -0.025em;
-    color: #ffffff;
+    color: $color-ink;
     margin-bottom: $spacing-2;
   }
 
   p {
     font-size: $font-size-sm;
-    color: #a3a3a3;
+    color: $color-mid-gray;
     max-width: 440px;
     line-height: 1.5;
     margin-bottom: $spacing-6;
@@ -398,16 +410,17 @@
   align-items: center;
   justify-content: space-between;
   gap: $spacing-2;
-  padding: $spacing-3 $spacing-4;
-  background-color: #171717;
-  border: 1px solid #262626;
+  padding: 12px 16px;
+  background-color: $color-paper;
+  border: 1px solid $color-hairline;
   border-radius: $radius-inputs;
+  box-shadow: $shadow-subtle;
   margin-bottom: $spacing-6;
 
   code {
     font-family: monospace;
     font-size: $font-size-sm;
-    color: #ffffff;
+    color: $color-ink;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

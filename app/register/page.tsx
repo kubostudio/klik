@@ -1,40 +1,42 @@
-'use client';
+"use client";
 
-import { useState, Suspense } from 'react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import styles from '@/styles/modules/auth.module.scss';
-import { ArrowRight } from 'lucide-react';
-import Logo from '@/components/ui/Logo';
+import { useState, Suspense } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import styles from "@/styles/modules/auth.module.scss";
+import { ArrowRight } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedPlan = searchParams.get('plan') || 'starter';
+  const selectedPlan = searchParams?.get("plan") || "starter";
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!name.trim() || !email.trim() || !password) {
-      setError('Por favor completa todos los campos.');
+      setError("Por favor completa todos los campos.");
       return;
     }
 
     if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.');
+      setError("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
 
     if (!acceptedTerms) {
-      setError('Debes aceptar los Términos y Condiciones y la Política de Privacidad para crear tu cuenta.');
+      setError(
+        "Debes aceptar los Términos y Condiciones y la Política de Privacidad para crear tu cuenta.",
+      );
       return;
     }
 
@@ -43,7 +45,7 @@ function RegisterForm() {
     try {
       // Guardar información temporal del vendedor en sesión/storage
       localStorage.setItem(
-        'qori_seller_session',
+        "klik_seller_session",
         JSON.stringify({
           name: name.trim(),
           email: email.trim(),
@@ -51,36 +53,38 @@ function RegisterForm() {
           acceptedTerms: true,
           acceptedAt: new Date().toISOString(),
           createdAt: new Date().toISOString(),
-        })
+        }),
       );
 
       // Redirigir de inmediato al Onboarding (no al dashboard vacío)
-      router.push('/onboarding');
+      router.push("/onboarding");
     } catch {
-      setError('Ocurrió un error al registrar tu cuenta. Intenta de nuevo.');
+      setError("Ocurrió un error al registrar tu cuenta. Intenta de nuevo.");
       setLoading(false);
     }
   };
 
   const handleGoogleSignup = () => {
     if (!acceptedTerms) {
-      setError('Debes aceptar los Términos y Condiciones y la Política de Privacidad para registrarte con Google.');
+      setError(
+        "Debes aceptar los Términos y Condiciones y la Política de Privacidad para registrarte con Google.",
+      );
       return;
     }
 
     setLoading(true);
     localStorage.setItem(
-      'qori_seller_session',
+      "klik_seller_session",
       JSON.stringify({
-        name: 'Emprendedor Qori',
-        email: 'vendedor@gmail.com',
+        name: "Emprendedor Klik",
+        email: "vendedor@gmail.com",
         plan: selectedPlan,
         acceptedTerms: true,
         acceptedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
-      })
+      }),
     );
-    router.push('/onboarding');
+    router.push("/onboarding");
   };
 
   return (
@@ -91,14 +95,14 @@ function RegisterForm() {
             href="/"
             className={styles.logo}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#0a0a0a',
-              borderRadius: '12px',
-              padding: '8px 16px',
-              marginBottom: '1rem',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#0a0a0a",
+              borderRadius: "12px",
+              padding: "8px 16px",
+              marginBottom: "1rem",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
             }}
           >
             <Logo size={44} color="#ffffff" />
@@ -110,12 +114,12 @@ function RegisterForm() {
         {error && (
           <div
             style={{
-              backgroundColor: '#FEF2F2',
-              color: '#EF4444',
-              padding: '0.65rem 0.85rem',
-              borderRadius: '8px',
-              fontSize: '0.8125rem',
-              marginBottom: '1rem',
+              backgroundColor: "#FEF2F2",
+              color: "#EF4444",
+              padding: "0.65rem 0.85rem",
+              borderRadius: "8px",
+              fontSize: "0.8125rem",
+              marginBottom: "1rem",
             }}
           >
             {error}
@@ -193,15 +197,15 @@ function RegisterForm() {
             />
           </div>
 
-          <div style={{ marginTop: '1rem', marginBottom: '1.25rem' }}>
+          <div style={{ marginTop: "1rem", marginBottom: "1.25rem" }}>
             <label
               style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '0.65rem',
-                cursor: 'pointer',
-                fontSize: '0.8125rem',
-                color: 'var(--color-ink)',
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "0.65rem",
+                cursor: "pointer",
+                fontSize: "0.8125rem",
+                color: "var(--color-ink)",
                 lineHeight: 1.45,
               }}
             >
@@ -211,38 +215,51 @@ function RegisterForm() {
                 onChange={(e) => setAcceptedTerms(e.target.checked)}
                 required
                 style={{
-                  marginTop: '0.15rem',
-                  cursor: 'pointer',
-                  accentColor: 'var(--color-ink)',
-                  width: '16px',
-                  height: '16px',
+                  marginTop: "0.15rem",
+                  cursor: "pointer",
+                  accentColor: "var(--color-ink)",
+                  width: "16px",
+                  height: "16px",
                   flexShrink: 0,
                 }}
               />
               <span>
-                He leído y acepto obligatoriamente los{' '}
+                He leído y acepto obligatoriamente los{" "}
                 <Link
                   href="/terminos"
                   target="_blank"
-                  style={{ textDecoration: 'underline', fontWeight: 600, color: 'var(--color-ink)' }}
+                  style={{
+                    textDecoration: "underline",
+                    fontWeight: 600,
+                    color: "var(--color-ink)",
+                  }}
                 >
                   Términos y Condiciones
-                </Link>{' '}
-                y la{' '}
+                </Link>{" "}
+                y la{" "}
                 <Link
                   href="/privacidad"
                   target="_blank"
-                  style={{ textDecoration: 'underline', fontWeight: 600, color: 'var(--color-ink)' }}
+                  style={{
+                    textDecoration: "underline",
+                    fontWeight: 600,
+                    color: "var(--color-ink)",
+                  }}
                 >
                   Política de Privacidad
-                </Link>{' '}
-                de Qori.
+                </Link>{" "}
+                de Klik.
               </span>
             </label>
           </div>
 
-          <button type="submit" className="btn btn--primary btn--full btn--lg" disabled={loading}>
-            {loading ? 'Creando cuenta...' : 'Continuar al onboarding'} <ArrowRight size={16} />
+          <button
+            type="submit"
+            className="btn btn--primary btn--full btn--lg"
+            disabled={loading}
+          >
+            {loading ? "Creando cuenta..." : "Continuar al onboarding"}{" "}
+            <ArrowRight size={16} />
           </button>
         </form>
 
@@ -256,9 +273,10 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<div className={styles.authContainer}>Cargando...</div>}>
+    <Suspense
+      fallback={<div className={styles.authContainer}>Cargando...</div>}
+    >
       <RegisterForm />
     </Suspense>
   );
 }
-

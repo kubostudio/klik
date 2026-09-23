@@ -3,14 +3,14 @@
 .carouselContainer {
   position: relative;
   width: 100%;
-  background-color: #141414;
+  background-color: $color-surface-alt;
 }
 
 .mainWrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background-color: #141414;
+  background-color: $color-surface-alt;
   overflow: hidden;
 
   // Single static image
@@ -43,9 +43,9 @@
   top: 12px;
   right: 12px;
   z-index: 5;
-  background-color: rgba(10, 10, 10, 0.8);
+  background-color: rgba(35, 20, 10, 0.7);
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #FFFFFF;
   font-size: 11px;
   font-weight: $font-weight-semibold;
@@ -62,14 +62,14 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background-color: rgba(20, 20, 20, 0.85);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(35, 20, 10, 0.08);
+  box-shadow: $shadow-md;
+  color: $color-ink;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,9 +77,10 @@
   transition: all $transition-fast;
 
   &:hover {
-    background-color: #2a2a2a;
-    transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+    color: $color-primary;
+    transform: translateY(-50%) scale(1.06);
+    box-shadow: $shadow-lg;
   }
 
   &--prev {
@@ -97,14 +98,14 @@
   padding: $spacing-3 $spacing-4;
   overflow-x: auto;
   scrollbar-width: thin;
-  background-color: #141414;
-  border-top: 1px solid #242424;
+  background-color: $color-paper;
+  border-top: 1px solid $color-hairline;
 
   &::-webkit-scrollbar {
     height: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #333333;
+    background-color: rgba(35, 20, 10, 0.15);
     border-radius: 4px;
   }
 }
@@ -115,8 +116,8 @@
   flex-shrink: 0;
   border-radius: $radius-sm;
   overflow: hidden;
-  border: 2px solid #282828;
-  background: none;
+  border: 2px solid transparent;
+  background-color: $color-surface-alt;
   padding: 0;
   cursor: pointer;
   transition: all $transition-fast;
@@ -129,12 +130,12 @@
   }
 
   &:hover {
-    border-color: #666666;
+    border-color: rgba(217, 119, 66, 0.4);
   }
 
   &--active {
-    border-color: #ffffff;
-    box-shadow: 0 0 0 1px #ffffff;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
   }
 }
 

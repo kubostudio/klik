@@ -123,7 +123,7 @@
 .makePrimaryBtn {
   width: 100%;
   background-color: rgba(255, 255, 255, 0.95);
-  color: #0a0a0a;
+  color: #232323;
   border: none;
   border-radius: 6px;
   padding: 4px 6px;
@@ -138,7 +138,7 @@
 
   &:hover {
     background-color: #FFFFFF;
-    color: #0a0a0a;
+    color: #232323;
   }
 }
 
@@ -263,9 +263,9 @@
 }
 
 .errorText {
-  color: #f87171;
-  background-color: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #b91c1c;
+  background-color: #fef2f2;
+  border: 1px solid rgba(185, 28, 28, 0.2);
   border-radius: $radius-badges;
   padding: 4px 10px;
   font-size: $font-size-caption;

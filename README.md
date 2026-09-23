@@ -1,4 +1,4 @@
-# Qori — E-commerce & Catálogo Digital para Vender por WhatsApp
+# Klik — E-commerce & Catálogo Digital para Vender por WhatsApp
 
 > Plataforma de comercio electrónico diseñada para que tiendas, marcas y emprendedores en el Perú vendan directamente por WhatsApp con 0% de comisiones por venta.
 
@@ -12,7 +12,7 @@
 - **Cierre en WhatsApp en 1 Clic**: Envío automatizado de la orden estructurada con productos, cantidades, variantes, DNI y dirección.
 - **Importador desde Instagram**: Autocompleta nombre, biografía, foto/logo de alta calidad, ciudad y WhatsApp con solo ingresar el `@usuario`.
 - **Panel de Control Operativo (Dashboard)**:
-  - Gestión de pedidos con actualización de estados en tiempo real (*Nuevo, Contactado, Confirmado, Entregado, Cancelado*).
+  - Gestión de pedidos con actualización de estados en tiempo real (_Nuevo, Contactado, Confirmado, Entregado, Cancelado_).
   - Generador de respuestas predeterminadas para WhatsApp por cada estado de pedido.
   - Directorio y CRM de clientes con historial de compras, DNI y monto acumulado.
   - Automatizaciones y recordatorios de seguimiento a clientes.
@@ -40,8 +40,8 @@
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/kubostudio/qori.git
-cd qori
+git clone https://github.com/kubostudio/klik.git
+cd klik
 ```
 
 ### 2. Instalar dependencias
@@ -80,4 +80,4 @@ npm run start
 
 ## Licencia
 
-Desarrollado para **Qori** / **KUBO Studio**. Todos los derechos reservados.
+Desarrollado para **Klik** / **KUBO Studio**. Todos los derechos reservados.

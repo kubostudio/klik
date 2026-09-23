@@ -8,7 +8,10 @@
   justify-content: center;
   align-items: center;
   padding: $spacing-6 $spacing-4;
-  background-color: $color-canvas;
+  background-color: $color-canvas; // Warm #f9f4ef
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(217, 119, 66, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(217, 119, 66, 0.07), transparent);
 }
 
 .authCard {
@@ -16,9 +19,9 @@
   max-width: 440px;
   background-color: $color-paper;
   border: 1px solid $color-hairline;
-  border-radius: $radius-cards;
+  border-radius: $radius-cards; // 8px
   padding: 32px 24px;
-  box-shadow: $shadow-subtle;
+  box-shadow: $shadow-lg;
 
   @include desktop {
     padding: 40px 32px;
@@ -31,22 +34,24 @@
 
   .logo {
     display: inline-block;
+    font-family: $font-family-display;
     font-size: $font-size-2xl;
     font-weight: 600;
     color: $color-ink;
-    letter-spacing: -0.025em;
+    letter-spacing: $tracking-heading-sm;
     margin-bottom: $spacing-3;
 
     span {
-      color: $color-ink;
+      color: $color-primary; // Orange accent
     }
   }
 
   h1 {
-    font-size: $font-size-xl;
+    font-family: $font-family-display;
+    font-size: $font-size-heading-sm;
     font-weight: 600;
     color: $color-ink;
-    letter-spacing: -0.02em;
+    letter-spacing: $tracking-heading-sm;
     margin-bottom: $spacing-1;
   }
 
@@ -69,13 +74,13 @@
   color: $color-ink;
   background-color: $color-paper;
   border: 1px solid $color-hairline;
-  border-radius: $radius-buttons;
+  border-radius: $radius-buttons; // 7px
   cursor: pointer;
   transition: all $transition-fast;
 
   &:hover {
     background-color: $color-canvas;
-    border-color: #d4d4d4;
+    border-color: $color-border-hover;
   }
 }
 
@@ -105,10 +110,11 @@
   color: $color-mid-gray;
 
   a {
-    color: $color-ink;
-    font-weight: 500;
+    color: $color-primary; // Orange link
+    font-weight: 600;
 
     &:hover {
+      color: $color-primary-hover;
       text-decoration: underline;
     }
   }
@@ -118,12 +124,12 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-1;
-  background-color: $color-canvas;
-  color: $color-ink;
+  background-color: $color-primary-subtle;
+  color: $color-primary;
   font-size: $font-size-caption;
-  font-weight: 500;
-  padding: 4px 12px;
-  border-radius: $radius-badges;
-  border: 1px solid $color-hairline;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: $radius-badges; // 6px
+  border: 1px solid rgba($color-primary, 0.25);
   margin-bottom: $spacing-4;
 }

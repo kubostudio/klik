@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '@/styles/modules/dashboard.module.scss';
-import { getCurrentStore, getOrders, updateOrderStatus } from '@/lib/supabase/db';
+import { getCurrentStore, getOrders, updateOrderStatus, supabase } from '@/lib/supabase/db';
 import { Order, OrderStatus, Store } from '@/lib/supabase/types';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import {
@@ -24,6 +24,8 @@ import {
   Send,
   Info,
   LucideIcon,
+  ImageIcon,
+  Volume2,
 } from 'lucide-react';
 
 const FILTER_TABS: { label: string; value: 'all' | OrderStatus }[] = [
@@ -49,7 +51,7 @@ const STATUS_CONFIG: Record<
   new: {
     label: 'Nuevo',
     description: 'Coordinar pago y entrega inicial con el comprador.',
-    color: '#facc15',
+    color: '#352b06ff',
     bgColor: 'rgba(234, 179, 8, 0.15)',
     borderColor: 'rgba(234, 179, 8, 0.35)',
     icon: Clock,
@@ -57,7 +59,7 @@ const STATUS_CONFIG: Record<
   contacted: {
     label: 'Contactado',
     description: 'Notificar que el pedido ha sido confirmado y está en preparación.',
-    color: '#93c5fd',
+    color: '#213449ff',
     bgColor: 'rgba(59, 130, 246, 0.15)',
     borderColor: 'rgba(59, 130, 246, 0.35)',
     icon: MessageCircle,
@@ -65,15 +67,15 @@ const STATUS_CONFIG: Record<
   confirmed: {
     label: 'Confirmado',
     description: 'Avisar que el pedido ya se encuentra en proceso de entrega/despacho.',
-    color: '#86efac',
+    color: '#15291cff',
     bgColor: 'rgba(34, 197, 94, 0.15)',
     borderColor: 'rgba(34, 197, 94, 0.35)',
     icon: CheckCircle2,
   },
   delivered: {
     label: 'Entregado',
-    description: 'Confirmar entrega y agradecer la preferencia por comprar con Qori.',
-    color: '#d8b4fe',
+    description: 'Confirmar entrega y agradecer la preferencia por comprar con Klik.',
+    color: '#2b2038ff',
     bgColor: 'rgba(168, 85, 247, 0.15)',
     borderColor: 'rgba(168, 85, 247, 0.35)',
     icon: PackageCheck,
@@ -81,7 +83,7 @@ const STATUS_CONFIG: Record<
   cancelled: {
     label: 'Cancelado',
     description: 'Avisar cancelación formal e invitar a realizar una compra después.',
-    color: '#f87171',
+    color: '#301818ff',
     bgColor: 'rgba(239, 68, 68, 0.15)',
     borderColor: 'rgba(239, 68, 68, 0.35)',
     icon: XCircle,
@@ -99,21 +101,82 @@ export default function OrdersDashboardPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [customMessage, setCustomMessage] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [voucherModalUrl, setVoucherModalUrl] = useState<string | null>(null);
+  const [newOrderToast, setNewOrderToast] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadOrders();
-  }, [activeTab, contextStore?.id]);
+  // ── Sound notification for new orders ──────────────────────────────────────
+  const lastOrderCountRef = React.useRef<number | null>(null);
+  const audioCtxRef = React.useRef<AudioContext | null>(null);
 
-  const loadOrders = async () => {
-    setLoading(true);
+  function playSaleSound() {
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioCtxRef.current = ctx;
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+        gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + i * 0.12 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + i * 0.12);
+        osc.stop(ctx.currentTime + i * 0.12 + 0.35);
+      });
+    } catch (err) {
+      console.warn('Audio notification failed:', err);
+    }
+  }
+
+  const loadOrders = async (showLoadingSpinner = true) => {
+    if (showLoadingSpinner) setLoading(true);
     const s = contextStore || (await getCurrentStore());
     setStore(s);
     if (s) {
       const ords = await getOrders(s.id, activeTab === 'all' ? undefined : activeTab);
       setOrders(ords);
     }
-    setLoading(false);
+    if (showLoadingSpinner) setLoading(false);
   };
+
+  useEffect(() => {
+    loadOrders(true);
+  }, [activeTab, contextStore?.id]);
+
+  // Suscripción en tiempo real instantánea (0ms) a nuevos pedidos
+  useEffect(() => {
+    const handleInstantOrder = () => {
+      loadOrders(false);
+    };
+    window.addEventListener('klik-order-received', handleInstantOrder);
+
+    const storeId = contextStore?.id;
+    if (!storeId) return () => window.removeEventListener('klik-order-received', handleInstantOrder);
+
+    const channel = supabase
+      .channel(`orders-live-${storeId}-${Math.random().toString(36).slice(2, 8)}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `store_id=eq.${storeId}`,
+        },
+        () => {
+          loadOrders(false);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      window.removeEventListener('klik-order-received', handleInstantOrder);
+      supabase.removeChannel(channel);
+    };
+  }, [contextStore?.id, activeTab]);
 
   const filteredOrders =
     activeTab === 'all' ? orders : orders.filter((o) => o.status === activeTab);
@@ -165,6 +228,28 @@ export default function OrdersDashboardPage() {
 
   return (
     <div>
+      {/* New Order Toast Notification */}
+      {newOrderToast && (
+        <div style={{
+          position: 'fixed',
+          top: '1.5rem',
+          right: '1.5rem',
+          zIndex: 9999,
+          backgroundColor: 'var(--color-brand)',
+          color: 'white',
+          padding: '0.85rem 1.25rem',
+          borderRadius: '14px',
+          fontWeight: 600,
+          fontSize: '0.9375rem',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          animation: 'slideInRight 0.3s ease',
+        }}>
+          <Volume2 size={18} /> {newOrderToast}
+        </div>
+      )}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.875rem', fontWeight: 600, letterSpacing: '-0.025em', color: 'var(--color-ink)' }}>
@@ -382,6 +467,32 @@ export default function OrdersDashboardPage() {
               )}
             </div>
 
+            {/* Comprobante de Pago */}
+            {selectedOrder.voucher_url && (
+              <div style={{ marginBottom: '1.25rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-mid-gray)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                  Comprobante de Pago
+                </div>
+                <div style={{ padding: '0.85rem', backgroundColor: 'var(--color-surface-alt)', border: '1px solid var(--color-hairline)', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: '10px', overflow: 'hidden', flexShrink: 0, backgroundColor: 'var(--color-canvas)' }}>
+                    <img src={selectedOrder.voucher_url} alt="Comprobante" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>Voucher adjunto</div>
+                    {selectedOrder.payment_method && <div style={{ fontSize: '0.8125rem', color: 'var(--color-mid-gray)' }}>Método: {selectedOrder.payment_method.replace('wallet-', '').replace('bank-', 'Banco ')}</div>}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setVoucherModalUrl(selectedOrder.voucher_url!)}
+                    className="btn btn--primary btn--sm"
+                    style={{ whiteSpace: 'nowrap' }}
+                  >
+                    <ImageIcon size={14} /> Ver comprobante
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Productos */}
             <div style={{ marginBottom: '1.25rem' }}>
               <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-mid-gray)', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
@@ -534,7 +645,7 @@ export default function OrdersDashboardPage() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#60a5fa',
+                    color: '#d97742',
                     cursor: 'pointer',
                     fontSize: '0.75rem',
                     fontWeight: 500,
@@ -585,21 +696,30 @@ export default function OrdersDashboardPage() {
                 href={`https://wa.me/${normalizePhoneNumber(selectedOrder.customer_phone)}?text=${encodeURIComponent(customMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn--whatsapp btn--full btn--lg"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                  fontWeight: 600,
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.925rem',
-                  borderRadius: '10px',
-                }}
+                className="btn btn--primary btn--full btn--lg"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 600, padding: '0.75rem 1rem', fontSize: '0.925rem', borderRadius: '10px' }}
               >
                 <MessageCircle size={19} /> Enviar WhatsApp ({getStatusWhatsAppActionLabel(selectedOrder.status)})
               </a>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Voucher full-size modal */}
+      {voucherModalUrl && (
+        <div
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '1rem' }}
+          onClick={() => setVoucherModalUrl(null)}
+        >
+          <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }} onClick={(e) => e.stopPropagation()}>
+            <img src={voucherModalUrl} alt="Comprobante de pago" style={{ maxWidth: '100%', maxHeight: '85vh', objectFit: 'contain', borderRadius: '12px', display: 'block' }} />
+            <button
+              onClick={() => setVoucherModalUrl(null)}
+              style={{ position: 'absolute', top: -12, right: -12, width: 32, height: 32, borderRadius: '50%', background: '#ef4444', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}
+            >
+              <X size={16} />
+            </button>
           </div>
         </div>
       )}

@@ -4,7 +4,7 @@ import { createOrder } from '@/lib/supabase/db';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { storeId, customerName, customerDni, customerPhone, customerAddress, customerReference, items } = body;
+    const { storeId, customerName, customerDni, customerPhone, customerAddress, customerReference, voucherUrl, paymentMethod, items } = body;
 
     if (!storeId || !customerName || !customerPhone || !items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
       customerPhone,
       customerAddress,
       customerReference,
+      voucherUrl,
+      paymentMethod,
       items,
     });
 

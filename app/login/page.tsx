@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import styles from '@/styles/modules/auth.module.scss';
-import { ArrowRight } from 'lucide-react';
-import Logo from '@/components/ui/Logo';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import styles from "@/styles/modules/auth.module.scss";
+import { ArrowRight } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!email.trim() || !password) {
-      setError('Por favor completa todos los campos.');
+      setError("Por favor completa todos los campos.");
       return;
     }
 
@@ -27,16 +27,16 @@ export default function LoginPage() {
 
     try {
       localStorage.setItem(
-        'qori_seller_session',
+        "klik_seller_session",
         JSON.stringify({
           email: email.trim(),
-          plan: 'pro',
+          plan: "pro",
           loggedInAt: new Date().toISOString(),
-        })
+        }),
       );
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch {
-      setError('Error al iniciar sesión. Intenta de nuevo.');
+      setError("Error al iniciar sesión. Intenta de nuevo.");
       setLoading(false);
     }
   };
@@ -44,13 +44,13 @@ export default function LoginPage() {
   const handleGoogleLogin = () => {
     setLoading(true);
     localStorage.setItem(
-      'qori_seller_session',
+      "klik_seller_session",
       JSON.stringify({
-        email: 'vendedor@gmail.com',
-        plan: 'pro',
-      })
+        email: "vendedor@gmail.com",
+        plan: "pro",
+      }),
     );
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
 
   return (
@@ -61,14 +61,14 @@ export default function LoginPage() {
             href="/"
             className={styles.logo}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#0a0a0a',
-              borderRadius: '12px',
-              padding: '8px 16px',
-              marginBottom: '1rem',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#0a0a0a",
+              borderRadius: "12px",
+              padding: "8px 16px",
+              marginBottom: "1rem",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
             }}
           >
             <Logo size={44} color="#ffffff" />
@@ -80,12 +80,12 @@ export default function LoginPage() {
         {error && (
           <div
             style={{
-              backgroundColor: '#FEF2F2',
-              color: '#EF4444',
-              padding: '0.65rem 0.85rem',
-              borderRadius: '8px',
-              fontSize: '0.8125rem',
-              marginBottom: '1rem',
+              backgroundColor: "#FEF2F2",
+              color: "#EF4444",
+              padding: "0.65rem 0.85rem",
+              borderRadius: "8px",
+              fontSize: "0.8125rem",
+              marginBottom: "1rem",
             }}
           >
             {error}
@@ -138,18 +138,28 @@ export default function LoginPage() {
           </div>
 
           <div className="form-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <label htmlFor="password">Contraseña</label>
               <button
                 type="button"
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#64748B',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer',
+                  background: "none",
+                  border: "none",
+                  color: "#64748B",
+                  fontSize: "0.75rem",
+                  cursor: "pointer",
                 }}
-                onClick={() => alert('Te enviaremos un correo para restablecer tu contraseña.')}
+                onClick={() =>
+                  alert(
+                    "Te enviaremos un correo para restablecer tu contraseña.",
+                  )
+                }
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -165,8 +175,13 @@ export default function LoginPage() {
             />
           </div>
 
-          <button type="submit" className="btn btn--primary btn--full btn--lg" disabled={loading}>
-            {loading ? 'Ingresando...' : 'Iniciar sesión'} <ArrowRight size={16} />
+          <button
+            type="submit"
+            className="btn btn--primary btn--full btn--lg"
+            disabled={loading}
+          >
+            {loading ? "Ingresando..." : "Iniciar sesión"}{" "}
+            <ArrowRight size={16} />
           </button>
         </form>
 

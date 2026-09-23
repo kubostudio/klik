@@ -21,6 +21,11 @@ import {
   OrderStatus,
   PlanType,
   AnalyticsEventType,
+  StoreBillingInfo,
+  SalesDataPoint,
+  TopProduct,
+  LowStockProduct,
+  ProductSortMode,
 } from './types';
 
 export const supabase = createClient();
@@ -38,7 +43,12 @@ export async function getStoreBySlug(slug: string): Promise<Store | null> {
       .maybeSingle();
 
     if (error || !data) return null;
-    return data as Store;
+    const store = data as Store;
+    if (!store.product_sort_mode && typeof window !== 'undefined') {
+      const savedMode = localStorage.getItem(`klik_store_sort_mode_${store.id}`) as ProductSortMode | null;
+      if (savedMode) store.product_sort_mode = savedMode;
+    }
+    return store;
   } catch (err) {
     console.error('Error fetching store by slug:', err);
     return null;
@@ -51,6 +61,8 @@ export async function getCurrentStore(): Promise<Store | null> {
       data: { user },
     } = await supabase.auth.getUser();
 
+    let foundStore: Store | null = null;
+
     if (user) {
       const { data, error } = await supabase
         .from('stores')
@@ -60,31 +72,38 @@ export async function getCurrentStore(): Promise<Store | null> {
         .limit(1)
         .maybeSingle();
 
-      if (!error && data) return data as Store;
+      if (!error && data) foundStore = data as Store;
     }
 
     // Fallback por si hay sesión local de onboarding
-    if (typeof window !== 'undefined') {
+    if (!foundStore && typeof window !== 'undefined') {
       const stored = localStorage.getItem('qori_current_store_id');
       if (stored) {
         const { data } = await supabase.from('stores').select('*').eq('id', stored).maybeSingle();
-        if (data) return data as Store;
+        if (data) foundStore = data as Store;
       }
     }
 
     // Si aún no hay sesión o localStorage pero hay tiendas en Supabase, tomar la última tienda creada
-    const { data: latestStore } = await supabase
-      .from('stores')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+    if (!foundStore) {
+      const { data: latestStore } = await supabase
+        .from('stores')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
-    if (latestStore) {
-      return latestStore as Store;
+      if (latestStore) {
+        foundStore = latestStore as Store;
+      }
     }
 
-    return null;
+    if (foundStore && !foundStore.product_sort_mode && typeof window !== 'undefined') {
+      const savedMode = localStorage.getItem(`klik_store_sort_mode_${foundStore.id}`) as ProductSortMode | null;
+      if (savedMode) foundStore.product_sort_mode = savedMode;
+    }
+
+    return foundStore;
   } catch (err) {
     console.error('Error fetching current store:', err);
     return null;
@@ -313,6 +332,10 @@ export async function updateStore(
       }
     }
 
+    if (typeof window !== 'undefined' && updates.product_sort_mode) {
+      localStorage.setItem(`klik_store_sort_mode_${storeId}`, updates.product_sort_mode);
+    }
+
     const { data, error } = await supabase
       .from('stores')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -321,7 +344,16 @@ export async function updateStore(
       .single();
 
     if (error) {
-      console.error('Error updating store:', error);
+      console.warn('Notice: Error updating store in Supabase, checking fallback:', error.message);
+      // Si el error es por columna inexistente (aún no migrada), reintentar sin ella
+      if (error.message?.includes('product_sort_mode')) {
+        const safeUpdates = { ...updates };
+        delete safeUpdates.product_sort_mode;
+        const retry = await supabase.from('stores').update({ ...safeUpdates, updated_at: new Date().toISOString() }).eq('id', storeId).select().maybeSingle();
+        if (retry.data) {
+          return { ...retry.data, product_sort_mode: updates.product_sort_mode } as Store;
+        }
+      }
       return null;
     }
     return data as Store;
@@ -337,7 +369,8 @@ export async function updateStore(
 
 export async function getProducts(
   storeId: string,
-  onlyActive: boolean = false
+  onlyActive: boolean = false,
+  sortMode?: ProductSortMode
 ): Promise<Product[]> {
   try {
     let query = supabase
@@ -349,18 +382,99 @@ export async function getProducts(
       query = query.eq('active', true);
     }
 
-    const { data, error } = await query.order('created_at', { ascending: false });
+    const { data, error } = await query;
 
     if (error || !data) return [];
 
-    return data.map((item: any) => ({
+    let prods = data.map((item: any) => ({
       ...item,
       variants: item.product_variants || [],
       images: item.product_images || [],
     })) as Product[];
+
+    // Fallback local de orden manual si existe
+    let fallbackOrder: string[] | null = null;
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(`klik_sort_order_${storeId}`);
+        if (stored) fallbackOrder = JSON.parse(stored);
+      } catch (e) {}
+    }
+
+    // Determinar modo de orden activo
+    let effectiveMode = sortMode;
+    if (!effectiveMode && typeof window !== 'undefined') {
+      const storedMode = localStorage.getItem(`klik_store_sort_mode_${storeId}`) as ProductSortMode | null;
+      if (storedMode) effectiveMode = storedMode;
+    }
+    if (!effectiveMode) {
+      effectiveMode = 'custom';
+    }
+
+    // Aplicar orden según el modo
+    if (effectiveMode === 'name_asc') {
+      prods.sort((a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }));
+    } else if (effectiveMode === 'name_desc') {
+      prods.sort((a, b) => b.name.localeCompare(a.name, 'es', { sensitivity: 'base' }));
+    } else if (effectiveMode === 'price_asc') {
+      prods.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (effectiveMode === 'price_desc') {
+      prods.sort((a, b) => Number(b.price) - Number(a.price));
+    } else {
+      // Modo 'custom': primero por sort_order, luego por created_at más reciente
+      prods.sort((a, b) => {
+        let orderA = a.sort_order ?? null;
+        let orderB = b.sort_order ?? null;
+
+        if ((orderA === null || orderA === undefined) && fallbackOrder) {
+          const idxA = fallbackOrder.indexOf(a.id);
+          if (idxA !== -1) orderA = idxA;
+        }
+        if ((orderB === null || orderB === undefined) && fallbackOrder) {
+          const idxB = fallbackOrder.indexOf(b.id);
+          if (idxB !== -1) orderB = idxB;
+        }
+
+        const valA = orderA !== null && orderA !== undefined ? orderA : 999999;
+        const valB = orderB !== null && orderB !== undefined ? orderB : 999999;
+
+        if (valA !== valB) return valA - valB;
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+      });
+    }
+
+    return prods;
   } catch (err) {
     console.error('Error fetching products:', err);
     return [];
+  }
+}
+
+/**
+ * Actualiza el orden personalizado (sort_order) de los productos de una tienda.
+ */
+export async function updateProductsOrder(
+  storeId: string,
+  orderedProductIds: string[]
+): Promise<boolean> {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`klik_sort_order_${storeId}`, JSON.stringify(orderedProductIds));
+    }
+
+    // Actualizar cada producto con su posición en la base de datos
+    const updates = orderedProductIds.map((id, index) =>
+      supabase
+        .from('products')
+        .update({ sort_order: index })
+        .eq('id', id)
+    );
+
+    await Promise.all(updates);
+    return true;
+  } catch (err) {
+    console.warn('Error persisting sort_order in Supabase, saved locally as fallback:', err);
+    return false;
   }
 }
 
@@ -416,26 +530,46 @@ export async function createProduct(
     category?: string;
     brand?: string | null;
     active?: boolean;
+    stock?: number | null;
+    show_stock?: boolean | null;
+    show_price?: boolean | null;
   },
   variants: Array<{ name: string; value: string }> = [],
   additionalImages: string[] = []
 ): Promise<Product | null> {
   try {
-    const { data: product, error: prodError } = await supabase
+    const insertPayload: Record<string, any> = {
+      store_id: productData.store_id,
+      name: productData.name,
+      slug: productData.slug,
+      description: productData.description || null,
+      price: productData.price,
+      image_url: productData.image_url || null,
+      category: productData.category || 'General',
+      brand: productData.brand || null,
+      active: productData.active !== undefined ? productData.active : true,
+      stock: productData.stock !== undefined ? productData.stock : null,
+      show_stock: productData.show_stock !== undefined ? productData.show_stock : true,
+      show_price: productData.show_price !== undefined ? productData.show_price : true,
+    };
+
+    let { data: product, error: prodError } = await supabase
       .from('products')
-      .insert({
-        store_id: productData.store_id,
-        name: productData.name,
-        slug: productData.slug,
-        description: productData.description || null,
-        price: productData.price,
-        image_url: productData.image_url || null,
-        category: productData.category || 'General',
-        brand: productData.brand || null,
-        active: productData.active !== undefined ? productData.active : true,
-      })
+      .insert(insertPayload)
       .select()
       .single();
+
+    if (prodError && (prodError.message?.includes('show_stock') || prodError.message?.includes('show_price'))) {
+      delete insertPayload.show_stock;
+      delete insertPayload.show_price;
+      const fallback = await supabase
+        .from('products')
+        .insert(insertPayload)
+        .select()
+        .single();
+      product = fallback.data;
+      prodError = fallback.error;
+    }
 
     if (prodError || !product) {
       console.error('Error creating product:', prodError);
@@ -657,6 +791,8 @@ export async function createOrder(payload: {
   customerPhone: string;
   customerAddress?: string;
   customerReference?: string;
+  voucherUrl?: string;
+  paymentMethod?: string;
   items: Array<{
     productId: string;
     quantity: number;
@@ -672,6 +808,21 @@ export async function createOrder(payload: {
       .in('id', productIds);
 
     const productsMap = new Map((dbProducts || []).map((p: any) => [p.id, p]));
+
+    // Validar disponibilidad de stock: no permitir comprar más del stock actual
+    for (const item of payload.items) {
+      const prod = productsMap.get(item.productId);
+      if (prod && prod.stock !== null && prod.stock !== undefined) {
+        if (prod.stock <= 0) {
+          throw new Error(`El producto "${prod.name}" se encuentra agotado.`);
+        }
+        if (item.quantity > prod.stock) {
+          throw new Error(
+            `No es posible comprar más del stock disponible. "${prod.name}" cuenta con ${prod.stock} unidad(es) en inventario y solicitaste ${item.quantity}.`
+          );
+        }
+      }
+    }
 
     let total = 0;
     const itemsToInsert = payload.items.map((item) => {
@@ -772,6 +923,8 @@ export async function createOrder(payload: {
       customer_phone: cleanPhone,
       customer_address: payload.customerAddress || null,
       customer_reference: payload.customerReference || null,
+      voucher_url: payload.voucherUrl || null,
+      payment_method: payload.paymentMethod || null,
       created_at: now,
       updated_at: now,
     };
@@ -785,8 +938,11 @@ export async function createOrder(payload: {
       .select()
       .single();
 
-    if (orderError && orderError.message?.includes('customer_dni')) {
-      delete orderInsertData.customer_dni;
+    if (orderError && (orderError.message?.includes('customer_dni') || orderError.message?.includes('voucher_url') || orderError.message?.includes('payment_method'))) {
+      if (orderError.message?.includes('customer_dni')) delete orderInsertData.customer_dni;
+      if (orderError.message?.includes('voucher_url')) delete orderInsertData.voucher_url;
+      if (orderError.message?.includes('payment_method')) delete orderInsertData.payment_method;
+
       const fallbackOrder = await supabase
         .from('orders')
         .insert(orderInsertData)
@@ -807,6 +963,18 @@ export async function createOrder(payload: {
       order_id: order.id,
     }));
     await supabase.from('order_items').insert(orderItemsRows);
+
+    // 4b. Deducir stock de los productos
+    for (const item of payload.items) {
+      const prod = productsMap.get(item.productId);
+      if (prod && prod.stock !== null && prod.stock !== undefined) {
+        const newStock = Math.max(0, (prod.stock as number) - item.quantity);
+        await supabase
+          .from('products')
+          .update({ stock: newStock })
+          .eq('id', item.productId);
+      }
+    }
 
     // 5. Crear follow_up pendiente
     if (customerId) {
@@ -830,9 +998,9 @@ export async function createOrder(payload: {
     });
 
     return await getOrderById(order.id);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Error in createOrder:', err);
-    return null;
+    throw err;
   }
 }
 
@@ -1002,3 +1170,269 @@ export async function getAnalyticsSummary(storeId: string): Promise<{
     };
   }
 }
+
+// ==============================================================================
+// STORE BILLING (Métodos de cobro del negocio)
+// ==============================================================================
+
+export async function getStoreBilling(storeId: string): Promise<StoreBillingInfo> {
+  const empty: StoreBillingInfo = { bank_accounts: [], digital_wallets: [] };
+  try {
+    const { data, error } = await supabase
+      .from('store_billing')
+      .select('data')
+      .eq('store_id', storeId)
+      .maybeSingle();
+
+    if (!error && data?.data) {
+      const res = data.data as StoreBillingInfo;
+      if ((res.bank_accounts && res.bank_accounts.length > 0) || (res.digital_wallets && res.digital_wallets.length > 0)) {
+        return res;
+      }
+    }
+
+    // Fallback localStorage si no hay en BD o la tabla aún no fue creada
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(`klik_store_billing_${storeId}`);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed && (parsed.digital_wallets?.length || parsed.bank_accounts?.length)) {
+            return parsed as StoreBillingInfo;
+          }
+        } catch (e) {}
+      }
+
+      // Check latest fallback
+      const latest = localStorage.getItem('klik_store_billing_latest');
+      if (latest) {
+        try {
+          const parsed = JSON.parse(latest);
+          if (parsed && (parsed.digital_wallets?.length || parsed.bank_accounts?.length)) {
+            return parsed as StoreBillingInfo;
+          }
+        } catch (e) {}
+      }
+    }
+
+    return (data?.data as StoreBillingInfo) || empty;
+  } catch (err) {
+    console.error('Error fetching store billing:', err);
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(`klik_store_billing_${storeId}`) || localStorage.getItem('klik_store_billing_latest');
+      if (stored) {
+        try {
+          return JSON.parse(stored) as StoreBillingInfo;
+        } catch (e) {}
+      }
+    }
+    return empty;
+  }
+}
+
+export async function updateStoreBilling(
+  storeId: string,
+  billing: StoreBillingInfo
+): Promise<boolean> {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`klik_store_billing_${storeId}`, JSON.stringify(billing));
+      localStorage.setItem('klik_store_billing_latest', JSON.stringify(billing));
+    }
+
+    const { error } = await supabase
+      .from('store_billing')
+      .upsert({
+        store_id: storeId,
+        data: billing,
+        updated_at: new Date().toISOString(),
+      });
+
+    if (error) {
+      console.warn('Notice: store_billing table pending migration, saved to localStorage fallback:', error.message);
+    }
+    return true;
+  } catch (err) {
+    console.error('Error updating store billing:', err);
+    return true;
+  }
+}
+
+// ==============================================================================
+// DASHBOARD ANALYTICS — Stock, Top sellers y gráfico de ventas
+// ==============================================================================
+
+export async function getLowStockProducts(
+  storeId: string,
+  threshold: number = 5
+): Promise<LowStockProduct[]> {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, name, image_url, stock')
+      .eq('store_id', storeId)
+      .eq('active', true)
+      .not('stock', 'is', null)
+      .lte('stock', threshold)
+      .order('stock', { ascending: true })
+      .limit(10);
+    if (error || !data) return [];
+    return data as LowStockProduct[];
+  } catch (err) {
+    console.error('Error fetching low stock products:', err);
+    return [];
+  }
+}
+
+export async function getTopSellingProducts(
+  storeId: string,
+  limit: number = 5
+): Promise<TopProduct[]> {
+  try {
+    const { data: items, error } = await supabase
+      .from('order_items')
+      .select('product_id, product_name, quantity, subtotal')
+      .not('product_id', 'is', null);
+
+    if (error || !items) return [];
+
+    // Filter by store orders
+    const { data: storeOrders } = await supabase
+      .from('orders')
+      .select('id')
+      .eq('store_id', storeId)
+      .neq('status', 'cancelled');
+
+    const orderIds = new Set((storeOrders || []).map((o: any) => o.id));
+
+    // Aggregate by product
+    const map = new Map<string, { product_name: string; units_sold: number; revenue: number }>();
+    for (const item of items) {
+      if (!orderIds.has((item as any).order_id)) continue;
+      const pid = (item as any).product_id as string;
+      const existing = map.get(pid);
+      if (existing) {
+        existing.units_sold += (item as any).quantity;
+        existing.revenue += Number((item as any).subtotal);
+      } else {
+        map.set(pid, {
+          product_name: (item as any).product_name,
+          units_sold: (item as any).quantity,
+          revenue: Number((item as any).subtotal),
+        });
+      }
+    }
+
+    // Get product images
+    const topIds = Array.from(map.entries())
+      .sort((a, b) => b[1].units_sold - a[1].units_sold)
+      .slice(0, limit)
+      .map(([id]) => id);
+
+    const { data: products } = await supabase
+      .from('products')
+      .select('id, image_url')
+      .in('id', topIds);
+
+    const imgMap = new Map((products || []).map((p: any) => [p.id, p.image_url]));
+
+    return topIds.map((pid) => ({
+      product_id: pid,
+      product_name: map.get(pid)!.product_name,
+      image_url: imgMap.get(pid) || null,
+      units_sold: map.get(pid)!.units_sold,
+      revenue: map.get(pid)!.revenue,
+    }));
+  } catch (err) {
+    console.error('Error fetching top selling products:', err);
+    return [];
+  }
+}
+
+export async function getSalesChart(
+  storeId: string,
+  period: 'week' | 'month' | 'year'
+): Promise<SalesDataPoint[]> {
+  try {
+    const now = new Date();
+    let from: Date;
+
+    const buckets = new Map<string, { label: string; fullDate: string; total: number; count: number }>();
+
+    if (period === 'week') {
+      from = new Date(now);
+      from.setDate(now.getDate() - 6);
+      from.setHours(0, 0, 0, 0);
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(now.getDate() - i);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const rawWeekday = d.toLocaleDateString('es-PE', { weekday: 'short', day: 'numeric' });
+        const label = rawWeekday.charAt(0).toUpperCase() + rawWeekday.slice(1).replace('.', '');
+        const fullDate = d.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        buckets.set(key, { label, fullDate, total: 0, count: 0 });
+      }
+    } else if (period === 'month') {
+      from = new Date(now);
+      from.setDate(now.getDate() - 29);
+      from.setHours(0, 0, 0, 0);
+
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(now.getDate() - i);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const rawMonth = d.toLocaleDateString('es-PE', { month: 'short' }).replace('.', '');
+        const label = `${d.getDate()} ${rawMonth}`;
+        const fullDate = d.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+        buckets.set(key, { label, fullDate, total: 0, count: 0 });
+      }
+    } else {
+      from = new Date(now.getFullYear(), now.getMonth() - 11, 1, 0, 0, 0, 0);
+
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const rawMonth = d.toLocaleDateString('es-PE', { month: 'short' }).replace('.', '');
+        const label = `${rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1)} ${d.getFullYear().toString().slice(-2)}`;
+        const fullDate = d.toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
+        buckets.set(key, { label, fullDate, total: 0, count: 0 });
+      }
+    }
+
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('total, created_at')
+      .eq('store_id', storeId)
+      .neq('status', 'cancelled')
+      .gte('created_at', from.toISOString())
+      .order('created_at', { ascending: true });
+
+    if (!error && orders) {
+      for (const order of orders) {
+        const d = new Date(order.created_at);
+        const key =
+          period === 'year'
+            ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+            : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+        const existing = buckets.get(key);
+        if (existing) {
+          existing.total += Number(order.total) || 0;
+          existing.count += 1;
+        }
+      }
+    }
+
+    return Array.from(buckets.values()).map((b) => ({
+      label: b.label,
+      fullDate: b.fullDate,
+      total: Math.round(b.total * 100) / 100,
+      count: b.count,
+    }));
+  } catch (err) {
+    console.error('Error fetching sales chart:', err);
+    return [];
+  }
+}
+

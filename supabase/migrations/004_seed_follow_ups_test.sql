@@ -37,7 +37,7 @@ BEGIN
     SELECT id INTO sample_prod_id FROM public.products WHERE store_id = target_store_id LIMIT 1;
     IF sample_prod_id IS NULL THEN
         INSERT INTO public.products (store_id, name, slug, price, category, brand, active)
-        VALUES (target_store_id, 'Polo Oversize Algodón Pima', 'polo-oversize-algodon-pima', 69.00, 'Ropa', 'Qori', true)
+        VALUES (target_store_id, 'Polo Oversize Algodón Pima', 'polo-oversize-algodon-pima', 69.00, 'Ropa', 'Klik', true)
         RETURNING id INTO sample_prod_id;
     END IF;
 

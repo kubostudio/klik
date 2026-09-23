@@ -2,55 +2,67 @@
 @import './mixins';
 
 :root {
-  /* Colors */
-  --color-canvas: #f5f5f5;
+  /* Colors — Cookbooker palette */
+  --color-primary: #d97742;
+  --color-primary-hover: #c4662f;
+  --color-primary-subtle: #fdf0e8;
+  --color-on-primary: #ffffff;
+
+  --color-canvas: #f9f4ef;
   --color-paper: #ffffff;
-  --color-surface-alt: #fafafa;
-  --color-ink: #0a0a0a;
-  --color-ink-soft: #171717;
-  --color-mid-gray: #737373;
-  --color-hairline: #e5e5e5;
+  --color-surface-alt: #fdf7f2;
+  --color-ink: #232323;
+  --color-ink-soft: #3d2e22;
+  --color-mid-gray: rgba(35, 35, 35, 0.55);
+  --color-hairline: #e8ddd4;
   --color-ember: #e7000b;
 
-  /* Typography — Font Families */
-  --font-geist: var(--font-geist, 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  /* Dark warm surfaces */
+  --color-dark-canvas: #1a0e06;
+  --color-dark-paper: #261508;
+  --color-dark-surface: #2e1a0a;
+  --color-dark-hairline: rgba(217, 119, 66, 0.18);
+  --color-dark-ink: #f5ebe0;
+  --color-dark-muted: #a08060;
 
-  /* Typography — Scale */
+  /* Typography — Inter */
+  --font-body: var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Typography Scale */
   --text-caption: 12px;
   --leading-caption: 1.33;
   --tracking-caption: 0.6px;
   --text-body: 14px;
-  --leading-body: 1.43;
+  --leading-body: 1.5;
   --text-body-lg: 16px;
   --leading-body-lg: 1.5;
   --text-subheading: 18px;
-  --leading-subheading: 1.56;
-  --text-heading-sm: 24px;
-  --leading-heading-sm: 1.33;
-  --tracking-heading-sm: -0.6px;
-  --text-heading: 30px;
-  --leading-heading: 1.2;
-  --tracking-heading: -0.75px;
-  --text-heading-lg: 36px;
-  --leading-heading-lg: 1.11;
-  --tracking-heading-lg: -0.9px;
-  --text-display: 48px;
-  --leading-display: 1.1;
-  --tracking-display: -2.4px;
+  --leading-subheading: 1.5;
+  --text-heading-sm: 20px;
+  --leading-heading-sm: 1.5;
+  --tracking-heading-sm: -0.2px;
+  --text-heading: 28px;
+  --leading-heading: 1.3;
+  --tracking-heading: -0.34px;
+  --text-display: 34px;
+  --leading-display: 1.5;
+  --tracking-display: -0.34px;
 
   /* Typography — Weights */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
 
-  /* Spacing */
-  --spacing-unit: 4px;
-  --spacing-4: 4px;
+  /* Spacing — 1px base, practical Cookbooker scale */
+  --spacing-unit: 1px;
+  --spacing-6: 6px;
   --spacing-8: 8px;
+  --spacing-10: 10px;
   --spacing-12: 12px;
   --spacing-16: 16px;
   --spacing-20: 20px;
-  --spacing-24: 24px;
+  --spacing-28: 28px;
   --spacing-48: 48px;
 
   /* Layout */
@@ -59,29 +71,38 @@
   --card-padding: 20px;
   --element-gap: 8px;
 
-  /* Border Radius */
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-2xl: 18px;
-  --radius-3xl: 24px;
+  /* Border Radius — Cohesive, modern scale */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
   /* Named Radii */
-  --radius-cards: 24px;
+  --radius-cards: 12px;
   --radius-small: 6px;
-  --radius-badges: 18px;
-  --radius-inputs: 18px;
-  --radius-nested: 10px;
-  --radius-buttons: 18px;
+  --radius-badges: 6px;
+  --radius-inputs: 8px;
+  --radius-nested: 8px;
+  --radius-buttons: 8px;
 
-  /* Shadows */
-  --shadow-subtle: 0 0 0 1px rgba(23, 23, 23, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  /* Shadows — Gentle and non-aggressive */
+  --shadow-subtle: 0 1px 3px rgba(35, 20, 10, 0.04), 0 4px 12px rgba(35, 20, 10, 0.03);
+  --shadow-sm: 0 1px 2px rgba(35, 20, 10, 0.04), 0 2px 6px rgba(35, 20, 10, 0.02);
+  --shadow-md: 0 3px 8px -1px rgba(35, 20, 10, 0.05), 0 8px 20px -2px rgba(35, 20, 10, 0.04);
+  --shadow-lg: 0 6px 20px -3px rgba(35, 20, 10, 0.06), 0 14px 32px -4px rgba(35, 20, 10, 0.04);
+  --shadow-hover: 0 8px 24px -2px rgba(217, 119, 66, 0.12), 0 3px 8px -1px rgba(35, 20, 10, 0.04);
 
   /* Surfaces */
-  --surface-canvas: #f5f5f5;
-  --surface-sidebar: #fafafa;
+  --surface-canvas: #f9f4ef;
+  --surface-sidebar: #fdf7f2;
   --surface-card: #ffffff;
-  --surface-input-fill: #f5f5f5;
+  --surface-input-fill: #fdf7f2;
+
+  /* Motion — Cookbooker: 150ms / ease uniform */
+  --duration-fast: 150ms;
+  --duration-base: 150ms;
+  --duration-slow: 150ms;
+  --easing: ease;
 }
 
 *, *::before, *::after {
@@ -100,9 +121,17 @@ body {
   font-family: $font-family;
   background-color: $color-canvas;
   color: $color-ink;
-  line-height: 1.43;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+// Inter for headings automatically
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-display;
+  font-weight: $font-weight-semibold;
+  color: $color-ink;
+  letter-spacing: $tracking-heading;
 }
 
 a {
@@ -124,29 +153,31 @@ img {
 }
 
 // ==============================================================================
-// Cards (DESIGN.md: 24px radius, 1px hairline border, subtle multi-layer elevation)
+// Cards — Cookbooker: 8px radius, warm hairline border, warm elevation
 // ==============================================================================
 .card {
   background-color: $color-paper;
   border-radius: $radius-cards;
   border: 1px solid $color-hairline;
   box-shadow: $shadow-subtle;
-  padding: $spacing-5;
+  padding: $spacing-6;
+  transition: box-shadow $transition-fast, transform $transition-fast;
 }
 
 // ==============================================================================
-// Buttons (DESIGN.md: 18px pill radius, height 36-40px, tonal contrast)
+// Buttons — 8px radius, height 40px, generous padding & subtle elevation
 // ==============================================================================
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: $spacing-2;
-  font-weight: $font-weight-medium;
+  font-family: $font-family;
+  font-weight: $font-weight-semibold;
   font-size: $font-size-sm;
-  height: 36px;
-  min-height: 36px;
-  padding: 0 $spacing-4;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 18px;
   border-radius: $radius-buttons;
   border: none;
   cursor: pointer;
@@ -160,44 +191,55 @@ img {
     cursor: not-allowed;
   }
 
-  // Primary Filled: #0a0a0a on #ffffff / #fafafa
+  // Primary: #d97742 orange on #ffffff
   &--primary, &--gold {
-    background-color: $color-ink;
-    color: $color-paper;
+    background-color: $color-primary;
+    color: $color-on-primary;
 
     &:hover:not(:disabled) {
-      background-color: $color-ink-soft;
+      background-color: $color-primary-hover;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(217, 119, 66, 0.22);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
     }
   }
 
-  // Secondary Ghost: #f5f5f5 tonal sibling
+  // Secondary: warm canvas fill with subtle shadow
   &--secondary, &--ghost {
-    background-color: $color-canvas;
-    color: $color-ink;
-
-    &:hover:not(:disabled) {
-      background-color: #ebebeb;
-      color: $color-ink;
-    }
-  }
-
-  // Outline: hairline boundary
-  &--outline {
-    background-color: transparent;
+    background-color: $color-paper;
     color: $color-ink;
     border: 1px solid $color-hairline;
+    box-shadow: $shadow-sm;
 
     &:hover:not(:disabled) {
       background-color: $color-canvas;
-      border-color: #d4d4d4;
+      border-color: $color-border-hover;
+      color: $color-ink;
+      transform: translateY(-1px);
     }
   }
 
-  // Destructive: reserved #e7000b
-  &--danger {
+  // Outline: hairline boundary, warm accent on hover
+  &--outline {
     background-color: transparent;
+    color: $color-ink;
+    border: 1px solid rgba(217, 119, 66, 0.25);
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-subtle;
+      border-color: $color-primary;
+      color: $color-primary;
+    }
+  }
+
+  // Destructive
+  &--danger {
+    background-color: $color-danger-bg;
     color: $color-ember;
-    border: 1px solid rgba($color-ember, 0.3);
+    border: 1px solid rgba($color-ember, 0.2);
 
     &:hover:not(:disabled) {
       background-color: $color-ember;
@@ -206,14 +248,17 @@ img {
     }
   }
 
-  // WhatsApp utility flow
+  // WhatsApp utility
   &--whatsapp {
-    background-color: $color-ink;
-    color: #FFFFFF;
+    background-color: $color-whatsapp;
+    color: #ffffff;
     font-weight: $font-weight-semibold;
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
 
     &:hover:not(:disabled) {
       background-color: $color-whatsapp-hover;
+      color: #ffffff;
+      transform: translateY(-1px);
     }
   }
 
@@ -222,24 +267,24 @@ img {
   }
 
   &--lg {
-    height: 44px;
-    min-height: 44px;
-    padding: 0 $spacing-5;
+    height: 48px;
+    min-height: 48px;
+    padding: 0 26px;
     font-size: $font-size-base;
     border-radius: $radius-buttons;
   }
 
   &--sm {
-    height: 32px;
-    min-height: 32px;
-    padding: 0 $spacing-3;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 14px;
     font-size: $font-size-xs;
     border-radius: $radius-buttons;
   }
 }
 
 // ==============================================================================
-// Form Controls (DESIGN.md: 18px pill inputs, #f5f5f5 resting, 1px ring focus)
+// Form Controls — 7px radius, warm canvas resting, orange focus ring
 // ==============================================================================
 .form-group {
   display: flex;
@@ -249,8 +294,9 @@ img {
 
   label {
     font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-semibold;
     color: $color-ink;
+    font-family: $font-family;
   }
 
   .helper-text {
@@ -269,9 +315,10 @@ img {
   height: 38px;
   padding: 0 $spacing-3;
   font-size: $font-size-sm;
+  font-family: $font-family;
   color: $color-ink;
-  background-color: $color-canvas;
-  border: 1px solid transparent;
+  background-color: $color-surface-alt;
+  border: 1px solid $color-hairline;
   border-radius: $radius-inputs;
   transition: border-color $transition-fast, background-color $transition-fast, box-shadow $transition-fast;
 
@@ -282,15 +329,15 @@ img {
   &:focus {
     outline: none;
     background-color: $color-paper;
-    border-color: $color-hairline;
-    box-shadow: 0 0 0 1px $color-hairline;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba(217, 119, 66, 0.18);
   }
 
   &--error {
     border-color: $color-ember;
     &:focus {
       border-color: $color-ember;
-      box-shadow: 0 0 0 1px $color-ember;
+      box-shadow: 0 0 0 2px rgba(231, 0, 11, 0.15);
     }
   }
 }
@@ -299,10 +346,11 @@ img {
   width: 100%;
   padding: $spacing-3;
   font-size: $font-size-sm;
+  font-family: $font-family;
   color: $color-ink;
-  background-color: $color-canvas;
-  border: 1px solid transparent;
-  border-radius: 14px;
+  background-color: $color-surface-alt;
+  border: 1px solid $color-hairline;
+  border-radius: $radius-lg;
   min-height: 96px;
   resize: vertical;
   transition: border-color $transition-fast, background-color $transition-fast, box-shadow $transition-fast;
@@ -314,72 +362,75 @@ img {
   &:focus {
     outline: none;
     background-color: $color-paper;
-    border-color: $color-hairline;
-    box-shadow: 0 0 0 1px $color-hairline;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba(217, 119, 66, 0.18);
   }
 
   &--error {
     border-color: $color-ember;
     &:focus {
       border-color: $color-ember;
-      box-shadow: 0 0 0 1px $color-ember;
+      box-shadow: 0 0 0 2px rgba(231, 0, 11, 0.15);
     }
   }
 }
 
 // ==============================================================================
-// Badges (DESIGN.md: 18px pill radius, compact capsule tags)
+// Badges — Cookbooker: 6px radius, compact editorial tags
 // ==============================================================================
 .badge {
   display: inline-flex;
   align-items: center;
   gap: $spacing-1;
-  padding: 2px 10px;
+  padding: 2px 8px;
   border-radius: $radius-badges;
   font-size: $font-size-caption;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family;
   line-height: 1.33;
 
-  // Solid: dark capsule
+  // Solid orange
   &--solid {
-    background-color: $color-ink-soft;
-    color: #fafafa;
+    background-color: $color-primary;
+    color: $color-on-primary;
   }
 
-  // Soft: subtle neutral
+  // Soft orange tint
   &--soft {
-    background-color: $color-canvas;
-    color: $color-ink-soft;
+    background-color: $color-primary-subtle;
+    color: $color-primary;
+    border: 1px solid rgba($color-primary, 0.25);
   }
 
-  // Outline: hairline border
+  // Outline: warm hairline
   &--outline {
     background-color: transparent;
     color: $color-ink;
     border: 1px solid $color-hairline;
   }
 
-  // Semantic mappings
+  // Semantic order states
   &--new {
-    background-color: $color-canvas;
-    color: $color-ink;
-    border: 1px solid $color-hairline;
+    background-color: $color-primary-subtle;
+    color: $color-primary;
+    border: 1px solid rgba($color-primary, 0.25);
   }
 
   &--contacted {
-    background-color: #ebebeb;
-    color: $color-ink;
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid rgba(37, 99, 235, 0.2);
   }
 
   &--confirmed {
-    background-color: $color-ink;
-    color: $color-paper;
+    background-color: #f0faf4;
+    color: #1a7a4a;
+    border: 1px solid rgba(26, 122, 74, 0.2);
   }
 
   &--delivered {
     background-color: $color-canvas;
     color: $color-ink;
-    font-weight: $font-weight-semibold;
     border: 1px solid $color-hairline;
   }
 
@@ -392,17 +443,18 @@ img {
   &--starter {
     background-color: $color-canvas;
     color: $color-mid-gray;
+    border: 1px solid $color-hairline;
   }
 
   &--pro {
-    background-color: $color-ink;
-    color: $color-paper;
+    background-color: $color-primary;
+    color: $color-on-primary;
     font-weight: $font-weight-semibold;
   }
 }
 
 // ==============================================================================
-// Stat Block (DESIGN.md: 12-14px uppercase label, 30-48px Geist 600 value)
+// Stat Block — Cookbooker: Newsreader display, orange accent values
 // ==============================================================================
 .stat-block {
   display: flex;
@@ -410,6 +462,7 @@ img {
 
   &__label {
     font-size: $font-size-caption;
+    font-family: $font-family;
     text-transform: uppercase;
     letter-spacing: $tracking-caption;
     color: $color-mid-gray;
@@ -417,22 +470,24 @@ img {
   }
 
   &__value {
+    font-family: $font-family-display;
     font-size: $font-size-4xl;
     font-weight: $font-weight-semibold;
     color: $color-ink;
-    letter-spacing: $tracking-heading;
-    line-height: 1.15;
+    letter-spacing: $tracking-display;
+    line-height: 1.2;
   }
 
   &__helper {
     font-size: $font-size-body;
+    font-family: $font-family;
     color: $color-mid-gray;
     margin-top: $spacing-1;
   }
 }
 
 // ==============================================================================
-// Empty States (DESIGN.md: 24px radius, hairline dashed border)
+// Empty States — 8px radius, warm dashed border
 // ==============================================================================
 .empty-state {
   display: flex;
@@ -448,13 +503,14 @@ img {
   &__icon {
     width: 44px;
     height: 44px;
-    color: $color-mid-gray;
+    color: $color-primary;
     margin-bottom: $spacing-3;
     stroke-width: 1.5;
   }
 
   &__title {
-    font-size: $font-size-base;
+    font-family: $font-family-display;
+    font-size: $font-size-heading-sm;
     font-weight: $font-weight-semibold;
     color: $color-ink;
     letter-spacing: $tracking-heading-sm;
@@ -476,10 +532,11 @@ img {
   opacity: 0;
   will-change: transform, opacity;
   transition-property: opacity, transform;
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-timing-function: ease;
+  transition-duration: 150ms;
 
   &--fade-up {
-    transform: translate3d(0, 32px, 0);
+    transform: translate3d(0, 24px, 0);
   }
 
   &--fade-in {
@@ -487,15 +544,15 @@ img {
   }
 
   &--scale-up {
-    transform: scale3d(0.95, 0.95, 1) translate3d(0, 20px, 0);
+    transform: scale3d(0.97, 0.97, 1) translate3d(0, 12px, 0);
   }
 
   &--slide-left {
-    transform: translate3d(-32px, 0, 0);
+    transform: translate3d(-24px, 0, 0);
   }
 
   &--slide-right {
-    transform: translate3d(32px, 0, 0);
+    transform: translate3d(24px, 0, 0);
   }
 
   &--visible {
@@ -509,8 +566,8 @@ img {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.06);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(217, 119, 66, 0.5));
   }
   100% {
     transform: scale(1);
@@ -519,7 +576,7 @@ img {
 }
 
 .counter--completed {
-  animation: counterPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: counterPop 0.3s ease forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -533,4 +590,3 @@ img {
     animation: none !important;
   }
 }
-

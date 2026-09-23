@@ -59,8 +59,18 @@ export default function ImageUpload({
       const publicUrl = await uploadImage(file, folder);
       onChange(publicUrl);
     } catch (err: any) {
-      console.error('Error al subir imagen:', err);
-      setErrorMessage(err?.message || 'Ocurrió un error al subir la imagen.');
+      console.warn('Fallo upload a Supabase Storage, usando respaldo Base64 local:', err);
+      try {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (typeof reader.result === 'string') {
+            onChange(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      } catch (readErr) {
+        setErrorMessage(err?.message || 'Ocurrió un error al procesar la imagen.');
+      }
     } finally {
       setIsUploading(false);
     }

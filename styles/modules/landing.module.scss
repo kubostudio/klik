@@ -2,12 +2,12 @@
 @import '../mixins';
 
 // ===========================================================================
-// LANDING PAGE - ULTRA-MODERN DARK THEME (#0a0a0a OBSIDIAN BLUEPRINT)
+// LANDING PAGE - ULTRA-MODERN LIGHT THEME (Cookbooker warm palette)
 // ===========================================================================
 
 .page {
-  background-color: #0a0a0a;
-  color: #f5f5f5;
+  background-color: $color-canvas;
+  color: $color-ink;
   position: relative;
 
   @include desktop {
@@ -24,65 +24,65 @@
     overflow-y: visible;
   }
 
-  // Scoped Button Styles for Dark Mode Landing
+  // Scoped Button Styles for Light Mode Landing
   :global {
     .btn--primary {
-      background-color: #ffffff;
-      color: #0a0a0a;
+      background-color: #d97742;
+      color: #ffffff;
       font-weight: 600;
-      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 14px rgba(217, 119, 66, 0.14);
 
       &:hover:not(:disabled) {
-        background-color: #eaeaea;
-        color: #0a0a0a;
+        background-color: #c4662f;
+        color: #ffffff;
         transform: translateY(-1px);
       }
     }
 
     .btn--secondary {
-      background-color: rgba(255, 255, 255, 0.07);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background-color: $color-canvas;
+      color: $color-ink;
+      border: 1px solid rgba(217, 119, 66, 0.20);
 
       &:hover:not(:disabled) {
-        background-color: rgba(255, 255, 255, 0.12);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.28);
+        background-color: rgba(217, 119, 66, 0.14);
+        color: $color-ink;
+        border-color: rgba(217, 119, 66, 0.35);
       }
     }
 
     .btn--ghost {
       background-color: transparent;
-      color: #d4d4d4;
+      color: $color-text-secondary;
 
       &:hover:not(:disabled) {
-        background-color: rgba(255, 255, 255, 0.08);
-        color: #ffffff;
+        background-color: $color-primary-subtle;
+        color: $color-primary;
       }
     }
 
     .badge--new {
-      background-color: rgba(234, 179, 8, 0.15);
-      color: #fde047;
-      border: 1px solid rgba(234, 179, 8, 0.35);
+      background-color: $color-primary-subtle;
+      color: $color-primary;
+      border: 1px solid rgba(217, 119, 66, 0.25);
     }
 
     .badge--contacted {
-      background-color: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      border: 1px solid rgba(59, 130, 246, 0.35);
+      background-color: #eff6ff;
+      color: #2563eb;
+      border: 1px solid rgba(37, 99, 235, 0.2);
     }
 
     .badge--confirmed {
-      background-color: rgba(34, 197, 94, 0.15);
-      color: #86efac;
-      border: 1px solid rgba(34, 197, 94, 0.35);
+      background-color: #f0faf4;
+      color: #166534;
+      border: 1px solid rgba(22, 101, 52, 0.2);
     }
 
     .badge--delivered {
-      background-color: rgba(168, 85, 247, 0.15);
-      color: #d8b4fe;
-      border: 1px solid rgba(168, 85, 247, 0.35);
+      background-color: $color-canvas;
+      color: $color-ink;
+      border: 1px solid $color-hairline;
     }
   }
 }
@@ -103,12 +103,12 @@
     bottom: 0;
     width: 260px;
     z-index: 100;
-    background: rgba(10, 10, 10, 0.92);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(28px) saturate(190%);
     -webkit-backdrop-filter: blur(28px) saturate(190%);
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid $color-hairline;
     padding: 28px 18px;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 0 24px rgba(35, 15, 5, 0.08);
   }
 
   &__top {
@@ -134,8 +134,8 @@
     font-size: 20px;
     font-weight: 700;
     letter-spacing: -0.04em;
-    color: #ffffff;
-    background: linear-gradient(180deg, #ffffff 40%, rgba(255, 255, 255, 0.72) 100%);
+    color: $color-ink;
+    background: linear-gradient(180deg, #232323 40%, rgba(61, 46, 34, 0.75) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -154,7 +154,7 @@
     border-radius: 12px;
     font-size: 13px;
     font-weight: 500;
-    color: #a1a1aa;
+    color: $color-mid-gray;
     text-decoration: none;
     background: transparent;
     border: 1px solid transparent;
@@ -165,16 +165,16 @@
     width: 100%;
 
     &:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
+      color: $color-ink;
+      background: rgba(217, 119, 66, 0.06);
     }
 
     &--active {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.12);
+      color: $color-ink;
+      background: rgba(217, 119, 66, 0.10);
+      border-color: rgba(217, 119, 66, 0.14);
       font-weight: 600;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 1px 0 rgba(217, 119, 66, 0.12);
 
       &::before {
         content: '';
@@ -183,13 +183,13 @@
         top: 25%;
         bottom: 25%;
         width: 3px;
-        background: #ffffff;
+        background: #d97742;
         border-radius: 0 4px 4px 0;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 10px rgba(217, 119, 66, 0.7);
       }
 
       .sidebar__navIndex {
-        color: #ffffff;
+        color: $color-ink;
         opacity: 1;
       }
     }
@@ -199,7 +199,7 @@
     font-size: 11px;
     font-family: monospace;
     font-weight: 600;
-    color: #71717a;
+    color: #8a6e52;
     opacity: 0.8;
   }
 
@@ -215,7 +215,7 @@
     flex-direction: column;
     gap: 10px;
     padding-top: 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(217, 119, 66, 0.07);
   }
 
   &__loginBtn {
@@ -226,13 +226,13 @@
     border-radius: 9999px;
     font-size: 13px;
     font-weight: 500;
-    color: #a3a3a3;
+    color: $color-mid-gray;
     text-decoration: none;
     transition: all 0.2s ease;
 
     &:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.06);
+      color: $color-ink;
+      background: rgba(217, 119, 66, 0.07);
     }
   }
 
@@ -245,18 +245,18 @@
     border-radius: 9999px;
     font-size: 13px;
     font-weight: 600;
-    color: #0a0a0a;
-    background: linear-gradient(180deg, #ffffff 0%, #ebebeb 100%);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 18px -2px rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    background: linear-gradient(180deg, #d97742 0%, #c4662f 100%);
+    border: 1px solid rgba(217, 119, 66, 0.3);
+    box-shadow: 0 0 18px -2px rgba(217, 119, 66, 0.35);
     text-decoration: none;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:hover {
       transform: translateY(-1px);
-      background: #ffffff;
-      box-shadow: 0 0 24px 0 rgba(255, 255, 255, 0.55);
-      color: #000000;
+      background: #c4662f;
+      box-shadow: 0 0 24px 0 rgba(217, 119, 66, 0.45);
+      color: #ffffff;
     }
   }
 
@@ -266,7 +266,7 @@
     justify-content: center;
     gap: 6px;
     font-size: 11px;
-    color: #71717a;
+    color: #8a6e52;
     margin-top: 4px;
 
     span {
@@ -285,10 +285,10 @@
   right: 0;
   height: 60px;
   z-index: 110;
-  background: rgba(12, 12, 12, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(217, 119, 66, 0.10);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -311,9 +311,9 @@
     width: 36px;
     height: 36px;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: $color-primary-subtle;
+    border: 1px solid rgba(217,119,66,0.2);
+    color: $color-ink;
     cursor: pointer;
   }
 
@@ -321,11 +321,11 @@
     font-size: 11px;
     font-family: monospace;
     font-weight: 600;
-    color: #a1a1aa;
-    background: rgba(255, 255, 255, 0.06);
+    color: $color-mid-gray;
+    background: $color-canvas;
     padding: 3px 8px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(217, 119, 66, 0.07);
   }
 
   &__logo {
@@ -339,13 +339,14 @@
   }
 
   &__ctaBtn {
-    padding: 6px 14px;
+    padding: 7px 16px;
     border-radius: 9999px;
     font-size: 12px;
     font-weight: 600;
-    color: #0a0a0a;
-    background: #ffffff;
+    color: #ffffff;
+    background: #d97742;
     text-decoration: none;
+    box-shadow: 0 2px 8px rgba(217, 119, 66, 0.28);
   }
 
   // Mobile Slide-out Drawer
@@ -355,15 +356,15 @@
     left: 0;
     bottom: 0;
     width: 270px;
-    background: rgba(12, 12, 12, 0.96);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(28px);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid $color-hairline;
     z-index: 120;
     padding: 24px 18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8);
+    box-shadow: 4px 0 16px rgba(35, 15, 5, 0.10);
     animation: drawerSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -381,15 +382,15 @@
     border-radius: 12px;
     font-size: 14px;
     font-weight: 500;
-    color: #a1a1aa;
+    color: $color-mid-gray;
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(217, 119, 66, 0.04);
     border: 1px solid transparent;
     cursor: pointer;
 
     &--active {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
+      color: $color-ink;
+      background: rgba(217, 119, 66, 0.10);
       border-color: rgba(255, 255, 255, 0.15);
       font-weight: 600;
     }
@@ -400,7 +401,7 @@
     flex-direction: column;
     gap: 10px;
     padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(217, 119, 66, 0.10);
   }
 
   &__drawerBackdrop {
@@ -409,7 +410,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(35, 15, 5, 0.35);
     backdrop-filter: blur(4px);
     z-index: 115;
   }
@@ -439,9 +440,9 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 90;
-    background: rgba(18, 18, 18, 0.6);
+    background: rgba(249, 244, 239, 0.85);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(217, 119, 66, 0.10);
     padding: 12px 8px;
     border-radius: 9999px;
   }
@@ -464,8 +465,8 @@
     &--active {
       height: 24px;
       border-radius: 9999px;
-      background: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      background: #d97742;
+      box-shadow: 0 0 10px rgba(217, 119, 66, 0.6);
     }
   }
 }
@@ -531,7 +532,7 @@
     scroll-snap-stop: normal;
     overflow: visible;
     padding: 52px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid $color-hairline;
 
     &:first-child {
       padding-top: 36px;
@@ -555,17 +556,33 @@
 }
 
 // ---------------------------------------------------------------------------
-// SLIDE 1: HERO
+// SLIDE 01: HERO
 // ---------------------------------------------------------------------------
 .slideHero {
-  background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 10, 0) 70%);
+  background: radial-gradient(circle at 50% 30%, rgba(217,119,66,0.08) 0%, transparent 70%);
 
   .heroContent {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 820px;
+    max-width: 860px;
+    width: 100%;
+  }
+
+  .heroPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $color-primary;
+    background: $color-primary-subtle;
+    border: 1px solid rgba(217,119,66,0.25);
+    padding: 5px 14px;
+    border-radius: 9999px;
+    margin-bottom: $spacing-4;
+    letter-spacing: 0.01em;
   }
 
   .heroTitle {
@@ -573,7 +590,7 @@
     font-weight: 600;
     line-height: 1.12;
     letter-spacing: $tracking-heading;
-    color: #ffffff;
+    color: $color-ink;
     margin-bottom: $spacing-4;
 
     @include desktop {
@@ -583,8 +600,7 @@
     }
 
     .accent {
-      color: #ffffff;
-      background: linear-gradient(180deg, #ffffff 20%, #999999 100%);
+      background: linear-gradient(180deg, $color-primary 20%, $color-primary-hover 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -592,10 +608,11 @@
 
   .heroSubtitle {
     font-size: $font-size-body-lg;
-    color: #a3a3a3;
-    max-width: 620px;
-    margin-bottom: $spacing-8;
+    color: $color-mid-gray;
+    max-width: 600px;
+    margin-bottom: $spacing-6;
     line-height: 1.55;
+    font-weight: 400;
 
     @include desktop {
       font-size: 18px;
@@ -608,7 +625,7 @@
     width: 100%;
     max-width: 380px;
     gap: $spacing-3;
-    margin-bottom: 40px;
+    margin-bottom: $spacing-8;
 
     @include tablet {
       flex-direction: row;
@@ -617,14 +634,77 @@
     }
   }
 
+  // Metrics strip — 4 stats inline (trustRow)
+  .heroMetrics,
+  .trustRow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 680px;
+    background: $color-paper;
+    border: 1px solid $color-hairline;
+    border-radius: $radius-lg;
+    padding: 18px 0;
+    margin-top: 32px;
+    margin-bottom: $spacing-6;
+    box-shadow: $shadow-subtle;
+
+    @media (max-width: 600px) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+
+      // Hide vertical dividers on 2-col mobile layout
+      .heroMetric__divider {
+        display: none;
+      }
+    }
+  }
+
+  .heroMetric {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 16px;
+
+    &__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: $color-primary;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+
+      @include desktop {
+        font-size: 26px;
+      }
+    }
+
+    &__label {
+      font-size: 11px;
+      color: $color-mid-gray;
+      line-height: 1.35;
+      max-width: 100px;
+    }
+
+    &__divider {
+      width: 1px;
+      height: 36px;
+      background: $color-hairline;
+      flex-shrink: 0;
+    }
+  }
+
   .scrollHint {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     font-size: 12px;
-    color: #71717a;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: $color-mid-gray;
+    background: rgba(217,119,66,0.06);
+    border: 1px solid rgba(217, 119, 66, 0.10);
     padding: 7px 16px;
     border-radius: 9999px;
     cursor: pointer;
@@ -632,9 +712,9 @@
     animation: bounceSlow 2.5s infinite ease-in-out;
 
     &:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.16);
+      color: $color-ink;
+      background: rgba(217, 119, 66, 0.10);
+      border-color: rgba(217, 119, 66, 0.20);
     }
   }
 }
@@ -649,171 +729,20 @@
 }
 
 // ---------------------------------------------------------------------------
-// SLIDE 2: DASHBOARD & METRICS
+// SLIDE 02: BENEFICIOS
 // ---------------------------------------------------------------------------
-.slideDashboard {
-  .trustRow {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    width: 100%;
-    max-width: 980px;
-    margin-bottom: 20px;
-
-    @include desktop {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  .trustCard {
-    background: #131313;
-    border: 1px solid #222222;
-    border-radius: 16px;
-    padding: 10px 14px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.25s ease, border-color 0.25s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .trustNumber {
-      font-size: 22px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.02em;
-    }
-
-    .trustLabel {
-      font-size: 11px;
-      color: #888888;
-      margin-top: 2px;
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// SLIDE 3: BENTO GRID ("TODO LO QUE NECESITAS")
-// ---------------------------------------------------------------------------
-.slideBento {
+.slideBenefits {
   .slideHeader {
     text-align: center;
     max-width: 640px;
-    margin-bottom: 24px;
-
-    h2 {
-      font-size: 26px;
-      font-weight: 600;
-      letter-spacing: $tracking-heading;
-      margin-bottom: 6px;
-      color: #ffffff;
-
-      @include desktop {
-        font-size: 34px;
-      }
-    }
-
-    p {
-      color: #a3a3a3;
-      font-size: 13.5px;
-      line-height: 1.45;
-    }
-  }
-
-  .bentoGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-    width: 100%;
-    max-width: 980px;
-
-    @include tablet {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @include desktop {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .bentoCard {
-    background: #141414;
-    border: 1px solid #222222;
-    border-radius: 16px;
-    padding: 18px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      border-color: rgba(255, 255, 255, 0.22);
-      transform: translateY(-3px);
-      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
-    }
-
-    &--span2 {
-      @include desktop {
-        grid-column: span 3;
-      }
-    }
-
-    .cardIcon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #1e1e1e;
-      border: 1px solid #2d2d2d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      margin-bottom: 10px;
-    }
-
-    h3 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #ffffff;
-      margin-bottom: 5px;
-      letter-spacing: -0.01em;
-    }
-
-    p {
-      font-size: 12.5px;
-      color: #999999;
-      line-height: 1.45;
-    }
-
-    .visualSnippet {
-      background: #1a1a1a;
-      border: 1px solid #262626;
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-top: 12px;
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// SLIDE 4: CÓMO FUNCIONA QORI
-// ---------------------------------------------------------------------------
-.slideHow {
-  .slideHeader {
-    text-align: center;
-    max-width: 600px;
     margin-bottom: 28px;
 
     h2 {
       font-size: 26px;
       font-weight: 600;
       letter-spacing: $tracking-heading;
-      margin-bottom: 6px;
-      color: #ffffff;
+      margin-bottom: 8px;
+      color: $color-ink;
 
       @include desktop {
         font-size: 34px;
@@ -821,169 +750,410 @@
     }
 
     p {
-      color: #a3a3a3;
+      color: $color-mid-gray;
       font-size: 14px;
+      line-height: 1.5;
     }
   }
 
-  .stepsGrid {
+  // 4 bento cards in a 2x2 grid, well-centered
+  .benefitsGrid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
     width: 100%;
-    max-width: 980px;
+    max-width: 960px;
+    margin: 0 auto;
 
-    @include desktop {
-      grid-template-columns: repeat(3, 1fr);
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
     }
   }
 
-  .stepCard {
-    background: #141414;
-    border: 1px solid #222222;
-    border-radius: 18px;
-    padding: 24px 20px;
+  .benefitCards {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  .benefitCard {
+    background: $color-paper;
+    border: 1px solid $color-hairline;
+    border-radius: $radius-lg;
+    padding: 26px 28px;
     display: flex;
     flex-direction: column;
-    position: relative;
-    overflow: hidden;
+    justify-content: flex-start;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: $shadow-subtle;
 
     &:hover {
-      border-color: rgba(255, 255, 255, 0.22);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+      border-color: rgba(217, 119, 66, 0.35);
+      transform: translateY(-3px);
+      box-shadow: $shadow-hover;
     }
 
-    .stepBadge {
-      font-size: 11px;
-      font-weight: 600;
-      color: #a1a1aa;
-      font-family: monospace;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: inline-flex;
+    &__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: $color-primary-subtle;
+      border: 1px solid rgba(217,119,66,0.22);
+      display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      color: $color-primary;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
 
-      span {
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #22c55e;
+    &__body {
+      h3 {
+        font-size: 16.5px;
+        font-weight: 600;
+        color: $color-ink;
+        margin-bottom: 6px;
+        letter-spacing: -0.01em;
+        line-height: 1.35;
+      }
+
+      p {
+        font-size: 13px;
+        color: $color-mid-gray;
+        line-height: 1.5;
+        margin-bottom: 14px;
       }
     }
 
-    h3 {
-      font-size: 18px;
+    // Visual flow & WhatsApp preview
+    &__visual {
+      margin-top: auto;
+      background: $color-canvas;
+      border: 1px solid $color-hairline;
+      border-radius: $radius-md;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .badgeFlow {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+
+      .badgeArrow {
+        font-size: 11px;
+        color: $color-mid-gray;
+      }
+    }
+
+    .whatsappSnippet {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: $color-paper;
+      border: 1px solid rgba(217,119,66,0.18);
+      border-radius: 6px;
+      padding: 8px 12px;
+
+      &__text {
+        font-size: 11.5px;
+        color: $color-ink;
+        line-height: 1.4;
+
+        strong {
+          color: $color-primary;
+        }
+      }
+    }
+
+    // Direct card headers for non-body cards
+    > h3 {
+      font-size: 16.5px;
       font-weight: 600;
-      margin-bottom: 8px;
-      color: #ffffff;
-      letter-spacing: -0.02em;
+      color: $color-ink;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
     }
 
-    p {
+    > p {
       font-size: 13px;
-      color: #999999;
+      color: $color-mid-gray;
       line-height: 1.5;
-
-      code {
-        background: #202020;
-        padding: 2px 6px;
-        border-radius: 4px;
-        color: #ffffff;
-        font-size: 12px;
-        border: 1px solid #333333;
-      }
     }
   }
 }
 
 // ---------------------------------------------------------------------------
-// SLIDE 5: PLAN QORI
+// SLIDE 03: CÓMO FUNCIONA + DEMO (2-Column Rich Slide)
 // ---------------------------------------------------------------------------
-.slidePricing {
-  .slideHeader {
-    text-align: center;
-    max-width: 520px;
-    margin-bottom: 20px;
+.slideDemo {
+  .slide__inner {
+    max-width: 1160px;
+  }
+}
 
-    h2 {
-      font-size: 26px;
-      font-weight: 600;
-      letter-spacing: $tracking-heading;
-      margin-bottom: 6px;
-      color: #ffffff;
+// Shared 2-column split layout: 1fr 1.25fr desktop / stack mobile
+.slideSplit, .demoLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  align-items: center;
 
-      @include desktop {
-        font-size: 34px;
+  @include desktop {
+    grid-template-columns: 1fr 1.25fr;
+    gap: 40px;
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .slideHeader {
+      text-align: left;
+      margin-bottom: 24px;
+
+      h2 {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: $tracking-heading;
+        margin-bottom: 6px;
+        color: $color-ink;
+
+        @include desktop {
+          font-size: 32px;
+        }
       }
+
+      p {
+        color: $color-mid-gray;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  &__showcase {
+    width: 100%;
+    min-width: 0; // prevent flex/grid blowout
+  }
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stepItem {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  background: $color-paper;
+  border: 1px solid $color-hairline;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-subtle;
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: rgba(217, 119, 66, 0.35);
+    box-shadow: $shadow-hover;
+    transform: translateY(-2px);
+  }
+
+  &__number {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: monospace;
+    color: #ffffff;
+    background: $color-primary;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__body {
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: $color-ink;
+      margin-bottom: 4px;
     }
 
     p {
-      color: #a3a3a3;
-      font-size: 13.5px;
+      font-size: 12.5px;
+      color: $color-mid-gray;
+      line-height: 1.45;
+      margin: 0;
+    }
+  }
+}
+
+.codeInline {
+  background: $color-primary-subtle;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: $color-primary;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 600;
+  border: 1px solid rgba(217, 119, 66, 0.25);
+}
+
+// ---------------------------------------------------------------------------
+// SLIDE 04: PLANES / PRICING
+// ---------------------------------------------------------------------------
+.slidePricing {
+  .slide__inner {
+    max-width: 980px;
+  }
+
+  .pricingLayout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    width: 100%;
+    align-items: center;
+
+    @include desktop {
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    &__left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .slideHeader {
+        text-align: left;
+        margin: 0;
+
+        h2 {
+          font-size: 28px;
+          font-weight: 600;
+          letter-spacing: $tracking-heading;
+          margin-bottom: 8px;
+          color: $color-ink;
+          line-height: 1.2;
+
+          @include desktop {
+            font-size: 38px;
+          }
+        }
+
+        p {
+          color: $color-mid-gray;
+          font-size: 14.5px;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  .pricingPerks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pricingPerk {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-ink;
+    padding: 10px 14px;
+    background: $color-paper;
+    border: 1px solid $color-hairline;
+    border-radius: $radius-md;
+    box-shadow: $shadow-subtle;
+
+    svg {
+      color: $color-primary;
+      flex-shrink: 0;
     }
   }
 
   .planCard {
-    background: #141414;
-    border: 1px solid #2c2c2c;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
-    padding: 24px 28px;
+    background: $color-paper;
+    border: 1px solid $color-hairline;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-subtle;
+    padding: 36px 32px;
     display: flex;
     flex-direction: column;
     position: relative;
     width: 100%;
-    max-width: 540px;
-    margin: 0 auto;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
       transform: translateY(-3px);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85), 0 0 24px -4px rgba(255, 255, 255, 0.12);
+      border-color: rgba(217, 119, 66, 0.35);
+      box-shadow: $shadow-hover;
     }
 
     .featuredBadge {
       position: absolute;
       top: -12px;
       right: 24px;
-      background: #ffffff;
-      color: #0a0a0a;
+      background: $color-primary;
+      color: #ffffff;
       font-size: 11px;
       font-weight: 600;
-      padding: 3px 12px;
+      padding: 4px 14px;
       border-radius: 9999px;
       letter-spacing: 0.02em;
     }
 
     .planName {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
     }
 
     .planTagline {
-      font-size: 12px;
-      color: #888888;
-      margin-bottom: 10px;
+      font-size: 12.5px;
+      color: $color-mid-gray;
+      margin-bottom: 12px;
+      line-height: 1.4;
     }
 
     .planPrice {
-      font-size: 30px;
+      font-size: 34px;
       font-weight: 700;
-      color: #ffffff;
+      color: $color-ink;
       letter-spacing: -0.02em;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
 
       span {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 400;
-        color: #71717a;
+        color: $color-mid-gray;
       }
     }
 
@@ -991,21 +1161,21 @@
       list-style: none;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 9px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 22px;
       padding: 0;
 
       @include tablet {
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px 16px;
+        gap: 10px 16px;
       }
 
       li {
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 12.5px;
-        color: #d4d4d4;
+        font-size: 13px;
+        color: $color-text-secondary;
 
         svg {
           color: #22c55e;
@@ -1017,24 +1187,24 @@
 }
 
 // ---------------------------------------------------------------------------
-// SLIDE 6: FOOTER & CIERRE
+// SLIDE 05: CTA FINAL + INFO / FOOTER
 // ---------------------------------------------------------------------------
 .slideFooter {
   .footerBox {
     width: 100%;
-    max-width: 860px;
+    max-width: 880px;
     display: flex;
     flex-direction: column;
     gap: 28px;
   }
 
   .ctaBanner {
-    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08) 0%, rgba(20, 20, 20, 0.95) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 32px 24px;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-hover 100%);
+    border: 1px solid rgba(217,119,66,0.3);
+    border-radius: $radius-xl;
+    padding: 34px 28px;
     text-align: center;
-    box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 36px -8px rgba(217,119,66,0.35);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1052,10 +1222,10 @@
     }
 
     p {
-      font-size: 13.5px;
-      color: #a3a3a3;
-      max-width: 500px;
-      margin-bottom: 20px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.88);
+      max-width: 520px;
+      margin-bottom: 22px;
       line-height: 1.5;
     }
 
@@ -1064,12 +1234,54 @@
       flex-direction: column;
       gap: 10px;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
 
       @include tablet {
         flex-direction: row;
         justify-content: center;
         max-width: none;
+      }
+    }
+
+    .bannerBtnPrimary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      color: #d97742;
+      font-weight: 700;
+      font-size: $font-size-base;
+      border-radius: $radius-buttons;
+      padding: 12px 24px;
+      text-decoration: none;
+      transition: all $transition-fast;
+      box-shadow: $shadow-subtle;
+
+      &:hover {
+        background-color: #fff8f4;
+        color: #c4662f;
+        transform: translateY(-1px);
+        box-shadow: $shadow-hover;
+      }
+    }
+
+    .bannerBtnOutline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: $font-size-base;
+      border-radius: $radius-buttons;
+      padding: 12px 24px;
+      text-decoration: none;
+      transition: all $transition-fast;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: #ffffff;
+        color: #ffffff;
       }
     }
   }
@@ -1078,7 +1290,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(217, 119, 66, 0.12);
     padding-top: 20px;
 
     @include tablet {
@@ -1093,10 +1305,11 @@
       gap: 14px;
 
       p {
-        font-size: 12px;
-        color: #71717a;
-        max-width: 320px;
+        font-size: 12.5px;
+        color: #8a6e52;
+        max-width: 340px;
         margin: 0;
+        line-height: 1.45;
       }
     }
 
@@ -1107,12 +1320,12 @@
 
       a {
         font-size: 13px;
-        color: #888888;
+        color: $color-mid-gray;
         text-decoration: none;
         transition: color 0.2s ease;
 
         &:hover {
-          color: #ffffff;
+          color: $color-ink;
         }
       }
     }
@@ -1121,11 +1334,11 @@
   .copyright {
     text-align: center;
     font-size: 12px;
-    color: #555555;
+    color: $color-mid-gray;
     padding-top: 4px;
 
     a {
-      color: #ffffff;
+      color: $color-ink;
       font-weight: 600;
       text-decoration: none;
 
@@ -1142,17 +1355,17 @@
 .showcaseWindow {
   width: 100%;
   max-width: 980px;
-  background-color: #121212;
-  border: 1px solid #262626;
+  background-color: $color-surface-alt;
+  border: 1px solid $color-hairline;
   border-radius: $radius-cards;
-  box-shadow: 0 24px 70px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: $shadow-lg;
   overflow: hidden;
   text-align: left;
   transition: all $transition-base;
 
   &__bar {
-    background-color: #171717;
-    border-bottom: 1px solid #242424;
+    background-color: $color-surface-alt;
+    border-bottom: 1px solid $color-hairline;
     padding: $spacing-3 $spacing-4;
     display: flex;
     flex-direction: column;
@@ -1176,31 +1389,30 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #333333;
 
-    &:nth-child(1) { background-color: #404040; }
-    &:nth-child(2) { background-color: #333333; }
-    &:nth-child(3) { background-color: #262626; }
+    &:nth-child(1) { background-color: #ff5f56; }
+    &:nth-child(2) { background-color: #ffbd2e; }
+    &:nth-child(3) { background-color: #27c93f; }
   }
 
   &__urlPill {
     display: flex;
     align-items: center;
     gap: 6px;
-    background-color: #1a1a1a;
-    border: 1px solid #2e2e2e;
+    background-color: $color-surface-alt;
+    border: 1px solid $color-hairline;
     border-radius: $radius-badges;
     padding: 4px 14px;
     font-size: 11px;
-    color: #888888;
+    color: $color-mid-gray;
     font-family: monospace;
   }
 
   &__tabs {
     display: flex;
     gap: 4px;
-    background-color: #1a1a1a;
-    border: 1px solid #262626;
+    background-color: $color-surface-alt;
+    border: 1px solid $color-hairline;
     padding: 3px;
     border-radius: $radius-badges;
     align-self: flex-start;
@@ -1212,7 +1424,7 @@
     padding: 5px 14px;
     font-size: 12px;
     font-weight: 500;
-    color: #888888;
+    color: $color-mid-gray;
     border-radius: 14px;
     cursor: pointer;
     transition: all $transition-fast;
@@ -1221,21 +1433,21 @@
     gap: 6px;
 
     &:hover {
-      color: #ffffff;
+      color: $color-ink;
     }
 
     &--active {
-      background-color: #282828;
+      background-color: $color-primary;
       color: #ffffff;
       font-weight: 600;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 1px 3px rgba(217,119,66,0.25);
     }
   }
 
   &__content {
     padding: $spacing-5;
     min-height: 380px;
-    background-color: #121212;
+    background-color: $color-surface-alt;
 
     @include tablet {
       padding: $spacing-6;
@@ -1261,15 +1473,15 @@
   }
 
   &__metricCard {
-    background-color: #171717;
-    border: 1px solid #262626;
+    background-color: $color-surface-alt;
+    border: 1px solid $color-hairline;
     border-radius: $radius-inputs;
     padding: $spacing-3 $spacing-4;
 
     .metricLabel {
       font-size: 11px;
       font-weight: 500;
-      color: #888888;
+      color: $color-mid-gray;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
@@ -1277,7 +1489,7 @@
     .metricValue {
       font-size: 18px;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       margin-top: 2px;
 
       @include tablet {
@@ -1287,10 +1499,10 @@
   }
 
   &__tableWrapper {
-    border: 1px solid #262626;
+    border: 1px solid $color-hairline;
     border-radius: $radius-inputs;
     overflow: hidden;
-    background-color: #151515;
+    background-color: $color-paper;
   }
 
   &__table {
@@ -1299,12 +1511,12 @@
     font-size: 13px;
 
     th {
-      background-color: #1a1a1a;
+      background-color: $color-surface-alt;
       padding: 10px 12px;
       text-align: left;
       font-weight: 500;
-      color: #888888;
-      border-bottom: 1px solid #262626;
+      color: $color-mid-gray;
+      border-bottom: 1px solid $color-hairline;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -1312,8 +1524,8 @@
 
     td {
       padding: 10px 12px;
-      border-bottom: 1px solid #202020;
-      color: #e5e5e5;
+      border-bottom: 1px solid $color-hairline;
+      color: $color-ink;
       vertical-align: middle;
     }
 
@@ -1322,7 +1534,7 @@
     }
 
     tr:hover td {
-      background-color: #1c1c1c;
+      background-color: $color-primary-subtle;
     }
   }
 }
@@ -1334,11 +1546,11 @@
   align-items: center;
   max-width: 520px;
   margin: 0 auto;
-  border: 1px solid #262626;
+  border: 1px solid $color-hairline;
   border-radius: $radius-cards;
   padding: $spacing-5;
-  background-color: #171717;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  background-color: $color-paper;
+  box-shadow: $shadow-lg;
 
   &__header {
     text-align: center;
@@ -1348,8 +1560,8 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background-color: #262626;
-      border: 1px solid #383838;
+      background-color: $color-primary;
+      border: 1px solid $color-primary-hover;
       color: #ffffff;
       display: flex;
       align-items: center;
@@ -1362,38 +1574,38 @@
     h3 {
       font-size: 18px;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       margin-bottom: 2px;
     }
 
     p {
       font-size: 12px;
-      color: #888888;
+      color: $color-mid-gray;
     }
   }
 
   &__productCard {
     width: 100%;
-    border: 1px solid #262626;
+    border: 1px solid $color-hairline;
     border-radius: $radius-inputs;
     padding: $spacing-3;
     display: flex;
     gap: $spacing-3;
     align-items: center;
-    background-color: #1e1e1e;
+    background-color: $color-canvas;
     margin-bottom: $spacing-4;
 
     .productThumb {
       width: 70px;
       height: 70px;
       border-radius: $radius-nested;
-      background-color: #262626;
-      border: 1px solid #333333;
+      background-color: $color-primary-subtle;
+      border: 1px solid rgba(217,119,66,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      color: #888888;
+      color: $color-mid-gray;
     }
 
     .productDetails {
@@ -1402,13 +1614,13 @@
       h4 {
         font-size: 14px;
         font-weight: 600;
-        color: #ffffff;
+        color: $color-ink;
       }
 
       .productPrice {
         font-size: 15px;
         font-weight: 700;
-        color: #ffffff;
+        color: $color-ink;
         margin: 2px 0;
       }
 
@@ -1418,11 +1630,11 @@
 
         span {
           font-size: 10px;
-          background-color: #282828;
-          border: 1px solid #383838;
+          background-color: $color-canvas;
+          border: 1px solid $color-hairline;
           border-radius: 6px;
           padding: 1px 6px;
-          color: #c4c4c4;
+          color: $color-ink;
         }
       }
     }
@@ -1430,8 +1642,8 @@
 
   &__cartBar {
     width: 100%;
-    background-color: #ffffff;
-    color: #0a0a0a;
+    background-color: #d97742;
+    color: #ffffff;
     border-radius: $radius-badges;
     padding: 10px 16px;
     display: flex;
@@ -1439,22 +1651,23 @@
     justify-content: space-between;
     font-size: 13px;
     font-weight: 600;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 16px rgba(217,119,66,0.25);
   }
 }
 
-// C. WHATSAPP CHAT VIEW (Authentic WhatsApp Dark Web)
+// C. WHATSAPP CHAT VIEW (Authentic WhatsApp Light Web)
 .mockWhatsApp {
   max-width: 580px;
   margin: 0 auto;
-  border: 1px solid #222e35;
+  border: 1px solid $color-hairline;
   border-radius: $radius-cards;
   overflow: hidden;
-  background-color: #0b141a;
+  background-color: #efeae2;
+  box-shadow: $shadow-subtle;
 
   &__top {
-    background-color: #1f2c34;
-    border-bottom: 1px solid #2a3942;
+    background-color: #f0f2f5;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     padding: $spacing-3 $spacing-4;
     display: flex;
     align-items: center;
@@ -1464,7 +1677,7 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background-color: #00a884;
+      background-color: #25d366;
       color: #ffffff;
       display: flex;
       align-items: center;
@@ -1477,13 +1690,14 @@
       h4 {
         font-size: 14px;
         font-weight: 600;
-        color: #e9edef;
+        color: #111b21;
         margin: 0;
       }
 
       span {
         font-size: 11px;
         color: #00a884;
+        font-weight: 500;
       }
     }
   }
@@ -1494,34 +1708,34 @@
     flex-direction: column;
     gap: $spacing-3;
     font-size: 13px;
-    background-color: #0b141a;
+    background-color: #efeae2;
   }
 
   &__bubbleCustomer {
-    background-color: #005c4b;
-    border-radius: 16px 16px 4px 16px;
+    background-color: #d9fdd3;
+    border-radius: 14px 14px 2px 14px;
     padding: 12px 14px;
     max-width: 90%;
     align-self: flex-end;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    color: #e9edef;
+    box-shadow: 0 1px 2px rgba(11, 20, 26, 0.12);
+    color: #111b21;
     line-height: 1.45;
 
     .orderItem {
       margin: 4px 0;
       padding-left: 8px;
-      border-left: 2px solid rgba(255, 255, 255, 0.35);
+      border-left: 2px solid #25d366;
     }
   }
 
   &__bubbleSeller {
-    background-color: #202c33;
-    border-radius: 16px 16px 16px 4px;
+    background-color: #ffffff;
+    border-radius: 14px 14px 14px 2px;
     padding: 10px 14px;
     max-width: 85%;
     align-self: flex-start;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    color: #e9edef;
+    box-shadow: 0 1px 2px rgba(11, 20, 26, 0.12);
+    color: #111b21;
     line-height: 1.45;
   }
 }
@@ -1530,8 +1744,8 @@
 // 4. TRUST METRICS STRIP
 // ---------------------------------------------------------------------------
 .trustStrip {
-  background-color: #0d0d0d;
-  border-bottom: 1px solid #1f1f1f;
+  background-color: $color-canvas;
+  border-bottom: 1px solid $color-hairline;
   padding: $spacing-8 0;
 
   &__inner {
@@ -1554,7 +1768,7 @@
     .metricNumber {
       font-size: 28px;
       font-weight: 700;
-      color: #ffffff;
+      color: $color-ink;
       letter-spacing: -0.025em;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.25s ease;
 
@@ -1565,12 +1779,12 @@
 
     &:hover .metricNumber {
       transform: scale(1.05);
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+      text-shadow: 0 0 20px rgba(217, 119, 66, 0.4);
     }
 
     .metricLabel {
       font-size: 13px;
-      color: #888888;
+      color: $color-mid-gray;
       margin-top: 4px;
     }
   }
@@ -1581,7 +1795,7 @@
 // ---------------------------------------------------------------------------
 .bentoSection {
   padding: $spacing-16 0;
-  background-color: #0a0a0a;
+  background-color: $color-canvas;
 
   &__inner {
     @include max-width-container;
@@ -1597,7 +1811,7 @@
       font-weight: 600;
       letter-spacing: $tracking-heading;
       margin-bottom: $spacing-2;
-      color: #ffffff;
+      color: $color-ink;
 
       @include desktop {
         font-size: 38px;
@@ -1605,7 +1819,7 @@
     }
 
     p {
-      color: #a3a3a3;
+      color: $color-mid-gray;
       font-size: $font-size-body-lg;
       line-height: 1.5;
     }
@@ -1626,7 +1840,7 @@
   }
 
   &__card {
-    background-color: #141414;
+    background-color: $color-paper;
     border: 1px solid #222222;
     border-radius: $radius-cards;
     padding: $spacing-6;
@@ -1637,9 +1851,9 @@
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      border-color: rgba(255, 255, 255, 0.22);
+      border-color: $color-primary;
       transform: translateY(-4px);
-      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 24px -6px rgba(217,119,66,0.18), 0 0 0 1px rgba(217,119,66,0.15);
     }
 
     &--span2 {
@@ -1655,33 +1869,33 @@
         width: 40px;
         height: 40px;
         border-radius: $radius-nested;
-        background-color: #1e1e1e;
-        border: 1px solid #2c2c2c;
+        background-color: $color-primary-subtle;
+        border: 1px solid rgba(217,119,66,0.2);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #ffffff;
+        color: $color-ink;
         margin-bottom: $spacing-3;
       }
 
       h3 {
         font-size: 18px;
         font-weight: 600;
-        color: #ffffff;
+        color: $color-ink;
         margin-bottom: $spacing-2;
         letter-spacing: -0.02em;
       }
 
       p {
         font-size: 13px;
-        color: #a3a3a3;
+        color: $color-mid-gray;
         line-height: 1.5;
       }
     }
 
     .cardVisual {
-      background-color: #1a1a1a;
-      border: 1px solid #262626;
+      background-color: $color-surface-alt;
+      border: 1px solid $color-hairline;
       border-radius: $radius-inputs;
       padding: $spacing-4;
       margin-top: $spacing-3;
@@ -1694,9 +1908,9 @@
 // ---------------------------------------------------------------------------
 .howItWorks {
   padding: $spacing-16 0;
-  background-color: #0d0d0d;
-  border-top: 1px solid #1f1f1f;
-  border-bottom: 1px solid #1f1f1f;
+  background-color: $color-surface-alt;
+  border-top: 1px solid $color-hairline;
+  border-bottom: 1px solid $color-hairline;
 
   &__inner {
     @include max-width-container;
@@ -1712,11 +1926,11 @@
       font-weight: 600;
       letter-spacing: $tracking-heading;
       margin-bottom: $spacing-2;
-      color: #ffffff;
+      color: $color-ink;
     }
 
     p {
-      color: #a3a3a3;
+      color: $color-mid-gray;
       font-size: $font-size-body-lg;
     }
   }
@@ -1732,25 +1946,25 @@
   }
 
   &__card {
-    background-color: #141414;
-    border: 1px solid #222222;
+    background-color: $color-paper;
+    border: 1px solid $color-hairline;
     border-radius: $radius-cards;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: $shadow-subtle;
     padding: $spacing-8 $spacing-6;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: $color-primary;
       transform: translateY(-4px);
-      box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 20px -6px rgba(217,119,66,0.15);
     }
 
     .stepNumber {
       font-size: $font-size-caption;
       font-weight: 600;
-      color: #737373;
+      color: $color-primary;
       letter-spacing: $tracking-caption;
       text-transform: uppercase;
       margin-bottom: $spacing-3;
@@ -1760,13 +1974,13 @@
       font-size: $font-size-subheading;
       font-weight: 600;
       margin-bottom: $spacing-2;
-      color: #ffffff;
+      color: $color-ink;
       letter-spacing: -0.02em;
     }
 
     p {
       font-size: $font-size-sm;
-      color: #a3a3a3;
+      color: $color-mid-gray;
       line-height: 1.5;
     }
   }
@@ -1777,7 +1991,7 @@
 // ---------------------------------------------------------------------------
 .pricingPreview {
   padding: $spacing-16 0;
-  background-color: #0a0a0a;
+  background-color: $color-canvas;
 
   &__inner {
     @include max-width-container;
@@ -1793,20 +2007,20 @@
       font-weight: 600;
       letter-spacing: $tracking-heading;
       margin-bottom: $spacing-2;
-      color: #ffffff;
+      color: $color-ink;
     }
 
     p {
-      color: #a3a3a3;
+      color: $color-mid-gray;
       font-size: $font-size-body-lg;
     }
   }
 
   &__planCard {
-    background-color: #141414;
-    border: 1px solid #333333;
+    background-color: $color-paper;
+    border: 1px solid rgba(217, 119, 66, 0.25);
     border-radius: $radius-cards;
-    box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    box-shadow: $shadow-lg;
     padding: $spacing-8 $spacing-6;
     display: flex;
     flex-direction: column;
@@ -1817,16 +2031,16 @@
 
     &:hover {
       transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 24px 54px -12px rgba(0, 0, 0, 0.85), 0 0 24px -4px rgba(255, 255, 255, 0.12);
+      border-color: $color-primary;
+      box-shadow: 0 12px 32px -8px rgba(217,119,66,0.2);
     }
 
     .featuredBadge {
       position: absolute;
       top: -12px;
       right: $spacing-6;
-      background-color: #ffffff;
-      color: #0a0a0a;
+      background-color: #d97742;
+      color: #ffffff;
       font-size: $font-size-caption;
       font-weight: 600;
       padding: 3px 12px;
@@ -1837,26 +2051,26 @@
     .planName {
       font-size: $font-size-subheading;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
     }
 
     .planTagline {
       font-size: $font-size-caption;
-      color: #a3a3a3;
+      color: $color-mid-gray;
       margin-bottom: $spacing-4;
     }
 
     .planPrice {
       font-size: $font-size-3xl;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       letter-spacing: $tracking-heading;
       margin-bottom: $spacing-6;
 
       span {
         font-size: $font-size-sm;
         font-weight: 400;
-        color: #888888;
+        color: $color-mid-gray;
       }
     }
 
@@ -1873,10 +2087,10 @@
         align-items: center;
         gap: $spacing-2;
         font-size: $font-size-sm;
-        color: #e5e5e5;
+        color: $color-ink;
 
         svg {
-          color: #ffffff;
+          color: $color-primary;
           flex-shrink: 0;
         }
       }
@@ -1888,8 +2102,8 @@
 // 8. FOOTER
 // ---------------------------------------------------------------------------
 .footer {
-  background-color: #050505;
-  border-top: 1px solid #1c1c1c;
+  background-color: $color-canvas;
+  border-top: 1px solid $color-hairline;
   padding: $spacing-12 0 $spacing-8;
 
   &__inner {
@@ -1911,14 +2125,14 @@
     .logo {
       font-size: $font-size-xl;
       font-weight: 600;
-      color: #ffffff;
+      color: $color-ink;
       letter-spacing: -0.03em;
       margin-bottom: $spacing-2;
     }
 
     p {
       font-size: $font-size-sm;
-      color: #888888;
+      color: $color-mid-gray;
       line-height: 1.5;
     }
   }
@@ -1929,12 +2143,12 @@
 
     a {
       font-size: $font-size-sm;
-      color: #888888;
+      color: $color-mid-gray;
       text-decoration: none;
       transition: color $transition-fast;
 
       &:hover {
-        color: #ffffff;
+        color: $color-ink;
       }
     }
   }
@@ -1943,9 +2157,9 @@
     @include max-width-container;
     margin-top: $spacing-8;
     padding-top: $spacing-6;
-    border-top: 1px solid #181818;
+    border-top: 1px solid $color-hairline;
     font-size: $font-size-caption;
-    color: #555555;
+    color: $color-mid-gray;
     text-align: center;
   }
 }

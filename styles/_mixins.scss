@@ -42,10 +42,10 @@
   padding-right: $spacing-4;
 }
 
-// Focus ring for accessibility
+// Focus ring for accessibility — Cookbooker orange
 @mixin focus-ring {
   &:focus-visible {
-    outline: 2px solid $color-ink;
+    outline: 2px solid $color-primary;
     outline-offset: 2px;
   }
 }

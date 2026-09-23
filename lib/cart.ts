@@ -1,4 +1,4 @@
-import { Product } from './supabase/types';
+import { Product } from "./supabase/types";
 
 export interface CartItem {
   id: string; // unique key combining product id and selected variants
@@ -8,9 +8,10 @@ export interface CartItem {
   imageUrl: string | null;
   quantity: number;
   variants: Record<string, string>;
+  stock?: number | null;
 }
 
-const CART_STORAGE_PREFIX = 'qori_cart_';
+const CART_STORAGE_PREFIX = "klik_cart_";
 
 export class CartManager {
   private getStorageKey(storeSlug: string): string {
@@ -18,7 +19,7 @@ export class CartManager {
   }
 
   getItems(storeSlug: string): CartItem[] {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === "undefined") return [];
     try {
       const raw = localStorage.getItem(this.getStorageKey(storeSlug));
       return raw ? JSON.parse(raw) : [];
@@ -28,54 +29,77 @@ export class CartManager {
   }
 
   saveItems(storeSlug: string, items: CartItem[]): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     localStorage.setItem(this.getStorageKey(storeSlug), JSON.stringify(items));
-    window.dispatchEvent(new CustomEvent('qori-cart-updated', { detail: { storeSlug, items } }));
+    window.dispatchEvent(
+      new CustomEvent("klik-cart-updated", { detail: { storeSlug, items } }),
+    );
   }
 
   addItem(
     storeSlug: string,
     product: Product,
     quantity: number = 1,
-    selectedVariants: Record<string, string> = {}
+    selectedVariants: Record<string, string> = {},
   ): CartItem[] {
     const items = this.getItems(storeSlug);
+
+    // Si tiene control de stock y ya no hay disponible, no permitir añadir
+    const hasStockControl = product.stock !== null && product.stock !== undefined;
+    if (hasStockControl && (product.stock as number) <= 0) {
+      return items;
+    }
 
     // Identificador único por producto y combinación de variantes
     const variantKey = Object.entries(selectedVariants)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([k, v]) => `${k}:${v}`)
-      .join('|');
+      .join("|");
     const itemId = `${product.id}_${variantKey}`;
 
     const existingIndex = items.findIndex((item) => item.id === itemId);
 
     if (existingIndex > -1) {
-      items[existingIndex].quantity += quantity;
+      const existing = items[existingIndex];
+      const maxAllowed = hasStockControl ? (product.stock as number) : Infinity;
+      const newQty = Math.min(existing.quantity + quantity, maxAllowed);
+      existing.quantity = newQty;
+      existing.stock = product.stock;
     } else {
-      items.push({
-        id: itemId,
-        productId: product.id,
-        name: product.name,
-        price: product.price,
-        imageUrl: product.image_url,
-        quantity,
-        variants: selectedVariants,
-      });
+      const maxAllowed = hasStockControl ? (product.stock as number) : Infinity;
+      const initialQty = Math.min(quantity, maxAllowed);
+      if (initialQty > 0) {
+        items.push({
+          id: itemId,
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          imageUrl: product.image_url,
+          quantity: initialQty,
+          variants: selectedVariants,
+          stock: product.stock,
+        });
+      }
     }
 
     this.saveItems(storeSlug, items);
     return items;
   }
 
-  updateQuantity(storeSlug: string, itemId: string, quantity: number): CartItem[] {
+  updateQuantity(
+    storeSlug: string,
+    itemId: string,
+    quantity: number,
+  ): CartItem[] {
     let items = this.getItems(storeSlug);
     if (quantity <= 0) {
       items = items.filter((i) => i.id !== itemId);
     } else {
       const target = items.find((i) => i.id === itemId);
       if (target) {
-        target.quantity = quantity;
+        const hasStockControl = target.stock !== null && target.stock !== undefined;
+        const maxAllowed = hasStockControl ? (target.stock as number) : Infinity;
+        target.quantity = Math.min(quantity, maxAllowed);
       }
     }
     this.saveItems(storeSlug, items);
@@ -89,9 +113,13 @@ export class CartManager {
   }
 
   clearCart(storeSlug: string): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     localStorage.removeItem(this.getStorageKey(storeSlug));
-    window.dispatchEvent(new CustomEvent('qori-cart-updated', { detail: { storeSlug, items: [] } }));
+    window.dispatchEvent(
+      new CustomEvent("klik-cart-updated", {
+        detail: { storeSlug, items: [] },
+      }),
+    );
   }
 
   getSubtotal(items: CartItem[]): number {

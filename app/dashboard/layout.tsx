@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import styles from '@/styles/modules/dashboard.module.scss';
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import styles from "@/styles/modules/dashboard.module.scss";
 import {
   LayoutDashboard,
   Package,
@@ -15,9 +15,11 @@ import {
   Share2,
   Menu,
   X,
-} from 'lucide-react';
-import Logo from '@/components/ui/Logo';
-import { DashboardProvider, useDashboard } from '@/contexts/DashboardContext';
+} from "lucide-react";
+import Logo from "@/components/ui/Logo";
+import { DashboardProvider, useDashboard } from "@/contexts/DashboardContext";
+import InstantOrderNotifier from "@/components/dashboard/InstantOrderNotifier";
+import NotificationBell from "@/components/dashboard/NotificationBell";
 
 function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -26,26 +28,28 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
   const [copied, setCopied] = useState(false);
 
   const navItems = [
-    { href: '/dashboard', label: 'Inicio', icon: LayoutDashboard },
-    { href: '/dashboard/products', label: 'Productos', icon: Package },
-    { href: '/dashboard/orders', label: 'Pedidos', icon: ShoppingBag },
-    { href: '/dashboard/customers', label: 'Clientes', icon: Users },
-    { href: '/dashboard/follow-ups', label: 'Seguimiento', icon: Clock },
-    { href: '/dashboard/settings', label: 'Configuración', icon: Settings },
+    { href: "/dashboard", label: "Inicio", icon: LayoutDashboard },
+    { href: "/dashboard/products", label: "Productos", icon: Package },
+    { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingBag },
+    { href: "/dashboard/customers", label: "Clientes", icon: Users },
+    { href: "/dashboard/follow-ups", label: "Seguimiento", icon: Clock },
+    { href: "/dashboard/settings", label: "Configuración", icon: Settings },
   ];
 
-  const currentSlug = store?.slug || '';
-  const currentName = store?.name || '';
+  const currentSlug = store?.slug || "";
+  const currentName = store?.name || "";
 
   const handleShareStore = () => {
     if (!currentSlug) return;
-    const url = `https://qori.business/${currentSlug}`;
+    const url = `https://klik.business/${currentSlug}`;
     if (navigator.share) {
-      navigator.share({
-        title: currentName || 'Mi Tienda',
-        text: `Compra en ${currentName || 'Mi Tienda'} a través de nuestro catálogo online:`,
-        url,
-      }).catch(() => {});
+      navigator
+        .share({
+          title: currentName || "Mi Tienda",
+          text: `Compra en ${currentName || "Mi Tienda"} a través de nuestro catálogo online:`,
+          url,
+        })
+        .catch(() => {});
     } else {
       navigator.clipboard.writeText(url);
       setCopied(true);
@@ -55,6 +59,9 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={styles.layout}>
+      {/* Notificador global de pedidos en tiempo real */}
+      <InstantOrderNotifier />
+
       {/* DESKTOP SIDEBAR */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebar__brand}>
@@ -71,7 +78,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${styles.sidebar__link} ${isActive ? styles['sidebar__link--active'] : ''}`}
+                className={`${styles.sidebar__link} ${isActive ? styles["sidebar__link--active"] : ""}`}
               >
                 <Icon size={18} />
                 <span>{item.label}</span>
@@ -89,20 +96,24 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             href="/dashboard"
             className={styles.logo}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              backgroundColor: '#0a0a0a',
-              borderRadius: '10px',
-              padding: '5px 12px',
-              textDecoration: 'none',
+              display: "inline-flex",
+              alignItems: "center",
+              backgroundColor: "#0a0a0a",
+              borderRadius: "10px",
+              padding: "5px 12px",
+              textDecoration: "none",
             }}
           >
             <Logo size={36} color="#ffffff" />
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <NotificationBell />
             {currentSlug && (
-              <button onClick={handleShareStore} className="btn btn--secondary btn--sm">
-                <Share2 size={14} /> {copied ? '¡Copiado!' : 'Compartir'}
+              <button
+                onClick={handleShareStore}
+                className="btn btn--secondary btn--sm"
+              >
+                <Share2 size={14} /> {copied ? "¡Copiado!" : "Compartir"}
               </button>
             )}
             <button
@@ -126,7 +137,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`${styles.sidebar__link} ${isActive ? styles['sidebar__link--active'] : ''}`}
+                  className={`${styles.sidebar__link} ${isActive ? styles["sidebar__link--active"] : ""}`}
                 >
                   <Icon size={18} />
                   <span>{item.label}</span>
@@ -156,18 +167,38 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
               <div className={styles.skeletonBadge} />
             </div>
           ) : (
-            <div className={styles.welcome} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontWeight: 600 }}>{currentName || 'Mi Tienda'}</span>
+            <div
+              className={styles.welcome}
+              style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            >
+              <span style={{ fontWeight: 600 }}>
+                {currentName || "Mi Tienda"}
+              </span>
               {currentSlug ? (
-                <span style={{ color: 'var(--color-mid-gray)', fontWeight: 400, fontSize: '0.875rem' }}>
-                  — qori.business/{currentSlug}
+                <span
+                  style={{
+                    color: "var(--color-mid-gray)",
+                    fontWeight: 400,
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  — klik.business/{currentSlug}
                 </span>
               ) : (
-                <span style={{ color: 'var(--color-mid-gray)', fontWeight: 400, fontSize: '0.875rem' }}>
+                <span
+                  style={{
+                    color: "var(--color-mid-gray)",
+                    fontWeight: 400,
+                    fontSize: "0.875rem",
+                  }}
+                >
                   — Tienda pendiente de publicación
                 </span>
               )}
-              <span className="badge badge--soft" title="Sistema en línea y sincronizado">
+              <span
+                className="badge badge--soft"
+                title="Sistema en línea y sincronizado"
+              >
                 ● En línea
               </span>
             </div>
@@ -178,15 +209,27 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
               <div className={styles.skeletonButton} />
             ) : currentSlug ? (
               <>
-                <Link href={`/${currentSlug}`} target="_blank" className="btn btn--outline btn--sm">
+                <NotificationBell />
+                <Link
+                  href={`/${currentSlug}`}
+                  target="_blank"
+                  className="btn btn--outline btn--sm"
+                >
                   <ExternalLink size={14} /> Ver tienda
                 </Link>
-                <button onClick={handleShareStore} className="btn btn--primary btn--sm">
-                  <Share2 size={14} /> {copied ? '¡Enlace copiado!' : 'Compartir mi tienda'}
+                <button
+                  onClick={handleShareStore}
+                  className="btn btn--primary btn--sm"
+                >
+                  <Share2 size={14} />{" "}
+                  {copied ? "¡Enlace copiado!" : "Compartir mi tienda"}
                 </button>
               </>
             ) : (
-              <Link href="/dashboard/settings" className="btn btn--primary btn--sm">
+              <Link
+                href="/dashboard/settings"
+                className="btn btn--primary btn--sm"
+              >
                 + Configurar mi Tienda
               </Link>
             )}
@@ -200,7 +243,11 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <DashboardProvider>
       <DashboardLayoutInner>{children}</DashboardLayoutInner>

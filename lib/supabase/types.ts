@@ -13,6 +13,8 @@ export type AnalyticsEventType =
   | 'checkout_started'
   | 'order_created';
 
+export type ProductSortMode = 'custom' | 'name_asc' | 'name_desc' | 'price_asc' | 'price_desc';
+
 export interface Store {
   id: string;
   user_id: string;
@@ -26,6 +28,7 @@ export interface Store {
   city: string | null;
   email?: string | null;
   plan: PlanType;
+  product_sort_mode?: ProductSortMode | null;
   created_at: string;
   updated_at: string;
 }
@@ -41,6 +44,10 @@ export interface Product {
   category: string;
   brand?: string | null;
   active: boolean;
+  stock: number | null;
+  sort_order?: number | null;
+  show_stock?: boolean | null;
+  show_price?: boolean | null;
   created_at: string;
   updated_at: string;
   images?: ProductImage[];
@@ -86,6 +93,8 @@ export interface Order {
   customer_dni?: string | null;
   customer_address: string | null;
   customer_reference: string | null;
+  voucher_url?: string | null;
+  payment_method?: string | null;
   created_at: string;
   updated_at: string;
   items?: OrderItem[];
@@ -148,4 +157,52 @@ export interface Subscription {
   current_period_end: string | null;
   created_at: string;
   updated_at: string;
+}
+
+// ── Billing / Métodos de cobro ──────────────────────────────────────────────
+
+export interface BankAccount {
+  id: string;
+  bank: string;
+  account_type: 'Ahorros' | 'Corriente';
+  account_number: string;
+  cci: string;
+  holder_name: string;
+}
+
+export interface DigitalWallet {
+  id: string;
+  platform: 'Yape' | 'Plin';
+  phone: string;
+  holder_name: string;
+  qr_url: string | null;
+}
+
+export interface StoreBillingInfo {
+  bank_accounts: BankAccount[];
+  digital_wallets: DigitalWallet[];
+}
+
+// ── Analítica de ventas (para gráfico) ─────────────────────────────────────
+
+export interface SalesDataPoint {
+  label: string;
+  fullDate?: string;
+  total: number;
+  count: number;
+}
+
+export interface TopProduct {
+  product_id: string;
+  product_name: string;
+  image_url: string | null;
+  units_sold: number;
+  revenue: number;
+}
+
+export interface LowStockProduct {
+  id: string;
+  name: string;
+  image_url: string | null;
+  stock: number;
 }

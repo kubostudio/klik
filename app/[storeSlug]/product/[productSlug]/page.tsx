@@ -169,7 +169,66 @@ export default function ProductDetailPage() {
               )}
             </div>
             <h1 className={styles.productDetail__title}>{product.name}</h1>
-            <div className={styles.productDetail__price}>{formatCurrency(product.price)}</div>
+
+            {/* Visualización de stock según configuración */}
+            {product.show_stock !== false && product.stock !== null && product.stock !== undefined && (
+              <div style={{ margin: '0.25rem 0 0.75rem 0' }}>
+                {product.stock <= 3 ? (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.8125rem',
+                      fontWeight: 600,
+                      color: '#ca8a04',
+                      backgroundColor: 'rgba(234, 179, 8, 0.12)',
+                      padding: '3px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(234, 179, 8, 0.25)',
+                    }}
+                  >
+                    🔥 ¡Solo quedan {product.stock} unidades disponibles!
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.8125rem',
+                      fontWeight: 500,
+                      color: '#16a34a',
+                      backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                      padding: '3px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(34, 197, 94, 0.2)',
+                    }}
+                  >
+                    ✓ Stock disponible: {product.stock} unidades
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Precio u ocultación de precio */}
+            {product.show_price === false ? (
+              <div
+                className={styles.productDetail__price}
+                style={{
+                  fontSize: '1.25rem',
+                  color: '#a3a3a3',
+                  fontStyle: 'italic',
+                  fontWeight: 500,
+                }}
+              >
+                Precio a consultar
+              </div>
+            ) : (
+              <div className={styles.productDetail__price}>
+                {formatCurrency(product.price)}
+              </div>
+            )}
 
             {product.description && (
               <p className={styles.productDetail__desc}>{product.description}</p>
@@ -208,39 +267,97 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* SELECTOR DE CANTIDAD */}
-            <div className={styles.productDetail__quantity}>
-              <span>Cantidad:</span>
-              <div className={styles.counter}>
-                <button
-                  type="button"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  aria-label="Disminuir cantidad"
-                >
-                  -
-                </button>
-                <input
-                  type="text"
-                  readOnly
-                  value={quantity}
-                  aria-label="Cantidad seleccionada"
-                />
-                <button
-                  type="button"
-                  onClick={() => setQuantity(quantity + 1)}
-                  aria-label="Aumentar cantidad"
-                >
-                  +
-                </button>
-              </div>
-            </div>
+            {/* SELECTOR DE CANTIDAD CON LÍMITE DE STOCK */}
+            {(() => {
+              const maxStock =
+                product.stock !== null && product.stock !== undefined
+                  ? product.stock
+                  : Infinity;
+              const isMaxReached = quantity >= maxStock;
+              const isOutOfStock = maxStock <= 0;
+
+              return (
+                <div className={styles.productDetail__quantity}>
+                  <span>Cantidad:</span>
+                  <div className={styles.counter}>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      aria-label="Disminuir cantidad"
+                      disabled={isOutOfStock || quantity <= 1}
+                      style={{ opacity: quantity <= 1 || isOutOfStock ? 0.4 : 1 }}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="text"
+                      readOnly
+                      value={isOutOfStock ? 0 : quantity}
+                      aria-label="Cantidad seleccionada"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!isMaxReached) {
+                          setQuantity(quantity + 1);
+                        }
+                      }}
+                      aria-label="Aumentar cantidad"
+                      disabled={isMaxReached || isOutOfStock}
+                      style={{
+                        opacity: isMaxReached || isOutOfStock ? 0.4 : 1,
+                        cursor: isMaxReached || isOutOfStock ? 'not-allowed' : 'pointer',
+                      }}
+                      title={isMaxReached ? 'Stock máximo alcanzado' : undefined}
+                    >
+                      +
+                    </button>
+                  </div>
+                  {isMaxReached && maxStock !== Infinity && !isOutOfStock && (
+                    <span
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#ca8a04',
+                        fontWeight: 500,
+                        marginLeft: '0.5rem',
+                      }}
+                    >
+                      (Máx. disponible)
+                    </span>
+                  )}
+                  {isOutOfStock && (
+                    <span
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#ef4444',
+                        fontWeight: 600,
+                        marginLeft: '0.5rem',
+                      }}
+                    >
+                      Agotado
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* ACCIONES (Section 18) */}
             <div className={styles.productDetail__actions}>
               <button
                 type="button"
                 onClick={handleAddToCart}
+                disabled={product.stock !== null && product.stock !== undefined && product.stock <= 0}
                 className="btn btn--secondary btn--full btn--lg"
+                style={{
+                  opacity:
+                    product.stock !== null && product.stock !== undefined && product.stock <= 0
+                      ? 0.5
+                      : 1,
+                  cursor:
+                    product.stock !== null && product.stock !== undefined && product.stock <= 0
+                      ? 'not-allowed'
+                      : 'pointer',
+                }}
               >
                 {addedNotice ? (
                   <>
@@ -256,7 +373,18 @@ export default function ProductDetailPage() {
               <button
                 type="button"
                 onClick={handleBuyNow}
+                disabled={product.stock !== null && product.stock !== undefined && product.stock <= 0}
                 className="btn btn--primary btn--full btn--lg"
+                style={{
+                  opacity:
+                    product.stock !== null && product.stock !== undefined && product.stock <= 0
+                      ? 0.5
+                      : 1,
+                  cursor:
+                    product.stock !== null && product.stock !== undefined && product.stock <= 0
+                      ? 'not-allowed'
+                      : 'pointer',
+                }}
               >
                 <Zap size={18} /> Comprar ahora
               </button>
@@ -265,12 +393,12 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Powered by Qori & KUBOstudio */}
+      {/* Powered by Klik & KUBOstudio */}
       <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
         <div>
           Creado con{' '}
           <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
-            Qori<span>.</span>
+            Klik<span>.</span>
           </Link>{' '}
           — Catálogo online para WhatsApp
         </div>
