@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import styles from "@/styles/modules/legal.module.scss";
-import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
+import { ArrowLeft, ShieldCheck, FileText, Cookie, BookOpen } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 
 export const metadata: Metadata = {
@@ -22,13 +22,12 @@ export default function PrivacidadPage() {
             style={{
               display: "inline-flex",
               alignItems: "center",
-              backgroundColor: "#0a0a0a",
               borderRadius: "10px",
-              padding: "5px 12px",
+              padding: "6px 14px",
               textDecoration: "none",
             }}
           >
-            <Logo size={36} color="#ffffff" />
+            <Logo size={28} color="#d97742" />
           </Link>
           <div className={styles.legalHeader__actions}>
             <Link href="/" className="btn btn--secondary btn--sm">
@@ -70,6 +69,28 @@ export default function PrivacidadPage() {
             />
             Política de Privacidad
           </Link>
+          <Link href="/cookies" className={styles.legalTab}>
+            <Cookie
+              size={14}
+              style={{
+                display: "inline",
+                marginRight: "4px",
+                verticalAlign: "-2px",
+              }}
+            />
+            Política de Cookies
+          </Link>
+          {/* <Link href="/reclamaciones" className={styles.legalTab}>
+            <BookOpen
+              size={14}
+              style={{
+                display: "inline",
+                marginRight: "4px",
+                verticalAlign: "-2px",
+              }}
+            />
+            Libro de Reclamaciones
+          </Link> */}
         </div>
 
         <article className={styles.legalCard}>
@@ -234,8 +255,7 @@ export default function PrivacidadPage() {
             <p>
               Klik utiliza cookies técnicas estrictamente necesarias para
               mantener la sesión de usuario activa y el contenido del carrito de
-              compras. Si el vendedor decide activar integraciones de terceros
-              (Meta Pixel de Facebook/Instagram o Google Analytics), dichas
+              compras. Si el vendedor decide activar integraciones de terceros, dichas
               herramientas recopilarán datos de navegación conforme a las
               políticas de privacidad de Meta Platforms Inc. y Google LLC
               respectivamente.
@@ -269,6 +289,8 @@ export default function PrivacidadPage() {
           <div className={styles.legalFooter__links}>
             <Link href="/terminos">Términos y Condiciones</Link>
             <Link href="/privacidad">Política de Privacidad</Link>
+            <Link href="/cookies">Política de Cookies</Link>
+            {/* <Link href="/reclamaciones">Libro de Reclamaciones</Link> */}
             <Link href="/login">Iniciar sesión</Link>
             <Link href="/register">Registrarse</Link>
           </div>

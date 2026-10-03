@@ -245,10 +245,10 @@
 
   &__brand {
     padding: $spacing-10 $spacing-6 0 $spacing-6;
-    border-bottom: 1px solid $color-hairline;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 2rem;
 
     .logo {
       font-size: $font-size-xl;

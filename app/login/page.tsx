@@ -64,14 +64,11 @@ export default function LoginPage() {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#0a0a0a",
-              borderRadius: "12px",
               padding: "8px 16px",
               marginBottom: "1rem",
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
             }}
           >
-            <Logo size={44} color="#ffffff" />
+            <Logo size={44} color="#d97742" />
           </Link>
           <h1>Iniciar sesión</h1>
           <p>Bienvenido de vuelta a tu panel de ventas</p>
@@ -92,7 +89,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        <button
+        {/* <button
           type="button"
           onClick={handleGoogleLogin}
           className={styles.socialBtn}
@@ -121,7 +118,7 @@ export default function LoginPage() {
 
         <div className={styles.divider}>
           <span>o con tu correo</span>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

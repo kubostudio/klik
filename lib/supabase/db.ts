@@ -77,7 +77,7 @@ export async function getCurrentStore(): Promise<Store | null> {
 
     // Fallback por si hay sesión local de onboarding
     if (!foundStore && typeof window !== 'undefined') {
-      const stored = localStorage.getItem('qori_current_store_id');
+      const stored = localStorage.getItem('klik_current_store_id') || localStorage.getItem('qori_current_store_id');
       if (stored) {
         const { data } = await supabase.from('stores').select('*').eq('id', stored).maybeSingle();
         if (data) foundStore = data as Store;
@@ -289,6 +289,7 @@ export async function createStore(storeData: {
       facebook: sanitizeText(storeData.facebook, 120) || null,
       city: cleanCity,
       plan: storeData.plan || 'starter',
+      is_active: false,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -386,11 +387,19 @@ export async function getProducts(
 
     if (error || !data) return [];
 
-    let prods = data.map((item: any) => ({
-      ...item,
-      variants: item.product_variants || [],
-      images: item.product_images || [],
-    })) as Product[];
+    let prods = data.map((item: any) => {
+      let onDemand = item.on_demand;
+      if ((onDemand === undefined || onDemand === null) && typeof window !== 'undefined') {
+        const storedOD = localStorage.getItem(`klik_product_on_demand_${item.id}`);
+        if (storedOD !== null) onDemand = storedOD === 'true';
+      }
+      return {
+        ...item,
+        on_demand: Boolean(onDemand),
+        variants: item.product_variants || [],
+        images: item.product_images || [],
+      };
+    }) as Product[];
 
     // Fallback local de orden manual si existe
     let fallbackOrder: string[] | null = null;
@@ -492,8 +501,15 @@ export async function getProductBySlug(
 
     if (error || !data) return null;
 
+    let onDemand = data.on_demand;
+    if ((onDemand === undefined || onDemand === null) && typeof window !== 'undefined') {
+      const storedOD = localStorage.getItem(`klik_product_on_demand_${data.id}`);
+      if (storedOD !== null) onDemand = storedOD === 'true';
+    }
+
     return {
       ...data,
+      on_demand: Boolean(onDemand),
       variants: data.product_variants || [],
       images: data.product_images || [],
     } as Product;
@@ -533,6 +549,7 @@ export async function createProduct(
     stock?: number | null;
     show_stock?: boolean | null;
     show_price?: boolean | null;
+    on_demand?: boolean | null;
   },
   variants: Array<{ name: string; value: string }> = [],
   additionalImages: string[] = []
@@ -551,6 +568,7 @@ export async function createProduct(
       stock: productData.stock !== undefined ? productData.stock : null,
       show_stock: productData.show_stock !== undefined ? productData.show_stock : true,
       show_price: productData.show_price !== undefined ? productData.show_price : true,
+      on_demand: productData.on_demand !== undefined ? productData.on_demand : false,
     };
 
     let { data: product, error: prodError } = await supabase
@@ -559,9 +577,10 @@ export async function createProduct(
       .select()
       .single();
 
-    if (prodError && (prodError.message?.includes('show_stock') || prodError.message?.includes('show_price'))) {
-      delete insertPayload.show_stock;
-      delete insertPayload.show_price;
+    if (prodError && (prodError.message?.includes('show_stock') || prodError.message?.includes('show_price') || prodError.message?.includes('on_demand'))) {
+      if (prodError.message?.includes('on_demand')) delete insertPayload.on_demand;
+      if (prodError.message?.includes('show_stock')) delete insertPayload.show_stock;
+      if (prodError.message?.includes('show_price')) delete insertPayload.show_price;
       const fallback = await supabase
         .from('products')
         .insert(insertPayload)
@@ -574,6 +593,10 @@ export async function createProduct(
     if (prodError || !product) {
       console.error('Error creating product:', prodError);
       return null;
+    }
+
+    if (productData.on_demand !== undefined && typeof window !== 'undefined') {
+      localStorage.setItem(`klik_product_on_demand_${product.id}`, String(productData.on_demand));
     }
 
     if (variants.length > 0) {
@@ -640,12 +663,31 @@ export async function updateProduct(
     }
 
     // 2. Actualizar producto en la base de datos
-    const { data: updated, error } = await supabase
+    let updatePayload: Record<string, any> = { ...updates, updated_at: new Date().toISOString() };
+    let { data: updated, error } = await supabase
       .from('products')
-      .update({ ...updates, updated_at: new Date().toISOString() })
+      .update(updatePayload)
       .eq('id', productId)
       .select()
       .single();
+
+    if (error && (error.message?.includes('on_demand') || error.message?.includes('show_stock') || error.message?.includes('show_price'))) {
+      if (error.message?.includes('on_demand')) delete updatePayload.on_demand;
+      if (error.message?.includes('show_stock')) delete updatePayload.show_stock;
+      if (error.message?.includes('show_price')) delete updatePayload.show_price;
+      const fallback = await supabase
+        .from('products')
+        .update(updatePayload)
+        .eq('id', productId)
+        .select()
+        .single();
+      updated = fallback.data;
+      error = fallback.error;
+    }
+
+    if (updates.on_demand !== undefined && typeof window !== 'undefined') {
+      localStorage.setItem(`klik_product_on_demand_${productId}`, String(updates.on_demand));
+    }
 
     if (error || !updated) {
       console.error('Error updating product:', error);

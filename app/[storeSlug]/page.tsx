@@ -17,6 +17,7 @@ import {
   MapPin,
   Package,
   Camera,
+  Clock,
 } from "lucide-react";
 
 export default function PublicStoreCatalogPage() {
@@ -112,14 +113,92 @@ export default function PublicStoreCatalogPage() {
     );
   }
 
+  // Tienda inactiva o pendiente de activación
+  if (store.is_active === false) {
+    return (
+      <div className={styles.storeContainer}>
+        <div style={{ padding: "5rem 1rem", textAlign: "center" }}>
+          <div
+            className="empty-state"
+            style={{
+              maxWidth: "460px",
+              margin: "0 auto",
+              backgroundColor: "#ffffff",
+              padding: "2.5rem 1.5rem",
+              borderRadius: "16px",
+            }}
+          >
+            <div
+              className="empty-state__icon"
+              style={{
+                backgroundColor: "#fff7ed",
+                color: "#d97742",
+                width: "64px",
+                height: "64px",
+                borderRadius: "50%",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1.25rem",
+              }}
+            >
+              <Clock size={32} />
+            </div>
+            <div
+              className="empty-state__title"
+              style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}
+            >
+              {store.name}
+            </div>
+            <div
+              className="empty-state__description"
+              style={{ fontSize: "0.9rem", color: "#666", lineHeight: 1.5 }}
+            >
+              Esta tienda se encuentra temporalmente inactiva o en proceso de activación.
+            </div>
+            <p
+              style={{
+                fontSize: "0.8125rem",
+                color: "#888",
+                marginTop: "0.75rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Si eres el propietario de esta tienda, por favor comunícate con KUBOstudio para habilitar tu catálogo.
+            </p>
+            <a
+              href={`https://wa.me/51906013310?text=${encodeURIComponent(
+                `Hola KUBOstudio, soy el propietario de la tienda ${store.name} (slug: ${store.slug}) y solicito activarla.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn--primary btn--sm"
+              style={{
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                margin: "0 auto",
+              }}
+            >
+              <MessageCircle size={15} /> Contactar a KUBOstudio
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Categorías únicas
   const categories = [
     "all",
     ...Array.from(new Set(products.map((p) => p.category || "General"))),
   ];
 
-  // Filtrar productos agotados (stock === 0) de la vista pública
-  const availableProducts = products.filter((p) => p.stock === null || p.stock === undefined || p.stock > 0);
+  // Filtrar productos agotados (stock === 0) de la vista pública (los productos a pedido siempre se muestran)
+  const availableProducts = products.filter(
+    (p) => p.on_demand || p.stock === null || p.stock === undefined || p.stock > 0
+  );
 
   const filteredProducts =
     selectedCategory === "all"
@@ -227,6 +306,26 @@ export default function PublicStoreCatalogPage() {
                     alt={prod.name}
                     loading="lazy"
                   />
+                  {prod.on_demand && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "8px",
+                        left: "8px",
+                        backgroundColor: "var(--color-primary)",
+                        color: "#ffffff",
+                        fontSize: "0.68rem",
+                        fontWeight: 700,
+                        padding: "3px 8px",
+                        borderRadius: "6px",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.35)",
+                        letterSpacing: "0.02em",
+                        zIndex: 2,
+                      }}
+                    >
+                      A pedido
+                    </span>
+                  )}
                   {prod.images && prod.images.length > 0 && (
                     <span className={styles.productCard__multiBadge}>
                       <Camera size={10} /> {prod.images.length + 1}
@@ -250,8 +349,8 @@ export default function PublicStoreCatalogPage() {
                     <h3 className={styles.productCard__name}>{prod.name}</h3>
                   </Link>
 
-                  {/* Visualización de stock según configuración de la tienda */}
-                  {prod.show_stock !== false && prod.stock !== null && prod.stock !== undefined && (
+                  {/* Visualización de stock según configuración de la tienda (no aplica a productos a pedido) */}
+                  {!prod.on_demand && prod.show_stock !== false && prod.stock !== null && prod.stock !== undefined && (
                     <div style={{ marginBottom: "0.4rem" }}>
                       {prod.stock <= 3 ? (
                         <span
@@ -286,15 +385,15 @@ export default function PublicStoreCatalogPage() {
                     </div>
                   )}
 
-                  {/* Precio o indicador de consulta según show_price */}
-                  {prod.show_price === false ? (
+                  {/* Precio o indicador de consulta según show_price y si es a pedido */}
+                  {prod.show_price === false || (prod.on_demand && (!prod.price || prod.price <= 0)) ? (
                     <div
                       className={styles.productCard__price}
                       style={{
                         fontSize: "0.875rem",
-                        color: "var(--color-mid-gray)",
-                        fontWeight: 500,
-                        fontStyle: "italic",
+                        color: prod.on_demand ? "var(--color-primary)" : "var(--color-mid-gray)",
+                        fontWeight: 600,
+                        fontStyle: prod.on_demand ? "normal" : "italic",
                       }}
                     >
                       Precio a consultar
@@ -302,16 +401,56 @@ export default function PublicStoreCatalogPage() {
                   ) : (
                     <div className={styles.productCard__price}>
                       {formatCurrency(prod.price)}
+                      {prod.on_demand && (
+                        <span style={{ fontSize: "0.68rem", color: "var(--color-mid-gray)", fontWeight: 400, marginLeft: "4px" }}>
+                          (ref.)
+                        </span>
+                      )}
                     </div>
                   )}
 
                   <div className={styles.productCard__cta}>
-                    <Link
-                      href={`/${storeSlug}/product/${prod.slug}`}
-                      className="btn btn--secondary btn--full btn--sm"
-                    >
-                      Ver producto
-                    </Link>
+                    {prod.on_demand ? (
+                      <div style={{ display: "flex", gap: "0.4rem", width: "100%" }}>
+                        <Link
+                          href={`/${storeSlug}/product/${prod.slug}`}
+                          className="btn btn--secondary btn--sm"
+                          style={{ flex: 1, padding: "0 0.5rem", fontSize: "0.78rem" }}
+                        >
+                          Ver
+                        </Link>
+                        <a
+                          href={`https://wa.me/${store.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
+                            `Hola ${store.name}, me interesa separar el producto a pedido: *${prod.name}* (https://klik.business/${storeSlug}/product/${prod.slug}). Deseo información para separarlo.`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn--primary btn--sm"
+                          style={{
+                            flex: 2,
+                            backgroundColor: "#25D366",
+                            borderColor: "#25D366",
+                            color: "#ffffff",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "0.25rem",
+                            fontSize: "0.78rem",
+                            padding: "0 0.4rem",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <MessageCircle size={13} /> Separar
+                        </a>
+                      </div>
+                    ) : (
+                      <Link
+                        href={`/${storeSlug}/product/${prod.slug}`}
+                        className="btn btn--secondary btn--full btn--sm"
+                      >
+                        Ver producto
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>

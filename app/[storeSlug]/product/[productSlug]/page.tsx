@@ -9,7 +9,7 @@ import { cartManager } from '@/lib/cart';
 import { trackEvent } from '@/lib/analytics';
 import { Store, Product } from '@/lib/supabase/types';
 import { formatCurrency } from '@/lib/utils';
-import { ArrowLeft, ShoppingCart, Check, Zap, Package } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Check, Zap, Package, MessageCircle } from 'lucide-react';
 import ProductCarousel from '@/components/store/ProductCarousel';
 
 export default function ProductDetailPage() {
@@ -157,7 +157,7 @@ export default function ProductDetailPage() {
           </div>
 
           <div className={styles.productDetail__body}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
               <span className={styles.productDetail__category}>{product.category}</span>
               {product.brand && (
                 <>
@@ -167,11 +167,27 @@ export default function ProductDetailPage() {
                   </span>
                 </>
               )}
+              {product.on_demand && (
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    backgroundColor: 'rgba(217, 119, 66, 0.15)',
+                    color: 'var(--color-primary)',
+                    border: '1px solid rgba(217, 119, 66, 0.35)',
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  A pedido
+                </span>
+              )}
             </div>
             <h1 className={styles.productDetail__title}>{product.name}</h1>
 
-            {/* Visualización de stock según configuración */}
-            {product.show_stock !== false && product.stock !== null && product.stock !== undefined && (
+            {/* Visualización de stock según configuración (no aplica a productos a pedido) */}
+            {!product.on_demand && product.show_stock !== false && product.stock !== null && product.stock !== undefined && (
               <div style={{ margin: '0.25rem 0 0.75rem 0' }}>
                 {product.stock <= 3 ? (
                   <span
@@ -212,21 +228,28 @@ export default function ProductDetailPage() {
             )}
 
             {/* Precio u ocultación de precio */}
-            {product.show_price === false ? (
+            {product.show_price === false || (product.on_demand && (!product.price || product.price <= 0)) ? (
               <div
                 className={styles.productDetail__price}
                 style={{
                   fontSize: '1.25rem',
-                  color: '#a3a3a3',
-                  fontStyle: 'italic',
-                  fontWeight: 500,
+                  color: product.on_demand ? 'var(--color-primary)' : '#a3a3a3',
+                  fontWeight: 600,
+                  fontStyle: product.on_demand ? 'normal' : 'italic',
                 }}
               >
-                Precio a consultar
+                Precio a consultar / A pedido
               </div>
             ) : (
-              <div className={styles.productDetail__price}>
-                {formatCurrency(product.price)}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div className={styles.productDetail__price}>
+                  {formatCurrency(product.price)}
+                </div>
+                {product.on_demand && (
+                  <span style={{ fontSize: '0.8125rem', color: '#a3a3a3', fontWeight: 500 }}>
+                    (Precio referencial a pedido)
+                  </span>
+                )}
               </div>
             )}
 
@@ -267,8 +290,36 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* SELECTOR DE CANTIDAD CON LÍMITE DE STOCK */}
-            {(() => {
+            {/* SELECTOR DE CANTIDAD */}
+            {product.on_demand ? (
+              <div className={styles.productDetail__quantity}>
+                <span>Cantidad a separar:</span>
+                <div className={styles.counter}>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    aria-label="Disminuir cantidad"
+                    disabled={quantity <= 1}
+                    style={{ opacity: quantity <= 1 ? 0.4 : 1 }}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="text"
+                    readOnly
+                    value={quantity}
+                    aria-label="Cantidad a separar"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(quantity + 1)}
+                    aria-label="Aumentar cantidad"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            ) : (() => {
               const maxStock =
                 product.stock !== null && product.stock !== undefined
                   ? product.stock
@@ -342,53 +393,133 @@ export default function ProductDetailPage() {
             })()}
 
             {/* ACCIONES (Section 18) */}
-            <div className={styles.productDetail__actions}>
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                disabled={product.stock !== null && product.stock !== undefined && product.stock <= 0}
-                className="btn btn--secondary btn--full btn--lg"
-                style={{
-                  opacity:
-                    product.stock !== null && product.stock !== undefined && product.stock <= 0
-                      ? 0.5
-                      : 1,
-                  cursor:
-                    product.stock !== null && product.stock !== undefined && product.stock <= 0
-                      ? 'not-allowed'
-                      : 'pointer',
-                }}
-              >
-                {addedNotice ? (
-                  <>
-                    <Check size={18} color="#10B981" /> ¡Agregado al carrito!
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart size={18} /> Agregar al carrito
-                  </>
-                )}
-              </button>
+            {product.on_demand ? (
+              <div className={styles.productDetail__actions} style={{ flexDirection: 'column' }}>
+                {(() => {
+                  const cleanPhone = store.whatsapp.replace(/\D/g, '');
+                  const variantText = Object.entries(selectedVariants)
+                    .map(([k, v]) => `${k}: ${v}`)
+                    .join(', ');
+                  const productUrl =
+                    typeof window !== 'undefined'
+                      ? window.location.href
+                      : `https://klik.business/${storeSlug}/product/${product.slug}`;
 
-              <button
-                type="button"
-                onClick={handleBuyNow}
-                disabled={product.stock !== null && product.stock !== undefined && product.stock <= 0}
-                className="btn btn--primary btn--full btn--lg"
-                style={{
-                  opacity:
-                    product.stock !== null && product.stock !== undefined && product.stock <= 0
-                      ? 0.5
-                      : 1,
-                  cursor:
-                    product.stock !== null && product.stock !== undefined && product.stock <= 0
-                      ? 'not-allowed'
-                      : 'pointer',
-                }}
-              >
-                <Zap size={18} /> Comprar ahora
-              </button>
-            </div>
+                  const waMessage = [
+                    `¡Hola ${store.name}! 👋`,
+                    `Quiero separar el producto *a pedido*:`,
+                    `🛍️ *${product.name}*`,
+                    product.brand ? `🏷️ Marca: ${product.brand}` : null,
+                    product.category ? `📂 Categoría: ${product.category}` : null,
+                    variantText ? `✨ Opciones: ${variantText}` : null,
+                    `🔢 Cantidad: ${quantity}`,
+                    product.price && product.price > 0 && product.show_price !== false
+                      ? `💰 Precio ref.: ${formatCurrency(product.price * quantity)}`
+                      : null,
+                    `🔗 Enlace: ${productUrl}`,
+                    ``,
+                    `¿Podrían indicarme los tiempos de entrega y cómo realizar la reserva? ¡Muchas gracias!`,
+                  ]
+                    .filter(Boolean)
+                    .join('\n');
+
+                  const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMessage)}`;
+
+                  return (
+                    <>
+                      <a
+                        href={waUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn--primary btn--full btn--lg"
+                        style={{
+                          backgroundColor: '#25D366',
+                          borderColor: '#25D366',
+                          color: '#ffffff',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.6rem',
+                          fontSize: '1.05rem',
+                          fontWeight: 700,
+                          boxShadow: '0 4px 14px rgba(37, 211, 102, 0.35)',
+                          textDecoration: 'none',
+                        }}
+                        onClick={() => {
+                          trackEvent({
+                            storeId: store.id,
+                            eventType: 'whatsapp_click',
+                            productId: product.id,
+                            metadata: { on_demand: true, quantity, variants: selectedVariants },
+                          });
+                        }}
+                      >
+                        <MessageCircle size={22} /> Separar por WhatsApp
+                      </a>
+                      <p
+                        style={{
+                          margin: '0.25rem 0 0',
+                          fontSize: '0.78rem',
+                          color: '#a3a3a3',
+                          textAlign: 'center',
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        Este producto es <strong>a pedido</strong>. Coordina la fabricación, detalles y reserva directamente con la tienda por WhatsApp.
+                      </p>
+                    </>
+                  );
+                })()}
+              </div>
+            ) : (
+              <div className={styles.productDetail__actions}>
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={product.stock !== null && product.stock !== undefined && product.stock <= 0}
+                  className="btn btn--secondary btn--full btn--lg"
+                  style={{
+                    opacity:
+                      product.stock !== null && product.stock !== undefined && product.stock <= 0
+                        ? 0.5
+                        : 1,
+                    cursor:
+                      product.stock !== null && product.stock !== undefined && product.stock <= 0
+                        ? 'not-allowed'
+                        : 'pointer',
+                  }}
+                >
+                  {addedNotice ? (
+                    <>
+                      <Check size={18} color="#10B981" /> ¡Agregado al carrito!
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart size={18} /> Agregar al carrito
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  disabled={product.stock !== null && product.stock !== undefined && product.stock <= 0}
+                  className="btn btn--primary btn--full btn--lg"
+                  style={{
+                    opacity:
+                      product.stock !== null && product.stock !== undefined && product.stock <= 0
+                        ? 0.5
+                        : 1,
+                    cursor:
+                      product.stock !== null && product.stock !== undefined && product.stock <= 0
+                        ? 'not-allowed'
+                        : 'pointer',
+                  }}
+                >
+                  <Zap size={18} /> Comprar ahora
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

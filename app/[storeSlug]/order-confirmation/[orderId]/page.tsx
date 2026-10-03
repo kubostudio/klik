@@ -113,7 +113,7 @@ export default function OrderConfirmationPage() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn--whatsapp btn--full btn--lg"
+              className="btn btn--primary btn--full btn--lg"
             >
               <MessageCircle size={20} /> Continuar por WhatsApp
             </a>

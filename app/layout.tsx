@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "@/styles/globals.scss";
+import CookieConsent from "@/components/ui/CookieConsent";
+import PwaProvider from "@/components/pwa/PwaProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -58,14 +60,24 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: "/logo.svg",
+    shortcut: "/icon.svg",
   },
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Klik",
+    startupImage: [
+      {
+        url: "/icon-512.png",
+      },
+    ],
+  },
   openGraph: {
     title:
       "Klik | Tu Tienda Online y Catálogo para Vender por WhatsApp en Perú",
@@ -131,7 +143,7 @@ const jsonLd = {
       browserRequirements: "Requires JavaScript. Requires HTML5.",
       offers: {
         "@type": "Offer",
-        price: "19.90",
+        price: "29.90",
         priceCurrency: "PEN",
         priceValidUntil: "2027-12-31",
         availability: "https://schema.org/InStock",
@@ -165,8 +177,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="apple-touch-startup-image" href="/icon-512.png" />
+        <meta name="mobile-web-app-capable" content="yes" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <PwaProvider>
+          {children}
+          <CookieConsent />
+        </PwaProvider>
+      </body>
     </html>
   );
 }

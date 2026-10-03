@@ -202,8 +202,7 @@ export default function HomePage() {
               <ScrollReveal animation="fade-up" delay={160}>
                 <p className={styles.heroSubtitle}>
                   Crea tu catálogo digital en minutos, comparte un solo link y
-                  recibe compras estructuradas directamente en WhatsApp — con
-                  panel operativo en tiempo real.
+                  recibe compras directamente en WhatsApp.
                 </p>
               </ScrollReveal>
 
@@ -286,7 +285,7 @@ export default function HomePage() {
                         <strong>Mensaje inteligente:</strong>{" "}
                         &ldquo;¡Hola Carlos! Tu pedido #1042 está confirmado y en camino...&rdquo;
                       </div>
-                      <span className="btn btn--whatsapp btn--sm" style={{ flexShrink: 0, padding: "3px 10px" }}>
+                      <span className="btn btn--primary btn--sm" style={{ flexShrink: 0, padding: "3px 10px" }}>
                         <MessageCircle size={13} /> Enviar
                       </span>
                     </div>
@@ -408,26 +407,23 @@ export default function HomePage() {
                           <table className={styles.mockOrders__table}>
                             <thead>
                               <tr>
-                                <th>Nº</th><th>Cliente</th><th>Producto</th><th>Total</th><th>Estado</th><th style={{ textAlign: "right" }}>Acción</th>
+                                <th>Cliente</th><th>Producto</th><th>Total</th><th style={{ textAlign: "center" }}>Estado</th><th style={{ textAlign: "center" }}>Acción</th>
                               </tr>
                             </thead>
                             <tbody>
                               {[
                                 { id: "#1042", name: "Carlos Mendoza", dni: "72345678 • 987654321", product: "Polo Heavyweight (x1)", total: "S/ 89.00", badge: <span className="badge badge--new">Nuevo</span>, action: <span className="btn btn--secondary btn--sm" style={{ padding: "3px 10px", fontSize: "11px" }}><MessageCircle size={12} /> Coordinar</span> },
                                 { id: "#1041", name: "Andrea Rojas", dni: "45892103 • 912345678", product: "Tote Bag Canvas (x2)", total: "S/ 110.00", badge: <span className="badge badge--contacted">Contactado</span>, action: <span className="btn btn--secondary btn--sm" style={{ padding: "3px 10px", fontSize: "11px" }}><Check size={12} /> Confirmar</span> },
-                                { id: "#1040", name: "Mateo Silva", dni: "71204938 • 955432111", product: "Gorra Minimal (x1)", total: "S/ 45.00", badge: <span className="badge badge--confirmed">Confirmado</span>, action: <span style={{ fontSize: "11px", color: "#3d2e22", fontWeight: 600 }}>En despacho</span> },
-                                { id: "#1039", name: "Lucía Vargas", dni: "10482910 • 934567890", product: "Hoodie Boxy Fit (x1)", total: "S/ 140.00", badge: <span className="badge badge--delivered">Entregado</span>, action: <span style={{ fontSize: "11px", color: "#3d2e22", fontWeight: 600 }}>Finalizado</span> },
                               ].map((row) => (
                                 <tr key={row.id}>
-                                  <td style={{ fontWeight: 600 }}>{row.id}</td>
                                   <td>
                                     <div style={{ fontWeight: 600 }}>{row.name}</div>
                                     <div style={{ fontSize: "11px", color: "rgba(35, 35, 35, 0.65)" }}>DNI: {row.dni}</div>
                                   </td>
                                   <td>{row.product}</td>
                                   <td style={{ fontWeight: 600 }}>{row.total}</td>
-                                  <td>{row.badge}</td>
-                                  <td style={{ textAlign: "right" }}>{row.action}</td>
+                                  <td style={{ textAlign: "center" }}>{row.badge}</td>
+                                  <td style={{ textAlign: "center" }}>{row.action}</td>
                                 </tr>
                               ))}
                             </tbody>
@@ -458,7 +454,7 @@ export default function HomePage() {
                             <ShoppingCart size={16} /><span>1 producto • S/ 89.00</span>
                           </div>
                           <div style={{ display: "flex", alignItems: "center", gap: "4px", fontWeight: 600 }}>
-                            Pedir por WhatsApp <ArrowRight size={14} />
+                            Comprar <ArrowRight size={14} />
                           </div>
                         </div>
                         <div style={{ marginTop: "12px", fontSize: "11px", color: "#4b5563", display: "flex", alignItems: "center", gap: "5px", fontWeight: 500 }}>
@@ -515,14 +511,13 @@ export default function HomePage() {
                 <ScrollReveal animation="fade-up" delay={40}>
                   <div className={styles.slideHeader} style={{ textAlign: "left", margin: 0 }}>
                     <h2>Un solo precio.<br />Todo incluido.</h2>
-                    <p>14 días de prueba gratis. Sin comisiones por venta ni cobros ocultos.</p>
+                    <p>Sin comisiones por venta ni cobros ocultos.</p>
                   </div>
                 </ScrollReveal>
                 <ScrollReveal animation="fade-up" delay={120}>
                   <div className={styles.pricingPerks}>
                     {[
                       { icon: <Percent size={18} />, text: "0% comisión por cada venta" },
-                      { icon: <Timer size={18} />, text: "14 días de prueba sin tarjeta" },
                       { icon: <TrendingUp size={18} />, text: "Productos y pedidos ilimitados" },
                       { icon: <CheckCircle2 size={18} />, text: "Cancela cuando quieras" },
                     ].map((p, i) => (
@@ -536,20 +531,17 @@ export default function HomePage() {
 
               <ScrollReveal animation="fade-up" delay={80}>
                 <div className={styles.planCard}>
-                  <div className={styles.featuredBadge}>14 Días de Prueba Gratis</div>
                   <div className={styles.planName}>Plan Klik</div>
                   <div className={styles.planTagline}>Todo lo que necesitas para vender y crecer ordenadamente por WhatsApp.</div>
-                  <div className={styles.planPrice}>S/19.90 <span>/mes</span></div>
+                  <div className={styles.planPrice}>S/29.90 <span>/mes</span></div>
                   <ul className={styles.planFeatures}>
-                    <li><Check size={16} /> <strong>14 días de prueba</strong> sin tarjeta</li>
                     <li><Check size={16} /> <strong>Productos ilimitados</strong> con fotos</li>
                     <li><Check size={16} /> <strong>Pedidos ilimitados</strong> (0% comisión)</li>
                     <li><Check size={16} /> <strong>Directorio con DNI</strong> y clientes</li>
                     <li><Check size={16} /> Seguimiento operativo de ventas</li>
-                    <li><Check size={16} /> Meta Pixel & Google Analytics</li>
                   </ul>
                   <Link href="/register" className="btn btn--primary btn--full btn--lg">
-                    Crear tienda con 14 días gratis
+                    Crear tienda
                   </Link>
                 </div>
               </ScrollReveal>
@@ -587,6 +579,8 @@ export default function HomePage() {
                   </button>
                   <Link href="/terminos">Términos y Condiciones</Link>
                   <Link href="/privacidad">Política de Privacidad</Link>
+                  <Link href="/cookies">Política de Cookies</Link>
+                  <Link href="/reclamaciones">Libro de Reclamaciones</Link>
                   <Link href="/login">Iniciar sesión</Link>
                   <Link href="/register">Registrarse</Link>
                 </div>

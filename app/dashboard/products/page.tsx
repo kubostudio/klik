@@ -60,6 +60,7 @@ export default function ProductsDashboardPage() {
   const [stock, setStock] = useState<string>(""); // empty = no stock control
   const [showStock, setShowStock] = useState<boolean>(true); // show stock in public store
   const [showPrice, setShowPrice] = useState<boolean>(true); // show price in public store
+  const [onDemand, setOnDemand] = useState<boolean>(false); // product is on-demand / pre-order
 
   // URL Import State
   const [importUrl, setImportUrl] = useState("");
@@ -222,6 +223,7 @@ export default function ProductsDashboardPage() {
     setStock("");
     setShowStock(true);
     setShowPrice(true);
+    setOnDemand(false);
     setIsModalOpen(true);
   };
 
@@ -298,12 +300,21 @@ export default function ProductsDashboardPage() {
     setStock(prod.stock !== null && prod.stock !== undefined ? prod.stock.toString() : "");
     setShowStock(prod.show_stock !== false);
     setShowPrice(prod.show_price !== false);
+    setOnDemand(Boolean(prod.on_demand));
     setIsModalOpen(true);
   };
 
   const handleToggleActive = async (id: string, currentActive: boolean) => {
     await updateProduct(id, { active: !currentActive });
     await loadProducts();
+  };
+
+  const handleToggleOnDemand = async (prod: Product) => {
+    const nextVal = !prod.on_demand;
+    setProducts((prev) =>
+      prev.map((p) => (p.id === prod.id ? { ...p, on_demand: nextVal } : p))
+    );
+    await updateProduct(prod.id, { on_demand: nextVal });
   };
 
   const handleToggleShowStock = async (prod: Product) => {
@@ -337,8 +348,12 @@ export default function ProductsDashboardPage() {
       setErrorMessage("Por favor, ingresa el nombre del producto.");
       return;
     }
-    if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+    if (!onDemand && (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0)) {
       setErrorMessage("Por favor, ingresa un precio válido mayor a 0.");
+      return;
+    }
+    if (onDemand && price && (isNaN(parseFloat(price)) || parseFloat(price) < 0)) {
+      setErrorMessage("Si ingresas un precio referencial para este producto a pedido, debe ser válido.");
       return;
     }
 
@@ -381,14 +396,15 @@ export default function ProductsDashboardPage() {
           editingProduct.id,
           {
             name: name.trim(),
-            price: parseFloat(price) || 0,
+            price: price ? parseFloat(price) : 0,
             category: category.trim() || "General",
             brand: brand.trim() || null,
             description: description.trim(),
             image_url: mainImageUrl,
-            stock: stock.trim() !== "" ? parseInt(stock, 10) : null,
-            show_stock: showStock,
+            stock: onDemand ? null : (stock.trim() !== "" ? parseInt(stock, 10) : null),
+            show_stock: onDemand ? false : showStock,
             show_price: showPrice,
+            on_demand: onDemand,
           },
           variants,
           additionalImages,
@@ -400,15 +416,16 @@ export default function ProductsDashboardPage() {
             store_id: targetStore.id,
             name: name.trim(),
             slug: slugify(name.trim()),
-            price: parseFloat(price) || 0,
+            price: price ? parseFloat(price) : 0,
             category: category.trim() || "General",
             brand: brand.trim() || null,
             description: description.trim(),
             image_url: mainImageUrl,
             active: true,
-            stock: stock.trim() !== "" ? parseInt(stock, 10) : null,
-            show_stock: showStock,
+            stock: onDemand ? null : (stock.trim() !== "" ? parseInt(stock, 10) : null),
+            show_stock: onDemand ? false : showStock,
             show_price: showPrice,
+            on_demand: onDemand,
           },
           variants,
           additionalImages,
@@ -724,9 +741,27 @@ export default function ProductsDashboardPage() {
                       </td>
                       <td>
                         <div
-                          style={{ fontWeight: 600, color: "var(--color-ink)" }}
+                          style={{ fontWeight: 600, color: "var(--color-ink)", display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}
                         >
-                          {prod.name}
+                          <span>{prod.name}</span>
+                          {prod.on_demand && (
+                            <span
+                              style={{
+                                fontSize: "0.68rem",
+                                fontWeight: 700,
+                                backgroundColor: "rgba(217, 119, 66, 0.15)",
+                                color: "var(--color-primary)",
+                                border: "1px solid rgba(217, 119, 66, 0.3)",
+                                padding: "0.15rem 0.45rem",
+                                borderRadius: "6px",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.2rem",
+                              }}
+                            >
+                              A pedido
+                            </span>
+                          )}
                         </div>
                       </td>
                       <td>
@@ -734,7 +769,13 @@ export default function ProductsDashboardPage() {
                       </td>
                       <td>
                         <div style={{ fontWeight: 600, color: "var(--color-ink)" }}>
-                          {formatCurrency(prod.price)}
+                          {prod.price && prod.price > 0 ? (
+                            formatCurrency(prod.price)
+                          ) : prod.on_demand ? (
+                            <span style={{ fontSize: "0.8rem", color: "var(--color-primary)", fontWeight: 600 }}>A consultar</span>
+                          ) : (
+                            formatCurrency(0)
+                          )}
                         </div>
                         <button
                           type="button"
@@ -769,7 +810,11 @@ export default function ProductsDashboardPage() {
                       </td>
                       <td>
                         <div>
-                          {prod.stock === null || prod.stock === undefined ? (
+                          {prod.on_demand ? (
+                            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-primary)", backgroundColor: "rgba(217, 119, 66, 0.12)", padding: "0.2rem 0.5rem", borderRadius: "8px", border: "1px solid rgba(217, 119, 66, 0.25)" }}>
+                              A pedido
+                            </span>
+                          ) : prod.stock === null || prod.stock === undefined ? (
                             <span style={{ fontSize: "0.75rem", color: "var(--color-mid-gray)" }}>—</span>
                           ) : prod.stock === 0 ? (
                             <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#ef4444", backgroundColor: "rgba(239,68,68,0.1)", padding: "0.2rem 0.5rem", borderRadius: "8px" }}>Agotado</span>
@@ -779,7 +824,7 @@ export default function ProductsDashboardPage() {
                             <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#16a34a", backgroundColor: "rgba(34,197,94,0.1)", padding: "0.2rem 0.5rem", borderRadius: "8px" }}>{prod.stock} uds.</span>
                           )}
                         </div>
-                        {prod.stock !== null && prod.stock !== undefined && (
+                        {!prod.on_demand && prod.stock !== null && prod.stock !== undefined && (
                           <button
                             type="button"
                             onClick={(e) => {
@@ -1150,23 +1195,72 @@ export default function ProductsDashboardPage() {
                 />
               </div>
 
+              {/* Opción A Pedido */}
+              <div
+                onClick={() => setOnDemand(!onDemand)}
+                style={{
+                  backgroundColor: onDemand ? "rgba(217, 119, 66, 0.08)" : "var(--color-canvas)",
+                  border: onDemand ? "1px solid var(--color-primary)" : "1px solid var(--color-hairline)",
+                  borderRadius: "12px",
+                  padding: "0.9rem 1rem",
+                  marginBottom: "1rem",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.75rem",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={onDemand}
+                  onChange={(e) => setOnDemand(e.target.checked)}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ marginTop: "3px", width: "18px", height: "18px", accentColor: "var(--color-primary)", cursor: "pointer" }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "0.9rem", fontWeight: 700, color: onDemand ? "var(--color-primary)" : "var(--color-ink)" }}>
+                      Producto &quot;A pedido&quot; (Pre-order / Por encargo)
+                    </span>
+                    <span
+                      style={{
+                        backgroundColor: onDemand ? "var(--color-primary)" : "var(--color-hairline)",
+                        color: onDemand ? "#ffffff" : "var(--color-mid-gray)",
+                        fontSize: "0.68rem",
+                        padding: "0.15rem 0.45rem",
+                        borderRadius: "6px",
+                        fontWeight: 600,
+                      }}
+                    >
+                      WhatsApp Directo
+                    </span>
+                  </div>
+                  <p style={{ margin: "4px 0 0", fontSize: "0.78rem", color: "var(--color-mid-gray)", lineHeight: 1.4 }}>
+                    En la tienda solo se mostrará con fotos, marca, nombre y categoría, sin control de stock y con precio opcional. En vez de &quot;Agregar al carrito&quot;, los clientes verán <strong>&quot;Separar por WhatsApp&quot;</strong>.
+                  </p>
+                </div>
+              </div>
+
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
                   gap: "0.75rem",
                 }}
               >
                 <div className="form-group">
-                  <label>Precio (S/) *</label>
+                  <label>
+                    Precio (S/) {onDemand ? <span style={{ fontSize: "0.75rem", color: "var(--color-mid-gray)", fontWeight: "normal" }}>(Opcional)</span> : "*"}
+                  </label>
                   <input
                     type="number"
                     step="0.5"
                     className="input"
-                    placeholder="69.00"
+                    placeholder={onDemand ? "Ej. 69.00 (o vacío para cotizar)" : "69.00"}
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    required
+                    required={!onDemand}
                   />
                 </div>
 
@@ -1197,12 +1291,18 @@ export default function ProductsDashboardPage() {
                   <input
                     type="number"
                     className="input"
-                    placeholder="Ej. 50 (dejar vacío = sin control de stock)"
+                    placeholder={onDemand ? "Sin stock (A pedido)" : "Ej. 50 (vacío = ilimitado)"}
                     min={0}
-                    value={stock}
+                    value={onDemand ? "" : stock}
                     onChange={(e) => setStock(e.target.value)}
+                    disabled={onDemand}
+                    style={onDemand ? { opacity: 0.5, cursor: "not-allowed", backgroundColor: "var(--color-canvas)" } : undefined}
                   />
-                  <span className="helper-text">Si el stock llega a 0, el producto se ocultará automáticamente de tu tienda pública.</span>
+                  <span className="helper-text">
+                    {onDemand
+                      ? "Los productos a pedido no requieren control de stock y se gestionan por WhatsApp."
+                      : "Si el stock llega a 0, el producto se ocultará automáticamente de tu tienda pública."}
+                  </span>
                 </div>
               </div>
 

@@ -309,7 +309,7 @@ export default function CheckoutPage() {
     <div className={styles.storeContainer}>
       <div className={styles.storeContent}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-          <Link href={`/${storeSlug}/cart`} className="btn btn--ghost btn--sm" style={{ paddingLeft: 0 }}>
+          <Link href={`/${storeSlug}/cart`} className="btn btn--ghost btn--sm" style={{ paddingLeft: '10px' }}>
             <ArrowLeft size={16} /> Volver al carrito
           </Link>
         </div>
@@ -373,7 +373,7 @@ export default function CheckoutPage() {
                 </h3>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.75rem 0.75rem' }}>
                 <div className="form-group" style={{ margin: 0 }}>
                   <label htmlFor="checkout-name">Nombre y apellido *</label>
                   <input
@@ -404,7 +404,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="form-group" style={{ margin: 0 }}>
-                  <label htmlFor="checkout-phone">WhatsApp *</label>
+                  <label htmlFor="checkout-phone">Número de teléfono *</label>
                   <input
                     id="checkout-phone"
                     type="tel"
@@ -415,10 +415,7 @@ export default function CheckoutPage() {
                     required
                   />
                 </div>
-              </div>
-
-              {/* Departamento, Provincia y Ciudad */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', marginTop: '0.75rem' }}>
+                {/* Departamento, Provincia y Ciudad */}
                 <div className="form-group" style={{ margin: 0 }}>
                   <label htmlFor="checkout-dept">Departamento *</label>
                   <select
@@ -433,7 +430,6 @@ export default function CheckoutPage() {
                     ))}
                   </select>
                 </div>
-
                 <div className="form-group" style={{ margin: 0 }}>
                   <label htmlFor="checkout-province">Provincia *</label>
                   <input
@@ -459,9 +455,6 @@ export default function CheckoutPage() {
                     required
                   />
                 </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '0.75rem', marginTop: '0.75rem' }}>
                 <div className="form-group" style={{ margin: 0 }}>
                   <label htmlFor="checkout-address">Dirección exacta de entrega *</label>
                   <input
@@ -528,20 +521,23 @@ export default function CheckoutPage() {
                       >
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isSelected ? '0.75rem' : '0' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{
-                              width: 38,
-                              height: 38,
-                              borderRadius: '10px',
-                              background: wallet.platform === 'Yape' ? '#6c0ed9' : '#00b8d9',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: '#fff',
-                              fontWeight: 700,
-                              fontSize: '0.8125rem'
-                            }}>
-                              {wallet.platform === 'Yape' ? 'Y' : 'P'}
-                            </div>
+                            {wallet.platform === 'Yape' && (
+                              <img
+                                src="/icons/yape.png"
+                                alt="Yape"
+                                width={38}
+                                height={38}
+                              />
+                            )}
+
+                            {wallet.platform === 'Plin' && (
+                              <img
+                                src="/icons/plin.png"
+                                alt="Plin"
+                                width={38}
+                                height={38}
+                              />
+                            )}
                             <div>
                               <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--color-ink)' }}>
                                 {wallet.platform}
@@ -753,7 +749,7 @@ export default function CheckoutPage() {
                     <Smartphone size={18} style={{ color: 'var(--color-primary)' }} /> Coordinación directa con la tienda
                   </div>
                   <p style={{ fontSize: '0.8125rem', color: 'var(--color-mid-gray)', margin: '0 0 0.75rem 0' }}>
-                    La tienda aún no ha publicado cuentas en su panel. Puedes coordinar tu pago por WhatsApp o Yapear al número oficial:
+                    La tienda aún no ha publicado sus cuentas. Puedes coordinar tu pago por WhatsApp al siguiente número:
                   </p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--color-paper)', padding: '0.6rem 0.85rem', borderRadius: '10px', border: '1px solid var(--color-hairline)' }}>
                     <div>
@@ -903,8 +899,20 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: 'var(--color-mid-gray)', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: 'var(--color-mid-gray)', marginBottom: '0.5rem' }}>
               <Lock size={14} /> Tu compra es directa con el negocio. Sin intermediarios ni comisiones.
+            </div>
+
+            <div style={{ fontSize: '0.72rem', color: '#888', marginBottom: '1.25rem', lineHeight: 1.4 }}>
+              Al confirmar tu pedido, aceptas los{' '}
+              <Link href="/terminos" target="_blank" style={{ color: '#bbb', textDecoration: 'underline' }}>
+                Términos de servicio
+              </Link>{' '}
+              y la{' '}
+              <Link href="/privacidad" target="_blank" style={{ color: '#bbb', textDecoration: 'underline' }}>
+                Política de Privacidad
+              </Link>{' '}
+              de la plataforma.
             </div>
 
             {/* BOTÓN DE CONFIRMAR PEDIDO */}
@@ -939,6 +947,12 @@ export default function CheckoutPage() {
         <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666' }}>
           Desarrollado por{' '}
           <a href="https://kubostudio.co" target="_blank" rel="noopener noreferrer" style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}>KUBOstudio</a>
+        </div>
+        <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', fontSize: '0.7rem' }}>
+          <Link href="/terminos" target="_blank" style={{ color: '#888', textDecoration: 'none' }}>Términos</Link>
+          <Link href="/privacidad" target="_blank" style={{ color: '#888', textDecoration: 'none' }}>Privacidad</Link>
+          <Link href="/cookies" target="_blank" style={{ color: '#888', textDecoration: 'none' }}>Cookies</Link>
+          <Link href="/reclamaciones" target="_blank" style={{ color: '#888', textDecoration: 'none' }}>Libro de Reclamaciones</Link>
         </div>
       </footer>
     </div>

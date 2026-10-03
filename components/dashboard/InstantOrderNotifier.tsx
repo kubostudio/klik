@@ -132,7 +132,7 @@ export default function InstantOrderNotifier() {
         try {
           new Notification('¡Nuevo pedido recibido en Klik!', {
             body: `${order.customer_name} acaba de comprar por ${formatCurrency(order.total)}.`,
-            icon: '/logo.png',
+            icon: '/icon-192.png',
           });
         } catch {}
       }

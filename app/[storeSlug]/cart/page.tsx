@@ -40,7 +40,7 @@ export default function CartPage() {
       <div className={styles.storeContent}>
         {/* TOP BAR */}
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-          <Link href={`/${storeSlug}`} className="btn btn--ghost btn--sm" style={{ paddingLeft: 0 }}>
+          <Link href={`/${storeSlug}`} className="btn btn--ghost btn--sm" style={{ paddingLeft: '10px' }}>
             <ArrowLeft size={16} /> Continuar comprando
           </Link>
         </div>

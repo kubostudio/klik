@@ -11,7 +11,8 @@ export type AnalyticsEventType =
   | 'cart_add'
   | 'cart_remove'
   | 'checkout_started'
-  | 'order_created';
+  | 'order_created'
+  | 'whatsapp_click';
 
 export type ProductSortMode = 'custom' | 'name_asc' | 'name_desc' | 'price_asc' | 'price_desc';
 
@@ -29,6 +30,7 @@ export interface Store {
   email?: string | null;
   plan: PlanType;
   product_sort_mode?: ProductSortMode | null;
+  is_active?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -48,6 +50,7 @@ export interface Product {
   sort_order?: number | null;
   show_stock?: boolean | null;
   show_price?: boolean | null;
+  on_demand?: boolean | null;
   created_at: string;
   updated_at: string;
   images?: ProductImage[];

@@ -1,14 +1,20 @@
 {
-  "name": "Klik — Tu Tienda Online y Catálogo para Vender por WhatsApp en Perú",
+  "$schema": "https://json.schemastore.org/web-manifest.json",
+  "id": "/",
+  "name": "Klik Business — Tu Tienda Online",
   "short_name": "Klik",
   "description": "Crea tu catálogo online para móvil en minutos. Recibe pedidos ordenados por WhatsApp con DNI y 0% comisiones.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#d97742",
+  "categories": ["business", "shopping", "finance"],
   "icons": [
     {
-      "src": "/logo.svg",
+      "src": "/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     },
@@ -18,14 +24,33 @@
       "type": "image/png"
     },
     {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

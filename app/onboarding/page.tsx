@@ -1007,7 +1007,7 @@ export default function OnboardingPage() {
                   <button
                     type="button"
                     onClick={handlePublish}
-                    className="btn btn--whatsapp btn--lg"
+                    className="btn btn--primary btn--lg"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

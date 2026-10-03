@@ -67,11 +67,13 @@
 
 .legalTabs {
   display: inline-flex;
+  width: 100%;
+  flex-wrap: wrap;
   background-color: $color-paper;
   border: 1px solid $color-hairline;
   border-radius: $radius-xl; // 14px
   padding: 4px;
-  gap: 4px;
+  justify-content: space-between;
   margin-bottom: $spacing-6;
 }
 

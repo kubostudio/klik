@@ -98,14 +98,11 @@ function RegisterForm() {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#0a0a0a",
-              borderRadius: "12px",
               padding: "8px 16px",
               marginBottom: "1rem",
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
             }}
           >
-            <Logo size={44} color="#ffffff" />
+            <Logo size={44} color="#d97742" />
           </Link>
           <h1>Crea tu cuenta</h1>
           <p>Empieza a vender por WhatsApp en pocos minutos</p>
@@ -126,7 +123,7 @@ function RegisterForm() {
           </div>
         )}
 
-        <button
+        {/* <button
           type="button"
           onClick={handleGoogleSignup}
           className={styles.socialBtn}
@@ -155,11 +152,11 @@ function RegisterForm() {
 
         <div className={styles.divider}>
           <span>o con tu correo</span>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Tu nombre</label>
+            <label htmlFor="name">Nombre completo</label>
             <input
               id="name"
               type="text"
@@ -197,7 +194,7 @@ function RegisterForm() {
             />
           </div>
 
-          <div style={{ marginTop: "1rem", marginBottom: "1.25rem" }}>
+          <div style={{ marginTop: "2.5rem", marginBottom: "2.5rem" }}>
             <label
               style={{
                 display: "flex",
@@ -224,7 +221,7 @@ function RegisterForm() {
                 }}
               />
               <span>
-                He leído y acepto obligatoriamente los{" "}
+                He leído y acepto los{" "}
                 <Link
                   href="/terminos"
                   target="_blank"
@@ -235,8 +232,8 @@ function RegisterForm() {
                   }}
                 >
                   Términos y Condiciones
-                </Link>{" "}
-                y la{" "}
+                </Link>
+                , la{" "}
                 <Link
                   href="/privacidad"
                   target="_blank"
@@ -247,6 +244,18 @@ function RegisterForm() {
                   }}
                 >
                   Política de Privacidad
+                </Link>{" "}
+                y la{" "}
+                <Link
+                  href="/cookies"
+                  target="_blank"
+                  style={{
+                    textDecoration: "underline",
+                    fontWeight: 600,
+                    color: "var(--color-ink)",
+                  }}
+                >
+                  Política de Cookies
                 </Link>{" "}
                 de Klik.
               </span>
