@@ -17,7 +17,7 @@ export default function ReclamacionesPage() {
     departamento: "Lima",
     tipoBien: "servicio",
     montoReclamado: "",
-    descripcionBien: "Suscripción a la plataforma Klik (klik.business)",
+    descripcionBien: "Suscripción a la plataforma Klik (klik.sale)",
     tipoReclamacion: "reclamo",
     detalle: "",
     pedido: "",
@@ -140,7 +140,7 @@ export default function ReclamacionesPage() {
           <div className={styles.legalContent}>
             <div className={styles.callout}>
               <p>
-                <strong>Plataforma Proveedora:</strong> Klik (klik.business) • República del Perú
+                <strong>Plataforma Proveedora:</strong> Klik (klik.sale) • República del Perú
                 <br />
                 <strong>Razón Social:</strong> Klik Technologies S.A.C.
                 <br />
@@ -545,7 +545,7 @@ export default function ReclamacionesPage() {
       <footer className={styles.legalFooter}>
         <div className={styles.legalFooter__inner}>
           <div className={styles.legalFooter__copy}>
-            © {new Date().getFullYear()} Klik (klik.business) — Todos los derechos reservados.
+            © {new Date().getFullYear()} Klik (klik.sale) — Todos los derechos reservados.
           </div>
           <div className={styles.legalFooter__links}>
             <Link href="/terminos">Términos y Condiciones</Link>

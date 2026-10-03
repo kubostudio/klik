@@ -29,6 +29,7 @@ import {
   Building2,
   QrCode,
   X,
+  MessageCircle,
 } from "lucide-react";
 
 const BANKS = ["BCP", "BBVA", "Interbank", "Scotiabank", "Banco de la Nación", "Pichincha", "BanBif", "Otro"];
@@ -330,7 +331,7 @@ function SettingsContent() {
                 <div className="form-group">
                   <label>URL personalizada (slug)</label>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ fontSize: "0.875rem", color: "#64748B" }}>klik.business/</span>
+                    <span style={{ fontSize: "0.875rem", color: "#64748B" }}>klik.sale/</span>
                     <input type="text" className="input" placeholder="lima-trends" value={slug} onChange={(e) => setSlug(e.target.value)} required />
                   </div>
                 </div>
@@ -380,22 +381,80 @@ function SettingsContent() {
               <h2>Tu Suscripción Klik</h2>
             </div>
             <div className={styles.panel__body}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", backgroundColor: "rgba(34, 197, 94, 0.1)", color: "#16a34a", border: "1px solid rgba(34, 197, 94, 0.25)", padding: "0.4rem 0.85rem", borderRadius: "20px", fontWeight: 700, fontSize: "0.9375rem" }}>
-                  <Check size={15} /> Activo
+              {store?.is_active === false ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    gap: "1rem",
+                    marginBottom: "1.25rem",
+                    padding: "1rem 1.25rem",
+                    backgroundColor: "#fffbeb",
+                    border: "1px solid #fde68a",
+                    borderRadius: "14px",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        backgroundColor: "#fff7ed",
+                        color: "#c2410c",
+                        border: "1px solid rgba(234, 88, 12, 0.3)",
+                        padding: "0.35rem 0.75rem",
+                        borderRadius: "20px",
+                        fontWeight: 700,
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      ● Inactivo / Pendiente de Pago
+                    </div>
+                    <span style={{ fontSize: "0.875rem", color: "#b45309" }}>
+                      Activa tu suscripción para habilitar tu catálogo y ventas
+                    </span>
+                  </div>
+
+                  <a
+                    href={`https://wa.me/51906013310?text=${encodeURIComponent(
+                      `Hola KUBOstudio, solicito activar la suscripción para mi tienda ${store?.name || name} (slug: ${store?.slug || slug})`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn--primary btn--sm"
+                    style={{
+                      textDecoration: "none",
+                      fontWeight: 600,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <MessageCircle size={15} /> Activar suscripción
+                  </a>
                 </div>
-                <span style={{ fontSize: "0.875rem", color: "var(--color-mid-gray)" }}>Plan Klik — sin interrupciones</span>
-              </div>
+              ) : (
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", backgroundColor: "rgba(34, 197, 94, 0.1)", color: "#16a34a", border: "1px solid rgba(34, 197, 94, 0.25)", padding: "0.4rem 0.85rem", borderRadius: "20px", fontWeight: 700, fontSize: "0.9375rem" }}>
+                    <Check size={15} /> Activo
+                  </div>
+                  <span style={{ fontSize: "0.875rem", color: "var(--color-mid-gray)" }}>Plan Klik — sin interrupciones</span>
+                </div>
+              )}
               <div style={{ padding: "1.25rem", backgroundColor: "var(--color-surface-alt)", border: "1px solid var(--color-hairline)", borderRadius: "16px" }}>
                 <div style={{ fontWeight: 600, fontSize: "0.9375rem", marginBottom: "0.65rem", color: "var(--color-ink)" }}>
                   Beneficios incluidos en tu Plan Klik:
                 </div>
                 <ul style={{ margin: 0, paddingLeft: "1.25rem", fontSize: "0.8125rem", color: "var(--color-mid-gray)", lineHeight: 1.8 }}>
                   <li>Productos ilimitados con fotos y carrusel interactivo</li>
-                  <li>Pedidos ilimitados directo a WhatsApp (0% comisiones sobre ventas)</li>
+                  <li>0% comisiones sobre ventas</li>
                   <li>Control de stock por producto con alertas de bajo stock</li>
                   <li>Configuración de métodos de cobro: Yape, Plin y transferencias bancarias</li>
-                  <li>Seguimiento automático y manual de compradores por WhatsApp</li>
+                  <li>Seguimiento de compradores</li>
                   <li>Soporte y atención directa por WhatsApp</li>
                 </ul>
               </div>

@@ -138,7 +138,7 @@ export default function ProductDetailPage() {
       <div className={styles.storeContent}>
         {/* TOP BAR / BACK TO STORE */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <Link href={`/${storeSlug}`} className="btn btn--ghost btn--sm" style={{ paddingLeft: 0 }}>
+          <Link href={`/${storeSlug}`} className="btn btn--ghost btn--sm" style={{ paddingLeft: '10px' }}>
             <ArrowLeft size={16} /> Volver a {store.name}
           </Link>
 
@@ -403,7 +403,7 @@ export default function ProductDetailPage() {
                   const productUrl =
                     typeof window !== 'undefined'
                       ? window.location.href
-                      : `https://klik.business/${storeSlug}/product/${product.slug}`;
+                      : `https://klik.sale/${storeSlug}/product/${product.slug}`;
 
                   const waMessage = [
                     `¡Hola ${store.name}! 👋`,
@@ -433,8 +433,8 @@ export default function ProductDetailPage() {
                         rel="noopener noreferrer"
                         className="btn btn--primary btn--full btn--lg"
                         style={{
-                          backgroundColor: '#25D366',
-                          borderColor: '#25D366',
+                          backgroundColor: '#d97742',
+                          borderColor: '#d97742',
                           color: '#ffffff',
                           display: 'flex',
                           alignItems: 'center',
@@ -442,7 +442,7 @@ export default function ProductDetailPage() {
                           gap: '0.6rem',
                           fontSize: '1.05rem',
                           fontWeight: 700,
-                          boxShadow: '0 4px 14px rgba(37, 211, 102, 0.35)',
+                          boxShadow: '0 4px 14px rgba(217, 119, 66, 0.35)',
                           textDecoration: 'none',
                         }}
                         onClick={() => {
@@ -465,7 +465,7 @@ export default function ProductDetailPage() {
                           lineHeight: 1.4,
                         }}
                       >
-                        Este producto es <strong>a pedido</strong>. Coordina la fabricación, detalles y reserva directamente con la tienda por WhatsApp.
+                        Este producto es <strong>a pedido</strong>. Coordina la reserva directamente con la tienda por WhatsApp.
                       </p>
                     </>
                   );

@@ -14,7 +14,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/dashboard/", "/api/"],
       },
     ],
-    sitemap: "https://klik.business/sitemap.xml",
-    host: "https://klik.business",
+    sitemap: "https://klik.sale/sitemap.xml",
+    host: "https://klik.sale",
   };
 }

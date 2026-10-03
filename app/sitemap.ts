@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://klik.business";
+  const baseUrl = "https://klik.sale";
   const currentDate = new Date();
 
   return [

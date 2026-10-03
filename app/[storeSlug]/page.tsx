@@ -421,15 +421,15 @@ export default function PublicStoreCatalogPage() {
                         </Link>
                         <a
                           href={`https://wa.me/${store.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
-                            `Hola ${store.name}, me interesa separar el producto a pedido: *${prod.name}* (https://klik.business/${storeSlug}/product/${prod.slug}). Deseo información para separarlo.`
+                            `Hola ${store.name}, me interesa separar el producto a pedido: *${prod.name}* (https://klik.sale/${storeSlug}/product/${prod.slug}). Deseo información para separarlo.`
                           )}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn--primary btn--sm"
                           style={{
                             flex: 2,
-                            backgroundColor: "#25D366",
-                            borderColor: "#25D366",
+                            backgroundColor: "#d97742",
+                            borderColor: "#d97742",
                             color: "#ffffff",
                             display: "inline-flex",
                             alignItems: "center",

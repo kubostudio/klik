@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://klik.business"),
+  metadataBase: new URL("https://klik.sale"),
   title: {
     default:
       "Klik | Tu Tienda Online y Catálogo para Vender por WhatsApp en Perú",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "gestion de pedidos whatsapp",
     "emprendimiento peru",
   ],
-  authors: [{ name: "Klik", url: "https://klik.business" }],
+  authors: [{ name: "Klik", url: "https://klik.sale" }],
   creator: "Klik",
   publisher: "Klik",
   applicationName: "Klik",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: "https://klik.business",
+    canonical: "https://klik.sale",
   },
   icons: {
     icon: [
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
       "Klik | Tu Tienda Online y Catálogo para Vender por WhatsApp en Perú",
     description:
       "Crea tu catálogo online en 3 minutos. Tus clientes compran y los pedidos llegan ordenados a tu WhatsApp con DNI. 0% comisiones.",
-    url: "https://klik.business",
+    url: "https://klik.sale",
     siteName: "Klik",
     locale: "es_PE",
     type: "website",
@@ -125,19 +125,19 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://klik.business/#organization",
+      "@id": "https://klik.sale/#organization",
       name: "Klik",
-      url: "https://klik.business",
-      logo: "https://klik.business/logo.png",
-      sameAs: ["https://instagram.com/klik.business"],
+      url: "https://klik.sale",
+      logo: "https://klik.sale/logo.png",
+      sameAs: ["https://instagram.com/klik.sale"],
       description:
         "Plataforma de infraestructura de comercio electrónico para emprendimientos que venden por WhatsApp en el Perú.",
     },
     {
       "@type": "WebApplication",
-      "@id": "https://klik.business/#webapp",
+      "@id": "https://klik.sale/#webapp",
       name: "Klik",
-      url: "https://klik.business",
+      url: "https://klik.sale",
       applicationCategory: "BusinessApplication, ShoppingApplication",
       operatingSystem: "All",
       browserRequirements: "Requires JavaScript. Requires HTML5.",
@@ -150,15 +150,15 @@ const jsonLd = {
       },
       description:
         "Crea tu catálogo online para móvil en 3 minutos y recibe pedidos organizados por WhatsApp con DNI y 0% comisiones.",
-      screenshot: "https://klik.business/og-image.png",
+      screenshot: "https://klik.sale/og-image.png",
     },
     {
       "@type": "WebSite",
-      "@id": "https://klik.business/#website",
-      url: "https://klik.business",
+      "@id": "https://klik.sale/#website",
+      url: "https://klik.sale",
       name: "Klik",
       publisher: {
-        "@id": "https://klik.business/#organization",
+        "@id": "https://klik.sale/#organization",
       },
       inLanguage: "es-PE",
     },

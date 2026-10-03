@@ -1,5 +1,5 @@
 -- ==============================================================================
--- Klik (klik.business) - Esquema Inicial de Base de Datos PostgreSQL / Supabase
+-- Klik (klik.sale) - Esquema Inicial de Base de Datos PostgreSQL / Supabase
 -- ==============================================================================
 
 -- 1. Extensiones necesarias

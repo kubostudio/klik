@@ -340,7 +340,7 @@ export default function HomePage() {
                 <div className={styles.stepsList}>
                   {[
                     { n: "01", h: "Crea tu catálogo", p: "Agrega tu marca, WhatsApp y productos con fotos, precios y variantes en minutos." },
-                    { n: "02", h: "Comparte tu link único", p: <span>Coloca <code className={styles.codeInline}>klik.business/tutienda</code> en tu Instagram, TikTok o estados de WhatsApp.</span> },
+                    { n: "02", h: "Comparte tu link único", p: <span>Coloca <code className={styles.codeInline}>klik.sale/tutienda</code> en tu Instagram, TikTok o estados de WhatsApp.</span> },
                     { n: "03", h: "Cierra en WhatsApp", p: "Tus clientes eligen productos y envían sus datos. Tú recibes el pedido desglosado listo para despachar." },
                   ].map((step, i) => (
                     <ScrollReveal key={step.n} animation="fade-up" delay={80 + i * 50}>
@@ -372,7 +372,7 @@ export default function HomePage() {
                         <div className={styles.showcaseWindow__dot} />
                         <div className={styles.showcaseWindow__dot} />
                       </div>
-                      <div className={styles.showcaseWindow__urlPill}><Lock size={11} /> klik.business/mi-tienda</div>
+                      <div className={styles.showcaseWindow__urlPill}><Lock size={11} /> klik.sale/mi-tienda</div>
                     </div>
                     <div className={styles.showcaseWindow__tabs}>
                       {(["orders", "store", "whatsapp"] as const).map((tab) => (
@@ -587,7 +587,7 @@ export default function HomePage() {
               </footer>
 
               <div className={styles.copyright}>
-                © {new Date().getFullYear()} Klik (klik.business) — Todos los derechos reservados. Desarrollado por{" "}
+                © {new Date().getFullYear()} Klik (klik.sale) — Todos los derechos reservados. Desarrollado por{" "}
                 <a href="https://kubostudio.co" target="_blank" rel="noopener noreferrer">KUBOstudio</a>
               </div>
             </div>

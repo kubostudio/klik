@@ -122,7 +122,7 @@ export default function PrivacidadPage() {
             <p>
               La presente Política de Privacidad regula el tratamiento de datos
               personales realizado a través de la plataforma{" "}
-              <strong>klik.business</strong>, en estricto cumplimiento con la{" "}
+              <strong>klik.sale</strong>, en estricto cumplimiento con la{" "}
               <strong>Ley N° 29733</strong> (Ley de Protección de Datos
               Personales del Perú), su Reglamento aprobado por{" "}
               <strong>Decreto Supremo N° 003-2013-JUS</strong> y las directivas
@@ -239,7 +239,7 @@ export default function PrivacidadPage() {
               <li>
                 <strong>Vendedores registrados:</strong> Pueden actualizar,
                 modificar o solicitar la eliminación total de su tienda y cuenta
-                enviando un correo a <strong>privacidad@klik.business</strong> o
+                enviando un correo a <strong>privacidad@klik.sale</strong> o
                 directamente desde su panel de configuración.
               </li>
               <li>
@@ -273,7 +273,7 @@ export default function PrivacidadPage() {
             <p>
               Para cualquier duda o solicitud referente al resguardo de tus
               datos personales, puedes escribirnos a{" "}
-              <strong>privacidad@klik.business</strong>.
+              <strong>privacidad@klik.sale</strong>.
             </p>
           </div>
         </article>
@@ -283,7 +283,7 @@ export default function PrivacidadPage() {
       <footer className={styles.legalFooter}>
         <div className={styles.legalFooter__inner}>
           <div className={styles.legalFooter__copy}>
-            © {new Date().getFullYear()} Klik (klik.business) — Todos los
+            © {new Date().getFullYear()} Klik (klik.sale) — Todos los
             derechos reservados.
           </div>
           <div className={styles.legalFooter__links}>

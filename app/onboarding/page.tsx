@@ -348,7 +348,7 @@ export default function OnboardingPage() {
   };
 
   const handleCopyLink = () => {
-    const fullUrl = `https://klik.business/${storeSlug}`;
+    const fullUrl = `https://klik.sale/${storeSlug}`;
     navigator.clipboard.writeText(fullUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -561,7 +561,7 @@ export default function OnboardingPage() {
                     />
                     {storeName.trim() && (
                       <span className="helper-text">
-                        Tu link será: <strong>klik.business/{storeSlug}</strong>
+                        Tu link será: <strong>klik.sale/{storeSlug}</strong>
                       </span>
                     )}
                   </div>
@@ -1039,7 +1039,7 @@ export default function OnboardingPage() {
               </p>
 
               <div className={styles.urlBox}>
-                <code>https://klik.business/{storeSlug}</code>
+                <code>https://klik.sale/{storeSlug}</code>
                 <button
                   type="button"
                   onClick={handleCopyLink}

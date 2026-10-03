@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     const customerId = await billingService.createCustomer(
-      "vendedor@klik.business",
+      "vendedor@klik.sale",
       "Vendedor Klik",
     );
     const subscription = await billingService.createSubscription(

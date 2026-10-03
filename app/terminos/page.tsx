@@ -118,7 +118,7 @@ export default function TerminosPage() {
             <p>
               Al registrarte, acceder o utilizar el servicio provisto por{" "}
               <strong>Klik</strong> (en adelante "la Plataforma", accesible
-              mediante el dominio <strong>klik.business</strong> y sus
+              mediante el dominio <strong>klik.sale</strong> y sus
               subdominios), aceptas cumplir de manera irrevocable con los
               presentes Términos y Condiciones, así como con nuestra Política de
               Privacidad. Si no estás de acuerdo con estos términos, debes
@@ -289,7 +289,7 @@ export default function TerminosPage() {
             <p>
               Para cualquier consulta legal o aclaración sobre estos Términos,
               puedes comunicarte con nuestro equipo a través de{" "}
-              <strong>soporte@klik.business</strong>.
+              <strong>soporte@klik.sale</strong>.
             </p>
           </div>
         </article>
@@ -299,7 +299,7 @@ export default function TerminosPage() {
       <footer className={styles.legalFooter}>
         <div className={styles.legalFooter__inner}>
           <div className={styles.legalFooter__copy}>
-            © {new Date().getFullYear()} Klik (klik.business) — Todos los
+            © {new Date().getFullYear()} Klik (klik.sale) — Todos los
             derechos reservados.
           </div>
           <div className={styles.legalFooter__links}>

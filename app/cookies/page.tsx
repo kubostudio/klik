@@ -127,7 +127,7 @@ export default function CookiesPage() {
 
             <h2>2. Tipos de Cookies y Tecnologías que Empleamos</h2>
             <p>
-              En la plataforma <strong>klik.business</strong> y en los catálogos digitales de los
+              En la plataforma <strong>klik.sale</strong> y en los catálogos digitales de los
               comercios clasificados utilizamos las siguientes categorías de cookies:
             </p>
 
@@ -296,8 +296,8 @@ export default function CookiesPage() {
             <h2>6. Contacto</h2>
             <p>
               Si tienes preguntas sobre nuestra política de cookies o el manejo de datos en tu
-              navegación, puedes contactarnos en <strong>privacidad@klik.business</strong> o
-              en <strong>soporte@klik.business</strong>.
+              navegación, puedes contactarnos en <strong>privacidad@klik.sale</strong> o
+              en <strong>soporte@klik.sale</strong>.
             </p>
           </div>
         </article>
@@ -307,7 +307,7 @@ export default function CookiesPage() {
       <footer className={styles.legalFooter}>
         <div className={styles.legalFooter__inner}>
           <div className={styles.legalFooter__copy}>
-            © {new Date().getFullYear()} Klik (klik.business) — Todos los derechos reservados.
+            © {new Date().getFullYear()} Klik (klik.sale) — Todos los derechos reservados.
           </div>
           <div className={styles.legalFooter__links}>
             <Link href="/terminos">Términos y Condiciones</Link>

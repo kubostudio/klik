@@ -45,7 +45,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
   const handleShareStore = () => {
     if (!currentSlug) return;
-    const url = `https://klik.business/${currentSlug}`;
+    const url = `https://klik.sale/${currentSlug}`;
     if (navigator.share) {
       navigator
         .share({
@@ -196,7 +196,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                     fontSize: "0.875rem",
                   }}
                 >
-                  — klik.business/{currentSlug}
+                  — klik.sale/{currentSlug}
                 </span>
               ) : (
                 <span
@@ -367,7 +367,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
         {/* VIEW BODY */}
         <div className={styles.viewContainer}>
-          {store && store.is_active === false ? (
+          {store && store.is_active === false && pathname !== "/dashboard/settings" ? (
             <div
               style={{
                 maxWidth: "680px",
