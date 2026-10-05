@@ -103,7 +103,7 @@ export default async function StoreLayout({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '0.5rem',
-              backgroundColor: '#25D366',
+              backgroundColor: '#d97742',
               color: '#ffffff',
               padding: '0.85rem 1.5rem',
               borderRadius: '12px',
