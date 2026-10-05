@@ -145,6 +145,8 @@ async function uploadInstagramAvatarToStorage(
   }
 }
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -167,16 +169,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Crawlers reconocidos por Instagram para obtener metadatos y Relay stream
+    // Crawlers reconocidos por Instagram ordenados por fidelidad de entrega de metadatos/JSON
     const userAgents = [
-      "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
       "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+      "WhatsApp/2.21.12.21 A",
       "Twitterbot/1.0",
+      "TelegramBot (like TwitterBot)",
+      "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
     ];
 
-    let html = "";
+    let extractedUser: {
+      fullName?: string;
+      username?: string;
+      biography?: string;
+      profilePicUrl?: string;
+      externalUrl?: string;
+    } | null = null;
+    let name = "";
+    let biography = "";
+    let rawAvatar = "";
+    let externalUrl = "";
+
+    // Intentar con cada User-Agent secuencialmente hasta encontrar datos reales de perfil
     for (const ua of userAgents) {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 7000);
+
         const res = await fetch(`https://www.instagram.com/${username}/`, {
           headers: {
             "User-Agent": ua,
@@ -186,128 +205,140 @@ export async function POST(req: NextRequest) {
             "Sec-Fetch-Site": "none",
             "Sec-Fetch-Mode": "navigate",
           },
-          next: { revalidate: 60 },
+          cache: "no-store",
+          signal: controller.signal,
         });
 
-        if (res.ok) {
-          html = await res.text();
-          if (html.length > 5000) break;
+        clearTimeout(timeoutId);
+
+        if (!res.ok) continue;
+
+        const html = await res.text();
+        if (!html || html.length < 1000) continue;
+
+        // 1. Intento de extracción profunda mediante scripts JSON (RelayPrefetchedStreamCache)
+        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+        let match: RegExpExecArray | null;
+
+        while ((match = scriptRegex.exec(html)) !== null) {
+          const content = match[1];
+          if (
+            content.includes("xig_user_by_igid_v2") ||
+            (content.includes("biography") && content.includes("profile_pic_url"))
+          ) {
+            try {
+              const parsed = JSON.parse(content);
+              const findUser = (obj: any): any => {
+                if (!obj || typeof obj !== "object") return null;
+                if (
+                  obj.biography !== undefined &&
+                  (obj.username || obj.full_name)
+                ) {
+                  return obj;
+                }
+                for (const key of Object.keys(obj)) {
+                  const found = findUser(obj[key]);
+                  if (found) return found;
+                }
+                return null;
+              };
+
+              const found = findUser(parsed);
+              if (found) {
+                extractedUser = {
+                  fullName: found.full_name,
+                  username: found.username,
+                  biography: found.biography,
+                  profilePicUrl: found.profile_pic_url,
+                  externalUrl:
+                    found.external_url ||
+                    (Array.isArray(found.bio_links) && found.bio_links[0]?.url),
+                };
+                break;
+              }
+            } catch {
+              // Continuar buscando en siguientes scripts
+            }
+          }
+        }
+
+        // Extraer valores base si se encontraron en JSON
+        if (extractedUser) {
+          name = extractedUser.fullName?.trim() || "";
+          biography = extractedUser.biography?.trim() || "";
+          rawAvatar = extractedUser.profilePicUrl || "";
+          externalUrl = extractedUser.externalUrl || "";
+        }
+
+        // 2. Extracción fallback por OpenGraph Meta Tags si falta algún campo
+        if (!name) {
+          const ogTitleMatch = html.match(
+            /<meta property="og:title" content="([^"]*)"/i,
+          );
+          if (ogTitleMatch && ogTitleMatch[1]) {
+            let t = ogTitleMatch[1]
+              .replace(/&#064;/g, "@")
+              .replace(/&amp;/g, "&")
+              .replace(/&quot;/g, '"')
+              .trim();
+
+            const isGenericTitle =
+              /^login\b/i.test(t) ||
+              /^iniciar sesión\b/i.test(t) ||
+              /^instagram$/i.test(t);
+
+            if (!isGenericTitle) {
+              const parts = t.split("(@");
+              const cleanTitle = parts[0].replace(/•.*/, "").trim();
+              if (cleanTitle) {
+                name = cleanTitle;
+              }
+            }
+          }
+        }
+
+        if (!rawAvatar) {
+          const ogImageMatch = html.match(
+            /<meta property="og:image" content="([^"]*)"/i,
+          );
+          if (ogImageMatch && ogImageMatch[1]) {
+            const img = ogImageMatch[1].replace(/&amp;/g, "&");
+            // Descartar placeholders y assets de login de Instagram
+            const isPlaceholder =
+              img.includes("rsrc.php") ||
+              img.includes("static.cdninstagram.com/rsrc") ||
+              img.includes("instagram_logo");
+            if (!isPlaceholder) {
+              rawAvatar = img;
+            }
+          }
+        }
+
+        if (!biography) {
+          const descMatch =
+            html.match(/<meta content="([^"]*)" name="description"/i) ||
+            html.match(/<meta name="description" content="([^"]*)"/i);
+          if (descMatch && descMatch[1]) {
+            const d = descMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+            const bioMatch =
+              d.match(/(?:on Instagram|en Instagram):\s*["“«]?([^"”»\n\r]*)/i);
+            if (bioMatch && bioMatch[1]) {
+              biography = bioMatch[1].trim();
+            }
+          }
+        }
+
+        // Validar si encontramos datos reales de perfil
+        if (name || biography || rawAvatar) {
+          // Éxito: encontramos datos auténticos con este User-Agent
+          break;
         }
       } catch (err) {
         console.warn(`Attempt failed with UA ${ua}:`, err);
       }
     }
 
-    if (!html) {
-      return NextResponse.json(
-        {
-          error:
-            "No se pudo conectar con Instagram. Por favor verifica que la cuenta exista y sea pública.",
-        },
-        { status: 404 },
-      );
-    }
-
-    // 1. Intento de extracción profunda mediante scripts JSON (RelayPrefetchedStreamCache)
-    let extractedUser: {
-      fullName?: string;
-      username?: string;
-      biography?: string;
-      profilePicUrl?: string;
-      externalUrl?: string;
-    } | null = null;
-
-    const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
-    let match: RegExpExecArray | null;
-
-    while ((match = scriptRegex.exec(html)) !== null) {
-      const content = match[1];
-      if (
-        content.includes("xig_user_by_igid_v2") ||
-        (content.includes("biography") && content.includes("profile_pic_url"))
-      ) {
-        try {
-          const parsed = JSON.parse(content);
-          const findUser = (obj: any): any => {
-            if (!obj || typeof obj !== "object") return null;
-            if (
-              obj.biography !== undefined &&
-              (obj.username || obj.full_name)
-            ) {
-              return obj;
-            }
-            for (const key of Object.keys(obj)) {
-              const found = findUser(obj[key]);
-              if (found) return found;
-            }
-            return null;
-          };
-
-          const found = findUser(parsed);
-          if (found) {
-            extractedUser = {
-              fullName: found.full_name,
-              username: found.username,
-              biography: found.biography,
-              profilePicUrl: found.profile_pic_url,
-              externalUrl:
-                found.external_url ||
-                (Array.isArray(found.bio_links) && found.bio_links[0]?.url),
-            };
-            break;
-          }
-        } catch {
-          // Continuar buscando en siguientes scripts
-        }
-      }
-    }
-
-    // 2. Extracción fallback por OpenGraph Meta Tags
-    let name = extractedUser?.fullName?.trim() || "";
-    let biography = extractedUser?.biography?.trim() || "";
-    let rawAvatar = extractedUser?.profilePicUrl || "";
-    let externalUrl = extractedUser?.externalUrl || "";
-
-    // Si falta alguno, complementar con etiquetas OpenGraph
-    if (!name) {
-      const ogTitleMatch = html.match(
-        /<meta property="og:title" content="([^"]*)"/i,
-      );
-      if (ogTitleMatch && ogTitleMatch[1]) {
-        let t = ogTitleMatch[1]
-          .replace(/&#064;/g, "@")
-          .replace(/&amp;/g, "&")
-          .replace(/&quot;/g, '"');
-        const parts = t.split("(@");
-        name = parts[0].trim();
-      }
-    }
-
-    if (!rawAvatar) {
-      const ogImageMatch = html.match(
-        /<meta property="og:image" content="([^"]*)"/i,
-      );
-      if (ogImageMatch && ogImageMatch[1]) {
-        rawAvatar = ogImageMatch[1].replace(/&amp;/g, "&");
-      }
-    }
-
-    if (!biography) {
-      const descMatch =
-        html.match(/<meta content="([^"]*)" name="description"/i) ||
-        html.match(/<meta name="description" content="([^"]*)"/i);
-      if (descMatch && descMatch[1]) {
-        const d = descMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&");
-        const bioInQuotes =
-          d.match(/on Instagram:\s*"([^"]*)"/i) ||
-          d.match(/en Instagram:\s*"([^"]*)"/i);
-        if (bioInQuotes && bioInQuotes[1]) {
-          biography = bioInQuotes[1].trim();
-        }
-      }
-    }
-
-    // Si no se encontró ningún dato mínimo
+    // Si después de todos los UAs no se encontró ningún dato mínimo
     if (!name && !biography && !rawAvatar) {
       return NextResponse.json(
         {

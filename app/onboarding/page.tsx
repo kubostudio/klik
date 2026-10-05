@@ -41,6 +41,7 @@ export default function OnboardingPage() {
   const [instaInput, setInstaInput] = useState("");
   const [isImportingInsta, setIsImportingInsta] = useState(false);
   const [instaSuccessMsg, setInstaSuccessMsg] = useState<string | null>(null);
+  const [instaErrorMsg, setInstaErrorMsg] = useState<string | null>(null);
 
   // Paso 1: Info básica
   const [storeName, setStoreName] = useState("");
@@ -89,12 +90,12 @@ export default function OnboardingPage() {
 
   const handleImportInstagram = async () => {
     if (!instaInput.trim()) {
-      setErrorMessage("Ingresa tu usuario de Instagram para importar.");
+      setInstaErrorMsg("Ingresa tu usuario de Instagram para importar.");
       return;
     }
 
     setIsImportingInsta(true);
-    setErrorMessage(null);
+    setInstaErrorMsg(null);
     setInstaSuccessMsg(null);
 
     try {
@@ -130,7 +131,7 @@ export default function OnboardingPage() {
         `¡Detalles de @${data.username} importados con éxito! (${items.join(", ")}).`,
       );
     } catch (err: any) {
-      setErrorMessage(err.message || "Error al importar desde Instagram.");
+      setInstaErrorMsg(err.message || "Error al importar desde Instagram.");
     } finally {
       setIsImportingInsta(false);
     }
@@ -493,7 +494,10 @@ export default function OnboardingPage() {
                         className="input"
                         placeholder="@tu_tienda (importar datos)"
                         value={instaInput}
-                        onChange={(e) => setInstaInput(e.target.value)}
+                        onChange={(e) => {
+                          setInstaInput(e.target.value);
+                          if (instaErrorMsg) setInstaErrorMsg(null);
+                        }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
@@ -544,6 +548,26 @@ export default function OnboardingPage() {
                       >
                         <Check size={13} />
                         <span>{instaSuccessMsg}</span>
+                      </div>
+                    )}
+
+                    {instaErrorMsg && (
+                      <div
+                        style={{
+                          marginTop: "0.5rem",
+                          fontSize: "0.75rem",
+                          color: "#f87171",
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "0.35rem",
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        <AlertCircle
+                          size={13}
+                          style={{ flexShrink: 0, marginTop: "2px" }}
+                        />
+                        <span>{instaErrorMsg}</span>
                       </div>
                     )}
                   </div>
