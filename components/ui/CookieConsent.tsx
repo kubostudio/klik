@@ -153,7 +153,7 @@ export default function CookieConsent() {
                 fontSize: "0.8125rem",
                 padding: "6px 14px",
                 borderRadius: "8px",
-                backgroundColor: "#848484ff",
+                backgroundColor: "rgb(232 227 227)",
                 borderColor: "#333",
               }}
             >
