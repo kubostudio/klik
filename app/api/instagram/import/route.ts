@@ -145,6 +145,57 @@ async function uploadInstagramAvatarToStorage(
   }
 }
 
+/**
+ * Consulta perfil de Instagram usando RapidAPI (instagram-looter2)
+ */
+async function fetchFromRapidApi(username: string): Promise<{
+  name: string;
+  biography: string;
+  rawAvatar: string;
+  externalUrl: string;
+  isPrivate: boolean;
+} | null> {
+  const apiKey = process.env.RAPIDAPI_KEY;
+  if (!apiKey) return null;
+
+  try {
+    const fields =
+      "full_name,username,biography,profile_pic_url,profile_pic_url_hd,external_url,bio_links[].url,is_private";
+    const url = `https://instagram-looter2.p.rapidapi.com/profile?username=${encodeURIComponent(username)}&fields=${fields}`;
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "x-rapidapi-key": apiKey,
+        "x-rapidapi-host": "instagram-looter2.p.rapidapi.com",
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      console.warn("RapidAPI instagram-looter2 returned status:", res.status);
+      return null;
+    }
+
+    const data = await res.json();
+    const name = data?.full_name?.trim() || "";
+    const biography = data?.biography?.trim() || "";
+    const rawAvatar = data?.profile_pic_url_hd || data?.profile_pic_url || "";
+    const externalUrl =
+      data?.external_url ||
+      (Array.isArray(data?.bio_links) && data?.bio_links[0]?.url) ||
+      "";
+    const isPrivate = Boolean(data?.is_private);
+
+    if (name || biography || rawAvatar) {
+      return { name, biography, rawAvatar, externalUrl, isPrivate };
+    }
+  } catch (err) {
+    console.warn("Error calling RapidAPI instagram-looter2:", err);
+  }
+  return null;
+}
+
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
@@ -169,172 +220,184 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Crawlers reconocidos por Instagram ordenados por fidelidad de entrega de metadatos/JSON
-    const userAgents = [
-      "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-      "WhatsApp/2.21.12.21 A",
-      "Twitterbot/1.0",
-      "TelegramBot (like TwitterBot)",
-      "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
-    ];
-
-    let extractedUser: {
-      fullName?: string;
-      username?: string;
-      biography?: string;
-      profilePicUrl?: string;
-      externalUrl?: string;
-    } | null = null;
     let name = "";
     let biography = "";
     let rawAvatar = "";
     let externalUrl = "";
 
-    // Intentar con cada User-Agent secuencialmente hasta encontrar datos reales de perfil
-    for (const ua of userAgents) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 7000);
+    // 1. Intentar primero con RapidAPI (instagram-looter2) si está configurado
+    const rapidApiData = await fetchFromRapidApi(username);
+    if (rapidApiData) {
+      name = rapidApiData.name;
+      biography = rapidApiData.biography;
+      rawAvatar = rapidApiData.rawAvatar;
+      externalUrl = rapidApiData.externalUrl;
+    } else {
+      // 2. Fallback: Crawlers reconocidos por Instagram
+      const userAgents = [
+        "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+        "WhatsApp/2.21.12.21 A",
+        "Twitterbot/1.0",
+        "TelegramBot (like TwitterBot)",
+        "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+      ];
 
-        const res = await fetch(`https://www.instagram.com/${username}/`, {
-          headers: {
-            "User-Agent": ua,
-            Accept:
-              "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
-            "Sec-Fetch-Site": "none",
-            "Sec-Fetch-Mode": "navigate",
-          },
-          cache: "no-store",
-          signal: controller.signal,
-        });
+      let extractedUser: {
+        fullName?: string;
+        username?: string;
+        biography?: string;
+        profilePicUrl?: string;
+        externalUrl?: string;
+      } | null = null;
 
-        clearTimeout(timeoutId);
+      // Intentar con cada User-Agent secuencialmente hasta encontrar datos reales de perfil
+      for (const ua of userAgents) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 7000);
 
-        if (!res.ok) continue;
+          const res = await fetch(`https://www.instagram.com/${username}/`, {
+            headers: {
+              "User-Agent": ua,
+              Accept:
+                "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+              "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
+              "Sec-Fetch-Site": "none",
+              "Sec-Fetch-Mode": "navigate",
+            },
+            cache: "no-store",
+            signal: controller.signal,
+          });
 
-        const html = await res.text();
-        if (!html || html.length < 1000) continue;
+          clearTimeout(timeoutId);
 
-        // 1. Intento de extracción profunda mediante scripts JSON (RelayPrefetchedStreamCache)
-        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
-        let match: RegExpExecArray | null;
+          if (!res.ok) continue;
 
-        while ((match = scriptRegex.exec(html)) !== null) {
-          const content = match[1];
-          if (
-            content.includes("xig_user_by_igid_v2") ||
-            (content.includes("biography") && content.includes("profile_pic_url"))
-          ) {
-            try {
-              const parsed = JSON.parse(content);
-              const findUser = (obj: any): any => {
-                if (!obj || typeof obj !== "object") return null;
-                if (
-                  obj.biography !== undefined &&
-                  (obj.username || obj.full_name)
-                ) {
-                  return obj;
-                }
-                for (const key of Object.keys(obj)) {
-                  const found = findUser(obj[key]);
-                  if (found) return found;
-                }
-                return null;
-              };
+          const html = await res.text();
+          if (!html || html.length < 1000) continue;
 
-              const found = findUser(parsed);
-              if (found) {
-                extractedUser = {
-                  fullName: found.full_name,
-                  username: found.username,
-                  biography: found.biography,
-                  profilePicUrl: found.profile_pic_url,
-                  externalUrl:
-                    found.external_url ||
-                    (Array.isArray(found.bio_links) && found.bio_links[0]?.url),
+          // Intento de extracción profunda mediante scripts JSON (RelayPrefetchedStreamCache)
+          const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+          let match: RegExpExecArray | null;
+
+          while ((match = scriptRegex.exec(html)) !== null) {
+            const content = match[1];
+            if (
+              content.includes("xig_user_by_igid_v2") ||
+              (content.includes("biography") &&
+                content.includes("profile_pic_url"))
+            ) {
+              try {
+                const parsed = JSON.parse(content);
+                const findUser = (obj: any): any => {
+                  if (!obj || typeof obj !== "object") return null;
+                  if (
+                    obj.biography !== undefined &&
+                    (obj.username || obj.full_name)
+                  ) {
+                    return obj;
+                  }
+                  for (const key of Object.keys(obj)) {
+                    const found = findUser(obj[key]);
+                    if (found) return found;
+                  }
+                  return null;
                 };
-                break;
-              }
-            } catch {
-              // Continuar buscando en siguientes scripts
-            }
-          }
-        }
 
-        // Extraer valores base si se encontraron en JSON
-        if (extractedUser) {
-          name = extractedUser.fullName?.trim() || "";
-          biography = extractedUser.biography?.trim() || "";
-          rawAvatar = extractedUser.profilePicUrl || "";
-          externalUrl = extractedUser.externalUrl || "";
-        }
-
-        // 2. Extracción fallback por OpenGraph Meta Tags si falta algún campo
-        if (!name) {
-          const ogTitleMatch = html.match(
-            /<meta property="og:title" content="([^"]*)"/i,
-          );
-          if (ogTitleMatch && ogTitleMatch[1]) {
-            let t = ogTitleMatch[1]
-              .replace(/&#064;/g, "@")
-              .replace(/&amp;/g, "&")
-              .replace(/&quot;/g, '"')
-              .trim();
-
-            const isGenericTitle =
-              /^login\b/i.test(t) ||
-              /^iniciar sesión\b/i.test(t) ||
-              /^instagram$/i.test(t);
-
-            if (!isGenericTitle) {
-              const parts = t.split("(@");
-              const cleanTitle = parts[0].replace(/•.*/, "").trim();
-              if (cleanTitle) {
-                name = cleanTitle;
+                const found = findUser(parsed);
+                if (found) {
+                  extractedUser = {
+                    fullName: found.full_name,
+                    username: found.username,
+                    biography: found.biography,
+                    profilePicUrl: found.profile_pic_url,
+                    externalUrl:
+                      found.external_url ||
+                      (Array.isArray(found.bio_links) &&
+                        found.bio_links[0]?.url),
+                  };
+                  break;
+                }
+              } catch {
+                // Continuar buscando en siguientes scripts
               }
             }
           }
-        }
 
-        if (!rawAvatar) {
-          const ogImageMatch = html.match(
-            /<meta property="og:image" content="([^"]*)"/i,
-          );
-          if (ogImageMatch && ogImageMatch[1]) {
-            const img = ogImageMatch[1].replace(/&amp;/g, "&");
-            // Descartar placeholders y assets de login de Instagram
-            const isPlaceholder =
-              img.includes("rsrc.php") ||
-              img.includes("static.cdninstagram.com/rsrc") ||
-              img.includes("instagram_logo");
-            if (!isPlaceholder) {
-              rawAvatar = img;
+          // Extraer valores base si se encontraron en JSON
+          if (extractedUser) {
+            name = extractedUser.fullName?.trim() || "";
+            biography = extractedUser.biography?.trim() || "";
+            rawAvatar = extractedUser.profilePicUrl || "";
+            externalUrl = extractedUser.externalUrl || "";
+          }
+
+          // Extracción fallback por OpenGraph Meta Tags si falta algún campo
+          if (!name) {
+            const ogTitleMatch = html.match(
+              /<meta property="og:title" content="([^"]*)"/i,
+            );
+            if (ogTitleMatch && ogTitleMatch[1]) {
+              let t = ogTitleMatch[1]
+                .replace(/&#064;/g, "@")
+                .replace(/&amp;/g, "&")
+                .replace(/&quot;/g, '"')
+                .trim();
+
+              const isGenericTitle =
+                /^login\b/i.test(t) ||
+                /^iniciar sesión\b/i.test(t) ||
+                /^instagram$/i.test(t);
+
+              if (!isGenericTitle) {
+                const parts = t.split("(@");
+                const cleanTitle = parts[0].replace(/•.*/, "").trim();
+                if (cleanTitle) {
+                  name = cleanTitle;
+                }
+              }
             }
           }
-        }
 
-        if (!biography) {
-          const descMatch =
-            html.match(/<meta content="([^"]*)" name="description"/i) ||
-            html.match(/<meta name="description" content="([^"]*)"/i);
-          if (descMatch && descMatch[1]) {
-            const d = descMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&");
-            const bioMatch =
-              d.match(/(?:on Instagram|en Instagram):\s*["“«]?([^"”»\n\r]*)/i);
-            if (bioMatch && bioMatch[1]) {
-              biography = bioMatch[1].trim();
+          if (!rawAvatar) {
+            const ogImageMatch = html.match(
+              /<meta property="og:image" content="([^"]*)"/i,
+            );
+            if (ogImageMatch && ogImageMatch[1]) {
+              const img = ogImageMatch[1].replace(/&amp;/g, "&");
+              const isPlaceholder =
+                img.includes("rsrc.php") ||
+                img.includes("static.cdninstagram.com/rsrc") ||
+                img.includes("instagram_logo");
+              if (!isPlaceholder) {
+                rawAvatar = img;
+              }
             }
           }
-        }
 
-        // Validar si encontramos datos reales de perfil
-        if (name || biography || rawAvatar) {
-          // Éxito: encontramos datos auténticos con este User-Agent
-          break;
+          if (!biography) {
+            const descMatch =
+              html.match(/<meta content="([^"]*)" name="description"/i) ||
+              html.match(/<meta name="description" content="([^"]*)"/i);
+            if (descMatch && descMatch[1]) {
+              const d = descMatch[1]
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, "&");
+              const bioMatch = d.match(
+                /(?:on Instagram|en Instagram):\s*["“«]?([^"”»\n\r]*)/i,
+              );
+              if (bioMatch && bioMatch[1]) {
+                biography = bioMatch[1].trim();
+              }
+            }
+          }
+
+          if (name || biography || rawAvatar) {
+            break;
+          }
+        } catch (err) {
+          console.warn(`Attempt failed with UA ${ua}:`, err);
         }
-      } catch (err) {
-        console.warn(`Attempt failed with UA ${ua}:`, err);
       }
     }
 
