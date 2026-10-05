@@ -49,7 +49,7 @@ export default function CookieConsent() {
         maxWidth: "940px",
         margin: "0 auto 0 auto",
         zIndex: 9999,
-        backgroundColor: "rgb(228 227 227)",
+        backgroundColor: "rgb(31 30 30)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
         border: "1px solid #282828",
