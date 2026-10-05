@@ -107,13 +107,11 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             style={{
               display: "inline-flex",
               alignItems: "center",
-              backgroundColor: "#0a0a0a",
-              borderRadius: "10px",
               padding: "5px 12px",
               textDecoration: "none",
             }}
           >
-            <Logo size={36} color="#ffffff" />
+            <Logo size={36} color="#d97742" />
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <InstallAppButton variant="mobile" />

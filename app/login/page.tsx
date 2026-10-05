@@ -183,7 +183,7 @@ export default function LoginPage() {
         </form>
 
         <div className={styles.authFooter}>
-          ¿Aún no tienes tienda? <Link href="/register">Regístrate gratis</Link>
+          ¿Aún no tienes tienda? <Link href="/register">Regístrate</Link>
         </div>
       </div>
     </div>

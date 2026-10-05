@@ -360,7 +360,7 @@ export default function OnboardingPage() {
       <header className={styles.header}>
         <div className={styles.header__inner}>
           <Link href="/" className={styles.logo}>
-            <Logo size={36} color="#ffffff" />
+            <Logo size={36} color="#d97742" />
           </Link>
           <div className={styles.stepIndicator}>Paso {step} de 4</div>
         </div>

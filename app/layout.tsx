@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "vender por whatsapp",
     "catalogo digital whatsapp",
     "crear tienda virtual peru",
-    "tienda online gratis peru",
+    "tienda online peru",
     "pedidos por whatsapp",
     "catalogo para whatsapp",
     "tienda virtual para emprendedores",

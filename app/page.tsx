@@ -144,10 +144,6 @@ export default function HomePage() {
           <div className={styles.mobileHeader__drawerBackdrop} onClick={() => setIsMobileMenuOpen(false)} />
           <div className={styles.mobileHeader__drawer}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
-                <Logo size={32} color="#d97742" />
-                <span style={{ fontWeight: 700, fontSize: "18px", color: "#232323" }}>Klik</span>
-              </div>
               <nav className={styles.mobileHeader__drawerNav}>
                 {SLIDES.map((slide, idx) => (
                   <button key={`drawer-${slide.id}`} type="button"
@@ -161,7 +157,7 @@ export default function HomePage() {
             </div>
             <div className={styles.mobileHeader__drawerBottom}>
               <Link href="/login" className="btn btn--secondary btn--sm" onClick={() => setIsMobileMenuOpen(false)}>Iniciar sesión</Link>
-              <Link href="/register" className="btn btn--primary btn--sm" onClick={() => setIsMobileMenuOpen(false)}>Crear mi tienda gratis</Link>
+              <Link href="/register" className="btn btn--primary btn--sm" onClick={() => setIsMobileMenuOpen(false)}>Crear mi tienda</Link>
             </div>
           </div>
         </>
@@ -209,7 +205,7 @@ export default function HomePage() {
               <ScrollReveal animation="fade-up" delay={220}>
                 <div className={styles.heroCtas}>
                   <Link href="/register" className="btn btn--primary btn--lg">
-                    Crear mi tienda gratis <ArrowRight size={18} />
+                    Crear mi tienda <ArrowRight size={18} />
                   </Link>
                   <button type="button" onClick={() => scrollToSlide(2)} className="btn btn--secondary btn--lg">
                     Ver cómo funciona
@@ -356,7 +352,7 @@ export default function HomePage() {
 
                   <ScrollReveal animation="fade-up" delay={240}>
                     <Link href="/register" className="btn btn--primary" style={{ marginTop: "8px", alignSelf: "flex-start" }}>
-                      Empezar gratis <ArrowRight size={16} />
+                      Empezar <ArrowRight size={16} />
                     </Link>
                   </ScrollReveal>
                 </div>
@@ -559,7 +555,7 @@ export default function HomePage() {
                 <p>Únete a los cientos de marcas peruanas que ya organizan sus pedidos y aceleran sus cobros sin pagar comisiones abusivas por venta.</p>
                 <div className={styles.bannerCtas}>
                   <Link href="/register" className={styles.bannerBtnPrimary}>
-                    Crear mi tienda gratis
+                    Crear mi tienda
                   </Link>
                   <Link href="/login" className={styles.bannerBtnOutline}>
                     Iniciar sesión
