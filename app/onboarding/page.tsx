@@ -41,7 +41,6 @@ export default function OnboardingPage() {
   const [instaInput, setInstaInput] = useState("");
   const [isImportingInsta, setIsImportingInsta] = useState(false);
   const [instaSuccessMsg, setInstaSuccessMsg] = useState<string | null>(null);
-  const [instaNoticeMsg, setInstaNoticeMsg] = useState<string | null>(null);
   const [instaErrorMsg, setInstaErrorMsg] = useState<string | null>(null);
 
   // Paso 1: Info básica
@@ -97,7 +96,6 @@ export default function OnboardingPage() {
 
     setIsImportingInsta(true);
     setInstaErrorMsg(null);
-    setInstaNoticeMsg(null);
     setInstaSuccessMsg(null);
 
     try {
@@ -114,31 +112,24 @@ export default function OnboardingPage() {
         );
       }
 
-      const { data, partial, message } = result;
-      if (data.name && (!storeName || storeName.trim() === "")) setStoreName(data.name);
+      const { data } = result;
+      if (data.name) setStoreName(data.name);
       if (data.description) setDescription(data.description);
       if (data.logoUrl) setLogoUrl(data.logoUrl);
       if (data.whatsapp) setWhatsapp(data.whatsapp);
       if (data.city) setCity(data.city);
       if (data.instagram) setInstagram(data.instagram);
 
-      if (partial) {
-        setInstaNoticeMsg(
-          message ||
-            `¡Cuenta @${data.username} vinculada! Puedes completar tu nombre y WhatsApp abajo.`,
-        );
-      } else {
-        const items = [];
-        if (data.name) items.push("nombre");
-        if (data.description) items.push("bio");
-        if (data.logoUrl) items.push("logo");
-        if (data.whatsapp) items.push("WhatsApp");
-        if (data.city) items.push("ciudad");
+      const items = [];
+      if (data.name) items.push("nombre");
+      if (data.description) items.push("bio");
+      if (data.logoUrl) items.push("logo");
+      if (data.whatsapp) items.push("WhatsApp");
+      if (data.city) items.push("ciudad");
 
-        setInstaSuccessMsg(
-          `¡Detalles de @${data.username} importados con éxito! (${items.join(", ")}).`,
-        );
-      }
+      setInstaSuccessMsg(
+        `¡Detalles de @${data.username} importados con éxito! (${items.join(", ")}).`,
+      );
     } catch (err: any) {
       setInstaErrorMsg(err.message || "Error al importar desde Instagram.");
     } finally {
@@ -150,12 +141,6 @@ export default function OnboardingPage() {
     setErrorMessage(null);
 
     if (step === 1) {
-      // Si el usuario ingresó usuario de Instagram en el paso 1 pero no lo tenía en state
-      if (!instagram.trim() && instaInput.trim()) {
-        const clean = instaInput.trim();
-        setInstagram(clean.startsWith("@") ? clean : `@${clean}`);
-      }
-
       if (!storeName.trim()) {
         setErrorMessage("Por favor, ingresa el nombre de tu tienda.");
         return;
@@ -512,7 +497,6 @@ export default function OnboardingPage() {
                         onChange={(e) => {
                           setInstaInput(e.target.value);
                           if (instaErrorMsg) setInstaErrorMsg(null);
-                          if (instaNoticeMsg) setInstaNoticeMsg(null);
                         }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
@@ -564,26 +548,6 @@ export default function OnboardingPage() {
                       >
                         <Check size={13} />
                         <span>{instaSuccessMsg}</span>
-                      </div>
-                    )}
-
-                    {instaNoticeMsg && (
-                      <div
-                        style={{
-                          marginTop: "0.5rem",
-                          fontSize: "0.75rem",
-                          color: "#38bdf8",
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "0.35rem",
-                          lineHeight: 1.35,
-                        }}
-                      >
-                        <Sparkles
-                          size={13}
-                          style={{ flexShrink: 0, marginTop: "2px" }}
-                        />
-                        <span>{instaNoticeMsg}</span>
                       </div>
                     )}
 
