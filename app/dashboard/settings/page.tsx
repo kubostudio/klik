@@ -58,7 +58,7 @@ function SettingsContent() {
   // Instagram import states
   const [instaHandleInput, setInstaHandleInput] = useState("");
   const [isImportingInsta, setIsImportingInsta] = useState(false);
-  const [instaFeedback, setInstaFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [instaFeedback, setInstaFeedback] = useState<{ type: "success" | "info" | "error"; message: string } | null>(null);
 
   // Store fields
   const [name, setName] = useState(contextStore?.name || "");
@@ -121,7 +121,7 @@ function SettingsContent() {
       });
       const result = await res.json();
       if (!res.ok || !result.success) throw new Error(result.error || "No se pudieron extraer los datos de la cuenta.");
-      const { data } = result;
+      const { data, partial, message } = result;
       if (data.name) setName(data.name);
       if (!slug || slug.trim() === "") setSlug(slugify(data.name || data.username));
       if (data.description) setDescription(data.description);
@@ -129,13 +129,21 @@ function SettingsContent() {
       if (data.whatsapp) setWhatsapp(data.whatsapp);
       if (data.city) setCity(data.city);
       if (data.instagram) { setInstagram(data.instagram); setInstaHandleInput(data.instagram); }
-      const summaryList = [];
-      if (data.name) summaryList.push("Nombre");
-      if (data.description) summaryList.push("Biografía");
-      if (data.logoUrl) summaryList.push("Logo");
-      if (data.whatsapp) summaryList.push("WhatsApp");
-      if (data.city) summaryList.push("Ciudad");
-      setInstaFeedback({ type: "success", message: `¡Perfil @${data.username} importado con éxito! Se cargaron: ${summaryList.join(", ")}. Recuerda hacer clic en "Guardar Datos" para guardar.` });
+
+      if (partial) {
+        setInstaFeedback({
+          type: "info",
+          message: message || `¡Cuenta @${data.username} vinculada! Completa los demás campos y haz clic en "Guardar Datos".`,
+        });
+      } else {
+        const summaryList = [];
+        if (data.name) summaryList.push("Nombre");
+        if (data.description) summaryList.push("Biografía");
+        if (data.logoUrl) summaryList.push("Logo");
+        if (data.whatsapp) summaryList.push("WhatsApp");
+        if (data.city) summaryList.push("Ciudad");
+        setInstaFeedback({ type: "success", message: `¡Perfil @${data.username} importado con éxito! Se cargaron: ${summaryList.join(", ")}. Recuerda hacer clic en "Guardar Datos" para guardar.` });
+      }
     } catch (err: any) {
       setInstaFeedback({ type: "error", message: err.message || "Error al conectar con Instagram." });
     } finally {
@@ -315,8 +323,25 @@ function SettingsContent() {
                 </button>
               </div>
               {instaFeedback && (
-                <div style={{ marginTop: "0.85rem", padding: "0.65rem 0.85rem", borderRadius: "10px", fontSize: "0.8125rem", display: "flex", alignItems: "flex-start", gap: "0.5rem", backgroundColor: instaFeedback.type === "success" ? "rgba(34, 197, 94, 0.1)" : "rgba(239, 68, 68, 0.1)", color: instaFeedback.type === "success" ? "#16a34a" : "#ef4444", border: `1px solid ${instaFeedback.type === "success" ? "rgba(34, 197, 94, 0.25)" : "rgba(239, 68, 68, 0.25)"}` }}>
-                  {instaFeedback.type === "success" ? <Check size={16} style={{ marginTop: "2px", flexShrink: 0 }} /> : <AlertCircle size={16} style={{ marginTop: "2px", flexShrink: 0 }} />}
+                <div style={{
+                  marginTop: "0.85rem",
+                  padding: "0.65rem 0.85rem",
+                  borderRadius: "10px",
+                  fontSize: "0.8125rem",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.5rem",
+                  backgroundColor: instaFeedback.type === "success" ? "rgba(34, 197, 94, 0.1)" : instaFeedback.type === "info" ? "rgba(56, 189, 248, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                  color: instaFeedback.type === "success" ? "#16a34a" : instaFeedback.type === "info" ? "#0284c7" : "#ef4444",
+                  border: `1px solid ${instaFeedback.type === "success" ? "rgba(34, 197, 94, 0.25)" : instaFeedback.type === "info" ? "rgba(56, 189, 248, 0.25)" : "rgba(239, 68, 68, 0.25)"}`,
+                }}>
+                  {instaFeedback.type === "success" ? (
+                    <Check size={16} style={{ marginTop: "2px", flexShrink: 0 }} />
+                  ) : instaFeedback.type === "info" ? (
+                    <Sparkles size={16} style={{ marginTop: "2px", flexShrink: 0 }} />
+                  ) : (
+                    <AlertCircle size={16} style={{ marginTop: "2px", flexShrink: 0 }} />
+                  )}
                   <span>{instaFeedback.message}</span>
                 </div>
               )}

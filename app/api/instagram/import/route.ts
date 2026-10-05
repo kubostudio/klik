@@ -338,22 +338,22 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Si después de todos los UAs no se encontró ningún dato mínimo
-    if (!name && !biography && !rawAvatar) {
-      return NextResponse.json(
-        {
-          error: `No pudimos encontrar datos públicos para el usuario @${username}. Asegúrate de que la cuenta exista y no sea privada.`,
-        },
-        { status: 404 },
-      );
-    }
+    const hasFullData = Boolean(name || biography || rawAvatar);
 
-    // 3. Extracción de WhatsApp
+    // Nombre sugerido a partir del username (ej. "open_shopping21" -> "Open Shopping 21")
+    const fallbackName = username
+      .replace(/[._-]+/g, " ")
+      .split(" ")
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    // 3. Extracción de WhatsApp si hay texto disponible
     const combinedText = `${biography} ${externalUrl}`;
-    const detectedWhatsApp = extractWhatsApp(combinedText);
+    const detectedWhatsApp = hasFullData ? extractWhatsApp(combinedText) : null;
 
-    // 4. Extracción de Ciudad
-    const detectedCity = extractCity(biography);
+    // 4. Extracción de Ciudad si hay texto disponible
+    const detectedCity = hasFullData ? extractCity(biography) : null;
 
     // 5. Descarga y persistencia del avatar en Supabase Storage
     let permanentLogoUrl: string | null = null;
@@ -366,15 +366,19 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      partial: !hasFullData,
       data: {
-        name: name || username,
+        name: name || fallbackName || username,
         username,
-        description: biography,
+        description: biography || "",
         logoUrl: permanentLogoUrl || rawAvatar || null,
         whatsapp: detectedWhatsApp || null,
         city: detectedCity || null,
         instagram: `@${username}`,
       },
+      message: hasFullData
+        ? `¡Perfil @${username} importado con éxito!`
+        : `Cuenta @${username} vinculada. Por restricciones de Instagram no pudimos autocompletar foto o bio, pero puedes completarlos manualmente abajo.`,
     });
   } catch (err: any) {
     console.error("Error importing from Instagram:", err);
