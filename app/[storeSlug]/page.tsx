@@ -225,37 +225,40 @@ export default function PublicStoreCatalogPage() {
             </div>
           )}
 
-          <h1 className={styles.header__name}>{store.name}</h1>
-          {store.description && (
-            <p className={styles.header__desc}>{store.description}</p>
-          )}
+          <div className={styles.header__content}>
+            <div className={styles.header__titleRow}>
+              <h1 className={styles.header__name}>{store.name}</h1>
+              {store.city && (
+                <span className={styles.header__city}>
+                  <MapPin size={14} /> {store.city}
+                </span>
+              )}
+            </div>
 
-          <div className={styles.header__meta}>
-            {store.city && (
-              <span>
-                <MapPin
-                  size={13}
-                  style={{ display: "inline", verticalAlign: "-1px" }}
-                />{" "}
-                {store.city}
-              </span>
+            {store.description && (
+              <p className={styles.header__desc}>{store.description}</p>
             )}
-            {store.instagram && (
-              <a
-                href={`https://instagram.com/${store.instagram.replace("@", "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Instagram size={13} /> {store.instagram}
-              </a>
-            )}
-            <a
-              href={`https://wa.me/${store.whatsapp.replace(/\D/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <MessageCircle size={13} /> WhatsApp
-            </a>
+
+            <div className={styles.header__meta}>
+              {store.instagram && (
+                <a
+                  href={`https://instagram.com/${store.instagram.replace("@", "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Instagram size={14} /> {store.instagram.replace(/^@/, "")}
+                </a>
+              )}
+              {store.whatsapp && (
+                <a
+                  href={`https://wa.me/${store.whatsapp.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle size={14} /> WhatsApp
+                </a>
+              )}
+            </div>
           </div>
         </header>
 

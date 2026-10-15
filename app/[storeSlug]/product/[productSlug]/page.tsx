@@ -137,12 +137,36 @@ export default function ProductDetailPage() {
     <div className={styles.storeContainer}>
       <div className={styles.storeContent}>
         {/* TOP BAR / BACK TO STORE */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <Link href={`/${storeSlug}`} className="btn btn--ghost btn--sm" style={{ paddingLeft: '10px' }}>
-            <ArrowLeft size={16} /> Volver a {store.name}
+        <div className={styles.productNav}>
+          <Link
+            href={`/${storeSlug}`}
+            className={`btn btn--ghost btn--sm ${styles.productNav__back}`}
+          >
+            <ArrowLeft size={16} /> Volver
           </Link>
 
-          <Link href={`/${storeSlug}/cart`} className="btn btn--secondary btn--sm">
+          <Link
+            href={`/${storeSlug}`}
+            className={styles.productNav__logoWrap}
+            title={store.name}
+          >
+            {store.logo_url ? (
+              <img
+                src={store.logo_url}
+                alt={store.name}
+                className={styles.productNav__logo}
+              />
+            ) : (
+              <div className={styles.productNav__logoPlaceholder}>
+                {store.name.substring(0, 2).toUpperCase()}
+              </div>
+            )}
+          </Link>
+
+          <Link
+            href={`/${storeSlug}/cart`}
+            className={`btn btn--secondary btn--sm ${styles.productNav__cart}`}
+          >
             <ShoppingCart size={14} /> Carrito
           </Link>
         </div>
@@ -162,7 +186,7 @@ export default function ProductDetailPage() {
               {product.brand && (
                 <>
                   <span style={{ color: '#666666' }}>•</span>
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#a3a3a3', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: '#a3a3a3', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     {product.brand}
                   </span>
                 </>
@@ -186,45 +210,8 @@ export default function ProductDetailPage() {
             </div>
             <h1 className={styles.productDetail__title}>{product.name}</h1>
 
-            {/* Visualización de stock según configuración (no aplica a productos a pedido) */}
-            {!product.on_demand && product.show_stock !== false && product.stock !== null && product.stock !== undefined && (
-              <div style={{ margin: '0.25rem 0 0.75rem 0' }}>
-                {product.stock <= 3 ? (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.8125rem',
-                      fontWeight: 600,
-                      color: '#ca8a04',
-                      backgroundColor: 'rgba(234, 179, 8, 0.12)',
-                      padding: '3px 10px',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(234, 179, 8, 0.25)',
-                    }}
-                  >
-                    🔥 ¡Solo quedan {product.stock} unidades disponibles!
-                  </span>
-                ) : (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.8125rem',
-                      fontWeight: 500,
-                      color: '#16a34a',
-                      backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                      padding: '3px 10px',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(34, 197, 94, 0.2)',
-                    }}
-                  >
-                    ✓ Stock disponible: {product.stock} unidades
-                  </span>
-                )}
-              </div>
+            {product.description && (
+              <p className={styles.productDetail__desc}>{product.description}</p>
             )}
 
             {/* Precio u ocultación de precio */}
@@ -251,10 +238,6 @@ export default function ProductDetailPage() {
                   </span>
                 )}
               </div>
-            )}
-
-            {product.description && (
-              <p className={styles.productDetail__desc}>{product.description}</p>
             )}
 
             {/* VARIANTES INTERACTIVAS */}
@@ -287,6 +270,47 @@ export default function ProductDetailPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Visualización de stock según configuración (no aplica a productos a pedido) */}
+            {!product.on_demand && product.show_stock !== false && product.stock !== null && product.stock !== undefined && (
+              <div style={{ margin: '0.25rem 0 0.75rem 0' }}>
+                {product.stock <= 3 ? (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.8125rem',
+                      fontWeight: 600,
+                      color: '#ca8a04',
+                      backgroundColor: 'rgba(234, 179, 8, 0.12)',
+                      padding: '3px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(234, 179, 8, 0.25)',
+                    }}
+                  >
+                    🔥 ¡Solo quedan {product.stock} unidades disponibles!
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.8125rem',
+                      fontWeight: 500,
+                      color: '#d97742',
+                      backgroundColor: '#fdf0e8',
+                      padding: '3px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid #fdf0e8',
+                    }}
+                  >
+                    ✓ Stock disponible: {product.stock} unidades
+                  </span>
+                )}
               </div>
             )}
 

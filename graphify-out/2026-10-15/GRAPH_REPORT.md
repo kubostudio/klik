@@ -1,14 +1,19 @@
 # Graph Report - klik  (2026-10-15)
 
 ## Corpus Check
-- 101 files · ~95,365 words
+- 79 files · ~96,143 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 16 file(s) not represented in the graph (top: .scss 12, .ico 2, .example 1)
 
 ## Summary
 - 395 nodes · 1004 edges · 17 communities (14 shown, 3 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.86)
-- Token cost: 1,200 input · 450 output
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `c576e171`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Core App Layout & Static Pages

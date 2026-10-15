@@ -1,15 +1,15 @@
 {
   "app/[storeSlug]/cart/page.tsx": {
-    "mtime": 1792102346.4079764,
-    "seen": 1792102356.479171,
-    "ast_hash": "b1ff57c1c169ef6ff813acde514ed4c9",
-    "semantic_hash": "b1ff57c1c169ef6ff813acde514ed4c9"
+    "mtime": 1792102407.8296952,
+    "seen": 1792102591.956612,
+    "ast_hash": "9479c1827f71455ed9cd564c25c36006",
+    "semantic_hash": ""
   },
   "app/[storeSlug]/checkout/page.tsx": {
-    "mtime": 1792102352.4422219,
-    "seen": 1792102356.4791732,
-    "ast_hash": "af6eed5bfb0bc44f7a23a46fc70a519e",
-    "semantic_hash": "af6eed5bfb0bc44f7a23a46fc70a519e"
+    "mtime": 1792102399.6506143,
+    "seen": 1792102591.956615,
+    "ast_hash": "fa976d7834e8932b26406866ac86a4f1",
+    "semantic_hash": ""
   },
   "app/[storeSlug]/layout.tsx": {
     "mtime": 1791218453.0595706,
@@ -18,22 +18,22 @@
     "semantic_hash": "7cbb08c4a4947637f0980d10d6acbf3d"
   },
   "app/[storeSlug]/order-confirmation/[orderId]/page.tsx": {
-    "mtime": 1791059449.5931354,
-    "seen": 1792102356.4791749,
-    "ast_hash": "8a4d7f3aa3a25a5bcc1a20dd943e447e",
-    "semantic_hash": "8a4d7f3aa3a25a5bcc1a20dd943e447e"
+    "mtime": 1792102388.756555,
+    "seen": 1792102591.956651,
+    "ast_hash": "ebb0ee3d6dd19e987b3a3910f864009b",
+    "semantic_hash": ""
   },
   "app/[storeSlug]/page.tsx": {
-    "mtime": 1792102338.7299647,
-    "seen": 1792102356.479176,
-    "ast_hash": "866720a4e505f3af8cafb6da8c77336d",
-    "semantic_hash": "866720a4e505f3af8cafb6da8c77336d"
+    "mtime": 1792106426.3114617,
+    "seen": 1792106450.5025868,
+    "ast_hash": "8a641c4de941f4929c1cf795c0e2ec50",
+    "semantic_hash": ""
   },
   "app/[storeSlug]/product/[productSlug]/page.tsx": {
-    "mtime": 1791064096.950026,
-    "seen": 1792102356.479177,
-    "ast_hash": "fbf2133eca7aff52a2b25a04affae3a8",
-    "semantic_hash": "fbf2133eca7aff52a2b25a04affae3a8"
+    "mtime": 1792102368.4942193,
+    "seen": 1792102591.956652,
+    "ast_hash": "e9c75649ed4286a7510f3a1909a2ba4a",
+    "semantic_hash": ""
   },
   "app/api/analytics/route.ts": {
     "mtime": 1790012936.2857811,
@@ -126,10 +126,10 @@
     "semantic_hash": "10089ba0aa916d9b073ffe09400819f6"
   },
   "app/dashboard/products/page.tsx": {
-    "mtime": 1790920436.0185738,
-    "seen": 1792102356.479187,
-    "ast_hash": "e120449cd11ba4f6af2706cfd7c44712",
-    "semantic_hash": "e120449cd11ba4f6af2706cfd7c44712"
+    "mtime": 1792102572.6406236,
+    "seen": 1792102591.956987,
+    "ast_hash": "8d68149dcc818856bcf0e26d27d13e81",
+    "semantic_hash": ""
   },
   "app/dashboard/settings/page.tsx": {
     "mtime": 1791211879.962048,
@@ -392,68 +392,68 @@
   "supabase/migrations/001_initial_schema.sql": {
     "mtime": 1791063858.2773669,
     "seen": 1792102356.479213,
-    "ast_hash": "8e8b13704dfed775caf8af45190970c0",
-    "semantic_hash": "8e8b13704dfed775caf8af45190970c0"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/002_storage_bucket.sql": {
     "mtime": 1790013017.0885625,
     "seen": 1792102356.4792142,
-    "ast_hash": "62fadbe9fcae3cfc1e8c9f6fc613790d",
-    "semantic_hash": "62fadbe9fcae3cfc1e8c9f6fc613790d"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/003_add_brand_to_products.sql": {
     "mtime": 1790012936.3028593,
     "seen": 1792102356.4792142,
-    "ast_hash": "084b2635d7cc5a5f8b2fd3ba357b4e9f",
-    "semantic_hash": "084b2635d7cc5a5f8b2fd3ba357b4e9f"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/004_seed_follow_ups_test.sql": {
     "mtime": 1790013017.0884595,
     "seen": 1792102356.4792151,
-    "ast_hash": "0c20492ba663a00be04df607c97ac046",
-    "semantic_hash": "0c20492ba663a00be04df607c97ac046"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/005_store_security_and_uniqueness.sql": {
     "mtime": 1790012936.3030288,
     "seen": 1792102356.4792151,
-    "ast_hash": "af04f967774b66449eff6dde61a07686",
-    "semantic_hash": "af04f967774b66449eff6dde61a07686"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/006_add_dni_to_customers_and_orders.sql": {
     "mtime": 1790012936.3031,
     "seen": 1792102356.479216,
-    "ast_hash": "d7262a8703d693b0f2b1fe8eac1f4aa2",
-    "semantic_hash": "d7262a8703d693b0f2b1fe8eac1f4aa2"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/007_add_stock_and_store_billing.sql": {
     "mtime": 1790036994.6737518,
     "seen": 1792102356.4792168,
-    "ast_hash": "123795e841fbb0ea3529c56d98da0c43",
-    "semantic_hash": "123795e841fbb0ea3529c56d98da0c43"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/008_add_product_ordering.sql": {
     "mtime": 1790038357.8832505,
     "seen": 1792102356.4792168,
-    "ast_hash": "9a598fbf0a0bbc83d7b596cea9d479e3",
-    "semantic_hash": "9a598fbf0a0bbc83d7b596cea9d479e3"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/009_add_visibility_and_stock_limits.sql": {
     "mtime": 1790041983.9270322,
     "seen": 1792102356.479218,
-    "ast_hash": "957cee0a75ef73c383b3dbb88a6d1863",
-    "semantic_hash": "957cee0a75ef73c383b3dbb88a6d1863"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/010_add_on_demand_to_products.sql": {
     "mtime": 1790919669.2635965,
     "seen": 1792102356.479218,
-    "ast_hash": "0c4cb5207d854491d563a50d626fb026",
-    "semantic_hash": "0c4cb5207d854491d563a50d626fb026"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/011_add_is_active_to_stores.sql": {
     "mtime": 1791058059.6114562,
     "seen": 1792102356.479219,
-    "ast_hash": "09f341f99e76bb8fa35627563a103550",
-    "semantic_hash": "09f341f99e76bb8fa35627563a103550"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "tsconfig.json": {
     "mtime": 1790012936.303182,
@@ -508,5 +508,101 @@
     "seen": 1792102356.479224,
     "ast_hash": "df778a4f1b1f7242a356b06be3e578ab",
     "semantic_hash": "df778a4f1b1f7242a356b06be3e578ab"
+  },
+  "app/apple-icon.png": {
+    "mtime": 1790917956.2188828,
+    "seen": 1792102591.9579022,
+    "ast_hash": "96014a5279d13b242fcca37c0254d565",
+    "semantic_hash": ""
+  },
+  "app/icon.png": {
+    "mtime": 1790917956.2723148,
+    "seen": 1792102591.9579031,
+    "ast_hash": "5faba09d107ae61b227b2ec0bcc70728",
+    "semantic_hash": ""
+  },
+  "app/icon.svg": {
+    "mtime": 1790918652.6152184,
+    "seen": 1792102591.9579039,
+    "ast_hash": "093b83922ab4ea46db7a7c86d110429c",
+    "semantic_hash": ""
+  },
+  "app/twitter-image.png": {
+    "mtime": 1790012936.2934747,
+    "seen": 1792102591.9579232,
+    "ast_hash": "9740a00f272e9a2097d1582597008670",
+    "semantic_hash": ""
+  },
+  "public/app-icon.png": {
+    "mtime": 1790917956.0936716,
+    "seen": 1792102591.9579241,
+    "ast_hash": "c8ff2169848fea7c812566df640d2efe",
+    "semantic_hash": ""
+  },
+  "public/apple-icon.png": {
+    "mtime": 1790917956.2039156,
+    "seen": 1792102591.957925,
+    "ast_hash": "96014a5279d13b242fcca37c0254d565",
+    "semantic_hash": ""
+  },
+  "public/favicon-16x16.png": {
+    "mtime": 1790917956.1518095,
+    "seen": 1792102591.957925,
+    "ast_hash": "1f8c759ab5ffd18e634f08edea4c4f75",
+    "semantic_hash": ""
+  },
+  "public/favicon-32x32.png": {
+    "mtime": 1790917956.1755762,
+    "seen": 1792102591.9579258,
+    "ast_hash": "5faba09d107ae61b227b2ec0bcc70728",
+    "semantic_hash": ""
+  },
+  "public/favicon-48x48.png": {
+    "mtime": 1790917956.189856,
+    "seen": 1792102591.9579258,
+    "ast_hash": "f4727628f42e7c6475af7f8f277a46ce",
+    "semantic_hash": ""
+  },
+  "public/icon-192.png": {
+    "mtime": 1790917956.234616,
+    "seen": 1792102591.957927,
+    "ast_hash": "12940292361b37104fc94a5d0a81953c",
+    "semantic_hash": ""
+  },
+  "public/icon-512.png": {
+    "mtime": 1790917956.2540238,
+    "seen": 1792102591.957927,
+    "ast_hash": "7cdb1405e6a641b000d03b5dc2d8549a",
+    "semantic_hash": ""
+  },
+  "public/icon.svg": {
+    "mtime": 1790918663.023672,
+    "seen": 1792102591.957928,
+    "ast_hash": "093b83922ab4ea46db7a7c86d110429c",
+    "semantic_hash": ""
+  },
+  "public/logo.png": {
+    "mtime": 1790917956.2760394,
+    "seen": 1792102591.957985,
+    "ast_hash": "11fabad44031488804335e84c401f80a",
+    "semantic_hash": ""
+  },
+  "public/logo.svg": {
+    "mtime": 1790917852.1887586,
+    "seen": 1792102591.957986,
+    "ast_hash": "61041c5d4bbea874c139c49539964b4d",
+    "semantic_hash": ""
+  },
+  "public/og-image.png": {
+    "mtime": 1791056891.282187,
+    "seen": 1792102591.957987,
+    "ast_hash": "73198020e52589bfa05ce85bd44d3f6d",
+    "semantic_hash": ""
+  },
+  "public/og-image.svg": {
+    "mtime": 1791063858.192663,
+    "seen": 1792102591.957987,
+    "ast_hash": "cd4f38e18ee8269d1c26b5847df0a0eb",
+    "semantic_hash": ""
   }
 }

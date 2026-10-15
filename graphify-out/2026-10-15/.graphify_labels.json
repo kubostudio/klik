@@ -1,1 +1,19 @@
-{"0": "Core App Layout & Static Pages", "1": "Analytics & Customer CRM", "2": "Store Settings & Product Management", "3": "Storefront & WhatsApp Checkout", "4": "Shared UI & Supabase Client", "5": "Subscriptions & Billing Providers", "6": "TypeScript Compiler Config", "7": "Instagram Profile Importer", "8": "PWA Manifest Config", "9": "Orders Dashboard & Notifications", "10": "Package Dependencies", "11": "External Product Scraper API", "12": "Brand Assets & Payment Integrations", "13": "Next.js Build Config", "14": "Monochromatic Design Tokens", "15": "Next.js Type Declarations", "16": "PWA Service Worker"}
+{
+  "0": "Core App Layout & Static Pages",
+  "1": "Analytics & Customer CRM",
+  "2": "Store Settings & Product Management",
+  "3": "Storefront & WhatsApp Checkout",
+  "4": "Shared UI & Supabase Client",
+  "5": "Subscriptions & Billing Providers",
+  "6": "TypeScript Compiler Config",
+  "7": "Instagram Profile Importer",
+  "8": "PWA Manifest Config",
+  "9": "Orders Dashboard & Notifications",
+  "10": "Package Dependencies",
+  "11": "External Product Scraper API",
+  "12": "Brand Assets & Payment Integrations",
+  "13": "Next.js Build Config",
+  "14": "Monochromatic Design Tokens",
+  "15": "Next.js Type Declarations",
+  "16": "PWA Service Worker"
+}
