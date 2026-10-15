@@ -490,7 +490,7 @@ export default function PublicStoreCatalogPage() {
           <Link
             href="/"
             style={{
-              color: "#ffffff",
+              color: "#d97742",
               fontWeight: 600,
               textDecoration: "none",
             }}
@@ -508,7 +508,7 @@ export default function PublicStoreCatalogPage() {
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              color: "#a3a3a3",
+              color: "#d97742",
               fontWeight: 600,
               textDecoration: "none",
             }}

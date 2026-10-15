@@ -202,7 +202,7 @@ export default function CartPage() {
       <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid #1f1f1f', marginTop: '2rem' }}>
         <div>
           Creado con{' '}
-          <Link href="/" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'none' }}>
+          <Link href="/" style={{ color: '#d97742', fontWeight: 600, textDecoration: 'none' }}>
             Klik<span>.</span>
           </Link>{' '}
           — Catálogo online para WhatsApp
@@ -213,7 +213,7 @@ export default function CartPage() {
             href="https://kubostudio.co"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}
+            style={{ color: '#d97742', fontWeight: 600, textDecoration: 'none' }}
           >
             KUBOstudio
           </a>

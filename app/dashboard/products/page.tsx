@@ -35,6 +35,8 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Search,
+  Filter,
 } from "lucide-react";
 
 export default function ProductsDashboardPage() {
@@ -74,6 +76,10 @@ export default function ProductsDashboardPage() {
   const [sortNotification, setSortNotification] = useState<string | null>(null);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  // Filter & Search State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   useEffect(() => {
     loadProducts();
@@ -158,9 +164,25 @@ export default function ProductsDashboardPage() {
       return;
     }
 
+    const draggedProd = filteredProducts[draggedIndex];
+    const targetProd = filteredProducts[targetIndex];
+    if (!draggedProd || !targetProd) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const actualDraggedIndex = products.findIndex((p) => p.id === draggedProd.id);
+    const actualTargetIndex = products.findIndex((p) => p.id === targetProd.id);
+    if (actualDraggedIndex === -1 || actualTargetIndex === -1) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
     const reordered = [...products];
-    const [movedProduct] = reordered.splice(draggedIndex, 1);
-    reordered.splice(targetIndex, 0, movedProduct);
+    const [movedProduct] = reordered.splice(actualDraggedIndex, 1);
+    reordered.splice(actualTargetIndex, 0, movedProduct);
 
     setProducts(reordered);
     setSortMode("custom");
@@ -443,62 +465,312 @@ export default function ProductsDashboardPage() {
     }
   };
 
-  return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "1.5rem",
-        }}
-      >
+      {/* Categorías y filtrado */}
+      const categoryCounts = products.reduce((acc, p) => {
+        const cat = p.category?.trim() || "General";
+        acc[cat] = (acc[cat] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const categories = [
+        "all",
+        ...Object.keys(categoryCounts).sort((a, b) =>
+          a.localeCompare(b, "es", { sensitivity: "base" })
+        ),
+      ];
+
+      const isFiltering = searchQuery.trim().length > 0 || selectedCategory !== "all";
+
+      const filteredProducts = products.filter((prod) => {
+        const prodCategory = prod.category?.trim() || "General";
+        const matchesCategory =
+          selectedCategory === "all" ||
+          prodCategory.toLowerCase() === selectedCategory.toLowerCase();
+
+        const matchesSearch =
+          searchQuery.trim() === "" ||
+          prod.name.toLowerCase().includes(searchQuery.trim().toLowerCase());
+
+        return matchesCategory && matchesSearch;
+      });
+
+      return (
         <div>
-          <h1
+          <div
             style={{
-              fontSize: "1.875rem",
-              fontWeight: 600,
-              letterSpacing: "-0.025em",
-              color: "var(--color-ink)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1.5rem",
             }}
           >
-            Catálogo de Productos
-          </h1>
-          <p
-            style={{
-              color: "var(--color-mid-gray)",
-              fontSize: "0.875rem",
-              marginTop: "0.25rem",
-            }}
-          >
-            Gestiona los productos disponibles en tu tienda online.
-          </p>
-        </div>
+            <div>
+              <h1
+                style={{
+                  fontSize: "1.875rem",
+                  fontWeight: 600,
+                  letterSpacing: "-0.025em",
+                  color: "var(--color-ink)",
+                }}
+              >
+                Catálogo de Productos
+              </h1>
+              <p
+                style={{
+                  color: "var(--color-mid-gray)",
+                  fontSize: "0.875rem",
+                  marginTop: "0.25rem",
+                }}
+              >
+                Gestiona los productos disponibles en tu tienda online.
+              </p>
+            </div>
 
-        <button onClick={handleOpenCreate} className="btn btn--primary btn--sm">
-          <Plus size={16} /> Agregar producto
-        </button>
-      </div>
+            <button onClick={handleOpenCreate} className="btn btn--primary btn--sm">
+              <Plus size={16} /> Agregar producto
+            </button>
+          </div>
 
-      {products.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-state__icon">
-            <Package size={48} />
-          </div>
-          <div className="empty-state__title">Todavía no tienes productos</div>
-          <div className="empty-state__description">
-            Agrega tu primer artículo para que los clientes puedan verlo y
-            comprar desde tu tienda.
-          </div>
-          <button
-            onClick={handleOpenCreate}
-            className="btn btn--primary btn--sm"
-          >
-            <Plus size={16} /> Agregar primer producto
-          </button>
-        </div>
-      ) : (
-        <div className={styles.panel} style={{ overflow: "hidden" }}>
+          {products.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-state__icon">
+                <Package size={48} />
+              </div>
+              <div className="empty-state__title">Todavía no tienes productos</div>
+              <div className="empty-state__description">
+                Agrega tu primer artículo para que los clientes puedan verlo y
+                comprar desde tu tienda.
+              </div>
+              <button
+                onClick={handleOpenCreate}
+                className="btn btn--primary btn--sm"
+              >
+                <Plus size={16} /> Agregar primer producto
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {/* BARRA DE BÚSQUEDA Y FILTROS DE CATEGORÍA */}
+              <div
+                style={{
+                  backgroundColor: "var(--color-paper)",
+                  borderRadius: "18px",
+                  border: "1px solid var(--color-hairline)",
+                  padding: "1rem 1.25rem",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.875rem",
+                }}
+              >
+                {/* Fila superior: Input de búsqueda + Contador */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      flex: "1 1 320px",
+                      maxWidth: "480px",
+                    }}
+                  >
+                    <Search
+                      size={16}
+                      style={{
+                        position: "absolute",
+                        left: "14px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "var(--color-mid-gray)",
+                        pointerEvents: "none",
+                      }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Buscar producto por nombre..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "0.55rem 2.25rem 0.55rem 2.5rem",
+                        borderRadius: "14px",
+                        border: "1px solid var(--color-hairline)",
+                        backgroundColor: "var(--color-surface-alt)",
+                        color: "var(--color-ink)",
+                        fontSize: "0.875rem",
+                        outline: "none",
+                        transition: "all 0.15s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "var(--color-primary)";
+                        e.currentTarget.style.backgroundColor = "var(--color-paper)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = "var(--color-hairline)";
+                        e.currentTarget.style.backgroundColor = "var(--color-surface-alt)";
+                      }}
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setSearchQuery("")}
+                        style={{
+                          position: "absolute",
+                          right: "10px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          background: "none",
+                          border: "none",
+                          color: "var(--color-mid-gray)",
+                          cursor: "pointer",
+                          padding: "4px",
+                          display: "flex",
+                          alignItems: "center",
+                          borderRadius: "50%",
+                        }}
+                        title="Borrar búsqueda"
+                      >
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.75rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "0.8125rem",
+                        color: "var(--color-mid-gray)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {isFiltering ? (
+                        <>
+                          Mostrando <strong style={{ color: "var(--color-ink)" }}>{filteredProducts.length}</strong> de {products.length} productos
+                        </>
+                      ) : (
+                        <>
+                          <strong style={{ color: "var(--color-ink)" }}>{products.length}</strong> {products.length === 1 ? "producto" : "productos"} en total
+                        </>
+                      )}
+                    </span>
+
+                    {isFiltering && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSelectedCategory("all");
+                        }}
+                        style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          color: "var(--color-primary)",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                          padding: "0.2rem 0.4rem",
+                        }}
+                      >
+                        Restablecer filtros
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Fila inferior: Filtros de categoría */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    overflowX: "auto",
+                    paddingBottom: "0.25rem",
+                    scrollbarWidth: "thin",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      color: "var(--color-mid-gray)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.04em",
+                      marginRight: "0.25rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.3rem",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Filter size={12} /> Categoría:
+                  </span>
+
+                  {categories.map((cat) => {
+                    const isSelected = selectedCategory === cat;
+                    const count = cat === "all" ? products.length : (categoryCounts[cat] || 0);
+                    const label = cat === "all" ? "Todas" : cat;
+
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setSelectedCategory(cat)}
+                        style={{
+                          padding: "0.35rem 0.75rem",
+                          fontSize: "0.75rem",
+                          fontWeight: isSelected ? 600 : 500,
+                          borderRadius: "18px",
+                          border: isSelected
+                            ? "1px solid var(--color-primary)"
+                            : "1px solid var(--color-hairline)",
+                          backgroundColor: isSelected
+                            ? "var(--color-primary)"
+                            : "var(--color-surface-alt)",
+                          color: isSelected ? "#FFFFFF" : "var(--color-ink)",
+                          cursor: "pointer",
+                          whiteSpace: "nowrap",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.35rem",
+                          transition: "all 0.15s ease",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <span>{label}</span>
+                        <span
+                          style={{
+                            fontSize: "0.7rem",
+                            padding: "1px 5px",
+                            borderRadius: "10px",
+                            backgroundColor: isSelected
+                              ? "rgba(255, 255, 255, 0.25)"
+                              : "rgba(0, 0, 0, 0.06)",
+                            color: isSelected ? "#FFFFFF" : "var(--color-mid-gray)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className={styles.panel} style={{ overflow: "hidden" }}>
           {/* BARRA DE ORDENACIÓN EN TIENDA PÚBLICA */}
           <div
             style={{
@@ -599,8 +871,77 @@ export default function ProductsDashboardPage() {
             )}
           </div>
 
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
+          {filteredProducts.length === 0 ? (
+            <div
+              style={{
+                padding: "3.5rem 1.5rem",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.75rem",
+              }}
+            >
+              <div
+                style={{
+                  width: "52px",
+                  height: "52px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--color-surface-alt)",
+                  border: "1px solid var(--color-hairline)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--color-mid-gray)",
+                }}
+              >
+                <Search size={22} />
+              </div>
+              <div
+                style={{
+                  fontWeight: 600,
+                  fontSize: "1.0625rem",
+                  color: "var(--color-ink)",
+                }}
+              >
+                No se encontraron productos
+              </div>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "var(--color-mid-gray)",
+                  maxWidth: "420px",
+                  lineHeight: 1.5,
+                }}
+              >
+                {searchQuery
+                  ? `No hay productos con el nombre "${searchQuery}"`
+                  : "No hay productos en esta categoría"}
+                {selectedCategory !== "all" && searchQuery
+                  ? ` dentro de la categoría "${selectedCategory}".`
+                  : "."}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("all");
+                }}
+                className="btn btn--secondary btn--sm"
+                style={{
+                  marginTop: "0.5rem",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                <X size={14} /> Limpiar filtros
+              </button>
+            </div>
+          ) : (
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
               <thead>
                 <tr>
                   <th
@@ -650,7 +991,7 @@ export default function ProductsDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((prod, index) => {
+                {filteredProducts.map((prod, index) => {
                   const isDragging = draggedIndex === index;
                   const isDragOver = dragOverIndex === index;
 
@@ -930,6 +1271,8 @@ export default function ProductsDashboardPage() {
               </tbody>
             </table>
           </div>
+          )}
+        </div>
         </div>
       )}
 

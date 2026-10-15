@@ -941,12 +941,12 @@ export default function CheckoutPage() {
       <footer style={{ textAlign: 'center', padding: '1.5rem 1rem', fontSize: '0.75rem', color: '#737373', borderTop: '1px solid var(--color-hairline)', marginTop: '2rem' }}>
         <div>
           Creado con{' '}
-          <Link href="/" style={{ color: 'var(--color-ink)', fontWeight: 600, textDecoration: 'none' }}>Klik<span>.</span></Link>{' '}
+          <Link href="/" style={{ color: '#d97742', fontWeight: 600, textDecoration: 'none' }}>Klik<span>.</span></Link>{' '}
           — Catálogo online para WhatsApp
         </div>
         <div style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: '#666' }}>
           Desarrollado por{' '}
-          <a href="https://kubostudio.co" target="_blank" rel="noopener noreferrer" style={{ color: '#a3a3a3', fontWeight: 600, textDecoration: 'none' }}>KUBOstudio</a>
+          <a href="https://kubostudio.co" target="_blank" rel="noopener noreferrer" style={{ color: '#d97742', fontWeight: 600, textDecoration: 'none' }}>KUBOstudio</a>
         </div>
         <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', fontSize: '0.7rem' }}>
           <Link href="/terminos" target="_blank" style={{ color: '#888', textDecoration: 'none' }}>Términos</Link>
