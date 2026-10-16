@@ -24,15 +24,15 @@
     "semantic_hash": ""
   },
   "app/[storeSlug]/page.tsx": {
-    "mtime": 1792106426.3114617,
-    "seen": 1792106450.5025868,
-    "ast_hash": "8a641c4de941f4929c1cf795c0e2ec50",
+    "mtime": 1792109010.2845554,
+    "seen": 1792109038.501102,
+    "ast_hash": "58f0f2067f480f1cb3e8d4e96c23a33d",
     "semantic_hash": ""
   },
   "app/[storeSlug]/product/[productSlug]/page.tsx": {
-    "mtime": 1792107852.019851,
-    "seen": 1792107874.012117,
-    "ast_hash": "fa9cd6daddbb074e649c76603b4ba166",
+    "mtime": 1792108462.359612,
+    "seen": 1792109038.5011032,
+    "ast_hash": "80220aab20515a932f0c856da045996c",
     "semantic_hash": ""
   },
   "app/api/analytics/route.ts": {

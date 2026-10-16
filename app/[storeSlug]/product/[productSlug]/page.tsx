@@ -291,7 +291,7 @@ export default function ProductDetailPage() {
                       border: '1px solid rgba(234, 179, 8, 0.25)',
                     }}
                   >
-                    🔥 ¡Solo quedan {product.stock} unidades disponibles!
+                    ¡Solo quedan {product.stock} unidades disponibles!
                   </span>
                 ) : (
                   <span

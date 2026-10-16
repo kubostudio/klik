@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import styles from "@/styles/modules/store.module.scss";
@@ -28,7 +28,29 @@ export default function PublicStoreCatalogPage() {
   const [store, setStore] = useState<Store | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [isCategoryExiting, setIsCategoryExiting] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const categoryTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (categoryTimerRef.current) {
+        clearTimeout(categoryTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleCategorySelect = (cat: string) => {
+    if (cat === selectedCategory) return;
+    if (categoryTimerRef.current) {
+      clearTimeout(categoryTimerRef.current);
+    }
+    setIsCategoryExiting(true);
+    categoryTimerRef.current = setTimeout(() => {
+      setSelectedCategory(cat);
+      setIsCategoryExiting(false);
+    }, 130);
+  };
 
   useEffect(() => {
     async function loadStore() {
@@ -268,7 +290,7 @@ export default function PublicStoreCatalogPage() {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => handleCategorySelect(cat)}
                 className={`${styles.catPill} ${
                   selectedCategory === cat ? styles["catPill--active"] : ""
                 }`}
@@ -281,22 +303,47 @@ export default function PublicStoreCatalogPage() {
 
         {/* PRODUCTS GRID */}
         {filteredProducts.length === 0 ? (
-          <div className="empty-state">
+          <div
+            className="empty-state"
+            style={{ animation: "cardEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both" }}
+          >
             <div className="empty-state__icon">
               <Package size={44} />
             </div>
             <div className="empty-state__title">
-              Esta tienda todavía no tiene productos disponibles
+              {selectedCategory === "all"
+                ? "Esta tienda todavía no tiene productos disponibles"
+                : `No hay productos en la categoría "${selectedCategory}"`}
             </div>
             <div className="empty-state__description">
-              Vuelve a consultar pronto o escribe por WhatsApp para consultar el
-              catálogo.
+              {selectedCategory === "all"
+                ? "Vuelve a consultar pronto o escribe por WhatsApp para consultar el catálogo."
+                : "Intenta seleccionando otra categoría o viendo todos los artículos."}
             </div>
+            {selectedCategory !== "all" && (
+              <button
+                onClick={() => handleCategorySelect("all")}
+                className="btn btn--secondary btn--sm"
+                style={{ marginTop: "1rem" }}
+              >
+                Ver todos los productos
+              </button>
+            )}
           </div>
         ) : (
-          <div className={styles.productsGrid}>
-            {filteredProducts.map((prod) => (
-              <div key={prod.id} className={styles.productCard}>
+          <div
+            className={`${styles.productsGrid} ${
+              isCategoryExiting ? styles["productsGrid--exiting"] : ""
+            }`}
+          >
+            {filteredProducts.map((prod, index) => (
+              <div
+                key={`${selectedCategory}-${prod.id}`}
+                className={styles.productCard}
+                style={{
+                  animationDelay: `${Math.min(index * 35, 210)}ms`,
+                }}
+              >
                 <Link
                   href={`/${storeSlug}/product/${prod.slug}`}
                   className={styles.productCard__imgWrap}

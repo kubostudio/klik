@@ -175,7 +175,7 @@ export default function CartPage() {
               <div className={styles.cartView__summary}>
                 <div className={styles.row}>
                   <span>Subtotal</span>
-                  <span style={{ fontSize: '1.25rem', color: '#ffffff' }}>
+                  <span style={{ fontSize: '1.25rem', color: '#232323' }}>
                     {formatCurrency(subtotal)}
                   </span>
                 </div>

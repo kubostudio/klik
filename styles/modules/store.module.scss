@@ -306,7 +306,14 @@
 .productsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: $spacing-4;
+  gap: $spacing-3;
+  transition: opacity 0.13s ease, transform 0.13s ease;
+
+  &--exiting {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    pointer-events: none;
+  }
 }
 
 // PRODUCT CARD
@@ -319,6 +326,7 @@
   flex-direction: column;
   box-shadow: $shadow-subtle;
   transition: all 0.4s;
+  animation: cardEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   &:hover {
     img {
@@ -888,4 +896,27 @@
     color: $color-mid-gray;
   }
 }
+
+// ANIMATIONS
+@keyframes cardEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .productCard {
+    animation: none !important;
+    transition: none !important;
+  }
+  .productsGrid {
+    transition: none !important;
+  }
+}
+
 

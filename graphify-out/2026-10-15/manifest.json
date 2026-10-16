@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "app/[storeSlug]/product/[productSlug]/page.tsx": {
-    "mtime": 1792102368.4942193,
-    "seen": 1792102591.956652,
-    "ast_hash": "e9c75649ed4286a7510f3a1909a2ba4a",
+    "mtime": 1792107852.019851,
+    "seen": 1792107874.012117,
+    "ast_hash": "fa9cd6daddbb074e649c76603b4ba166",
     "semantic_hash": ""
   },
   "app/api/analytics/route.ts": {
